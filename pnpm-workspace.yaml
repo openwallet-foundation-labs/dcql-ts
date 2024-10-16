@@ -1,0 +1,13 @@
+packages:
+  - vp-query
+catalog:
+  '@types/node': ^20.16.10
+  eslint: ^9.9.0
+  prettier: ^3.3.3
+  tsx: ^4.11.2
+  typescript: ^5.6.2
+  valibot: 0.37.0
+  '@protokoll/prettier-config': ^0.2.31
+  '@protokoll/eslint-config': ^0.2.31
+  '@protokoll/tsconfig': ^0.2.31
+  '@protokoll/github': ^0.2.31
