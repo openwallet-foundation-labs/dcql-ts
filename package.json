@@ -1,0 +1,33 @@
+{
+  "name": "vp-query-root",
+  "private": true,
+  "version": "0.1.0",
+  "engines": {
+    "node": ">=20.16.0"
+  },
+  "packageManager": "pnpm@9.12.1+sha512.e5a7e52a4183a02d5931057f7a0dbff9d5e9ce3161e33fa68ae392125b79282a8a8a470a51dfc8a0ed86221442eb2fb57019b0990ed24fab519bf0e1bc5ccfc4",
+  "scripts": {
+    "build": "turbo run build",
+    "clean": "turbo run clean && pnpm clean:root",
+    "clean:root": "git clean -xdf node_modules && rm -rf .turbo",
+    "dev": "turbo watch dev --continue",
+    "format": "turbo run format --continue -- --cache --cache-location .cache/.prettiercache",
+    "format:fix": "turbo run format --continue -- --write --cache --cache-location .cache/.prettiercache",
+    "lint": "turbo run lint --continue -- --cache --cache-location .cache/.eslintcache",
+    "lint:fix": "turbo run lint --continue -- --fix --cache --cache-location .cache/.eslintcache",
+    "lint:ws": "pnpm dlx sherif@latest",
+    "lint:ws:fix": "pnpm dlx sherif@latest -f",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "release": "turbo run release && pnpm changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.7",
+    "@protokoll/prettier-config": "catalog:",
+    "@turbo/gen": "^2.1.3",
+    "prettier": "catalog:",
+    "turbo": "^2.1.3",
+    "typescript": "catalog:"
+  },
+  "prettier": "@protokoll/prettier-config"
+}

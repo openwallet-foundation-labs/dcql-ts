@@ -1,0 +1,59 @@
+{
+  "name": "vp-query",
+  "description": "OpenId for Verifiable Presentations Query-Lang implementation.",
+  "author": "Martin Auer",
+  "version": "0.2.1",
+  "private": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/src/index.js"
+    }
+  },
+  "license": "MIT",
+  "scripts": {
+    "clean": "git clean -xdf .cache .turbo node_modules dist",
+    "build": "tsc",
+    "format": "prettier --check . --ignore-path ./../.gitignore",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test"
+  },
+  "dependencies": {
+    "valibot": "catalog:"
+  },
+  "devDependencies": {
+    "@protokoll/eslint-config": "catalog:",
+    "@protokoll/prettier-config": "catalog:",
+    "@protokoll/tsconfig": "catalog:",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
+  },
+  "prettier": "@protokoll/prettier-config",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/auer-martin/vp-query"
+  },
+  "keywords": [
+    "Vp Query Lang",
+    "Verifiable Presentation Query Language",
+    "Verifiable Presentations",
+    "Presentation Definition",
+    "Credentials",
+    "SSI",
+    "OpenID",
+    "SIOP",
+    "Self Issued OpenId Provider",
+    "OpenId for Verifiable Presentations",
+    "SIOPv2",
+    "OID4VC",
+    "OID4VP",
+    "OpenID4VP",
+    "OpenID4VC",
+    "OIDC4VP"
+  ]
+}
