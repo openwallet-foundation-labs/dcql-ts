@@ -1,5 +1,5 @@
 {
-  "extends": "@ausweis/tsconfig/internal-package.json",
+  "extends": "@ausweis/typescript/internal-package.json",
   "include": ["src"],
   "exclude": ["node_modules"]
 }

@@ -7,7 +7,7 @@ catalog:
   tsx: ^4.11.2
   typescript: ^5.6.2
   valibot: 0.37.0
-  '@ausweis/prettier-config': ^0.2.33
-  '@ausweis/eslint-config': ^0.2.33
-  '@ausweis/tsconfig': ^0.2.33
-  '@ausweis/github': ^0.2.33
+  '@ausweis/prettier': ^0.2.34
+  '@ausweis/eslint': ^0.2.34
+  '@ausweis/typescript': ^0.2.34
+  '@ausweis/github': ^0.2.34
