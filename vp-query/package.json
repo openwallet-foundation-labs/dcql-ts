@@ -24,16 +24,16 @@
     "valibot": "catalog:"
   },
   "devDependencies": {
-    "@ausweis/eslint-config": "catalog:",
-    "@ausweis/prettier-config": "catalog:",
-    "@ausweis/tsconfig": "catalog:",
+    "@ausweis/eslint": "catalog:",
+    "@ausweis/prettier": "catalog:",
+    "@ausweis/typescript": "catalog:",
     "@types/node": "catalog:",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "tsx": "catalog:",
     "typescript": "catalog:"
   },
-  "prettier": "@ausweis/prettier-config",
+  "prettier": "@ausweis/prettier",
   "repository": {
     "type": "git",
     "url": "https://github.com/auer-martin/vp-query"
