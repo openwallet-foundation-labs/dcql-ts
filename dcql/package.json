@@ -1,6 +1,6 @@
 {
-  "name": "vp-query",
-  "description": "OpenId for Verifiable Presentations Query-Lang implementation.",
+  "name": "dcql",
+  "description": "Digital Credentials Query Language (DCQL)",
   "author": "Martin Auer",
   "version": "0.2.2",
   "private": false,
@@ -39,7 +39,8 @@
     "url": "https://github.com/auer-martin/vp-query"
   },
   "keywords": [
-    "Vp Query Lang",
+    "Digital Credentials Query Language (DCQL)",
+    "Credentials Query Language",
     "Verifiable Presentation Query Language",
     "Verifiable Presentations",
     "Presentation Definition",
