@@ -1,8 +1,15 @@
 import * as v from 'valibot';
 import { idRegex } from '../u-query.js';
 
+/**
+ * Specifies claims withing a requested Credential.
+ */
 export namespace ClaimsQuery {
-  export const vValue = v.union([v.string(), v.number(), v.boolean()]);
+  export const vValue = v.union([
+    v.string(),
+    v.pipe(v.number(), v.integer()),
+    v.boolean(),
+  ]);
   export type ClaimValue = v.InferOutput<typeof vValue>;
 
   export const vPath = v.union([

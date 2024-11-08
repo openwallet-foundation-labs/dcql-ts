@@ -1,9 +1,6 @@
 import * as v from 'valibot';
-import { InvalidClaimsQueryIdError } from '../e-vp-query.js';
-import type { Mdoc } from '../u-query.js';
-import { getIdMetadata } from '../u-query.js';
-import type { ClaimsQueryResult } from './v-claims-query-result.js';
-import { ClaimsQuery } from './v-claims-query.js';
+import { DcqlInvalidClaimsQueryIdError } from '../e-dcql.js';
+import { ClaimsQuery } from './m-claims-query.js';
 
 const getClaimParser = (input: {
   value?: string | number | boolean;
@@ -21,9 +18,7 @@ const getClaimParser = (input: {
   return ClaimsQuery.vValue;
 };
 
-export const getNamespacesParser = (
-  claimsQueries: ReturnType<typeof getClaimsQueriesForClaimSet>
-) => {
+export const getNamespacesParser = (claimsQueries: ClaimsQuery.Mdoc[]) => {
   const claimsForNamespace: Record<
     string,
     ReturnType<typeof getClaimsQueriesForClaimSet>
@@ -40,12 +35,7 @@ export const getNamespacesParser = (
   const parsersForNamespaces = Object.entries(claimsForNamespace).map(
     ([namespace, claims]) => {
       const claimParsers = Object.fromEntries(
-        claims.map(claim => [
-          claim.claim_name,
-          claim.isOptional || claim.isRequiredIfPresent
-            ? v.optional(getClaimParser(claim))
-            : getClaimParser(claim),
-        ])
+        claims.map(claim => [claim.claim_name, getClaimParser(claim)])
       );
       return [namespace, v.object(claimParsers)];
     }
@@ -54,51 +44,17 @@ export const getNamespacesParser = (
   return v.object(Object.fromEntries(parsersForNamespaces));
 };
 
-export const queryClaimFromMdoc = (
-  claimsQuery: ClaimsQuery.Mdoc,
-  credential: Mdoc
-) => {
-  const claimParser = getClaimParser(claimsQuery);
-  const claimParsers =
-    claimParser.type === 'union' ? claimParser.options : [claimParser];
-
-  const namespace = credential.namespaces[claimsQuery.namespace];
-  const claimParseResult: ClaimsQueryResult.ParseResult[] = [];
-  for (const claimParser of claimParsers) {
-    const parseResult = v.safeParse(
-      claimParser,
-      namespace?.[claimsQuery.claim_name]
-    );
-
-    const { typed, ...result } = parseResult;
-    claimParseResult.push(result);
-  }
-
-  return claimParseResult;
-};
-
 export const getClaimsQueriesForClaimSet = (
   claimsQueries: ClaimsQuery.Mdoc[],
-  claimSet?: string[]
-) => {
-  if (!claimSet) {
-    return claimsQueries.map(query => ({
-      ...query,
-      isOptional: false,
-      isRequiredIfPresent: false,
-    }));
-  }
-
+  claimSet: string[]
+): ClaimsQuery.Mdoc[] => {
   return claimSet.map(credential_id => {
-    const { isOptional, isRequiredIfPresent, baseId } =
-      getIdMetadata(credential_id);
-
-    const query = claimsQueries.find(query => query.id === baseId);
+    const query = claimsQueries.find(query => query.id === credential_id);
     if (!query) {
-      throw new InvalidClaimsQueryIdError({
-        message: `Claims-query with id '${baseId}' not found.`,
+      throw new DcqlInvalidClaimsQueryIdError({
+        message: `Claims-query with id '${credential_id}' not found.`,
       });
     }
-    return { ...query, isOptional, isRequiredIfPresent };
+    return query;
   });
 };
