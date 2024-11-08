@@ -10,7 +10,7 @@
     "dev": {
       "cache": false,
       "persistent": false,
-      "dependsOn": ["build"]
+      "dependsOn": ["^build"]
     },
     "format": {
       "outputs": [".cache/.prettiercache"],

@@ -33,11 +33,11 @@ export function getCauseFromUnknown(cause: unknown): Error | undefined {
   return undefined;
 }
 
-export const isAusweisError = (cause: unknown): cause is VpQueryError => {
-  if (cause instanceof VpQueryError) {
+export const isDcqlError = (cause: unknown): cause is DcqlError => {
+  if (cause instanceof DcqlError) {
     return true;
   }
-  if (cause instanceof Error && cause.name === 'AusweisError') {
+  if (cause instanceof Error && cause.name === 'DcqlError') {
     // https://github.com/trpc/trpc/pull/4848
     return true;
   }
@@ -45,31 +45,31 @@ export const isAusweisError = (cause: unknown): cause is VpQueryError => {
   return false;
 };
 
-export function getAusweisErrorFromUnknown(cause: unknown): VpQueryError {
-  if (isAusweisError(cause)) {
+export function getDcqlErrorFromUnknown(cause: unknown): DcqlError {
+  if (isDcqlError(cause)) {
     return cause;
   }
 
-  const ausweisError = new VpQueryError({
+  const dcqlError = new DcqlError({
     code: 'INTERNAL_SERVER_ERROR',
     cause,
   });
 
   // Inherit stack from error
   if (cause instanceof Error && cause.stack) {
-    ausweisError.stack = cause.stack;
+    dcqlError.stack = cause.stack;
   }
 
-  return ausweisError;
+  return dcqlError;
 }
 
-type AUSWEIS_ERROR_CODE =
+type DCQL_ERROR_CODE =
   | 'PARSE_ERROR'
   | 'INTERNAL_SERVER_ERROR'
   | 'NOT_IMPLEMENTED'
   | 'BAD_REQUEST';
 
-export class VpQueryError extends Error {
+export class DcqlError extends Error {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore override doesn't work in all environments due to "This member cannot have an 'override' modifier because it is not declared in the base class 'Error'"
   public override readonly cause?: Error;
@@ -77,7 +77,7 @@ export class VpQueryError extends Error {
 
   constructor(opts: {
     message?: string;
-    code: AUSWEIS_ERROR_CODE;
+    code: DCQL_ERROR_CODE;
     cause?: unknown;
   }) {
     const cause = getCauseFromUnknown(opts.cause);
@@ -88,29 +88,11 @@ export class VpQueryError extends Error {
     super(message, { cause });
 
     this.code = opts.code;
-    this.name = 'AusweisError';
+    this.name = 'DcqlError';
 
     if (!this.cause) {
       // < ES2022 / < Node 16.9.0 compatability
       this.cause = cause;
     }
-  }
-}
-
-export const NOT_IMPLEMENTED = <Error extends typeof VpQueryError>(input: {
-  message?: string;
-  error?: Error;
-}) => {
-  const { message, error } = input;
-
-  throw new (error ?? VpQueryError)({
-    code: 'NOT_IMPLEMENTED',
-    message: `NOT IMPLEMENTED. ${message}`,
-  });
-};
-
-export class Base64Error extends VpQueryError {
-  constructor(opts: { message: string; cause?: unknown }) {
-    super({ code: 'BAD_REQUEST', ...opts });
   }
 }

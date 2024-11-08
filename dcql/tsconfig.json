@@ -1,5 +1,5 @@
 {
-  "extends": "@ausweis/typescript/internal-package.json",
+  "extends": "@ausweis/typescript/monorepo-package.json",
   "include": ["src"],
   "exclude": ["node_modules"]
 }
