@@ -1,12 +1,12 @@
 import * as v from 'valibot';
-import { CredentialQuery } from '../credential-query/m-credential-query.js';
-import { CredentialSetQuery } from '../credential-set-query/m-credential-set-query.js';
 import {
   DcqlCredentialSetError,
   DcqlNonUniqueCredentialQueryIdsError,
 } from '../e-dcql.js';
 import { vNonEmptyArray } from '../u-query.js';
 import { performDcqlQuery } from './dcql-query.js';
+import { CredentialQuery } from './m-credential-query.js';
+import { CredentialSetQuery } from './m-credential-set-query.js';
 
 /**
  * The Digital Credentials Query Language (DCQL, pronounced [ˈdakl̩]) is a
@@ -25,13 +25,10 @@ export namespace DcqlQuery {
         `REQUIRED. A non-empty array of Credential Queries that specify the requested Verifiable Credentials.`
       )
     ),
-    credential_sets: v.optional(
-      v.pipe(
-        v.array(CredentialSetQuery.vModel),
-        vNonEmptyArray(),
-        v.description(
-          `OPTIONAL. A non-empty array of credential set queries that specifies additional constraints on which of the requested Verifiable Credentials to return.`
-        )
+    credential_sets: v.pipe(
+      v.optional(v.pipe(v.array(CredentialSetQuery.vModel), vNonEmptyArray())),
+      v.description(
+        `OPTIONAL. A non-empty array of credential set queries that specifies additional constraints on which of the requested Verifiable Credentials to return.`
       )
     ),
   });

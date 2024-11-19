@@ -1,4 +1,5 @@
 import * as v from 'valibot';
+import type { ClaimsQuery } from './dcql-query/m-claims-query.js';
 export const idRegex = /^[a-zA-Z0-9_-]+$/;
 
 export const vCredentialFormat = v.picklist([
@@ -24,3 +25,14 @@ export namespace Mdoc {
   }
 }
 export type Mdoc = Mdoc.Credential;
+
+export namespace SdJwtVc {
+  export type Claims = v.InferOutput<typeof ClaimsQuery.vJsonRecord>;
+  export interface Credential {
+    vct: string;
+    claims: Claims;
+  }
+}
+export type SdJwtVc = SdJwtVc.Credential;
+
+export type Credential = Mdoc | SdJwtVc;

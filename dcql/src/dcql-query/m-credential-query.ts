@@ -1,7 +1,7 @@
 import * as v from 'valibot';
-import { ClaimsQuery } from '../claims-query/m-claims-query.js';
 import { DcqlUndefinedClaimSetIdError } from '../e-dcql.js';
 import { idRegex, vNonEmptyArray } from '../u-query.js';
+import { ClaimsQuery } from './m-claims-query.js';
 
 /**
  * A Credential Query is an object representing a request for a presentation of one Credential.
@@ -15,13 +15,15 @@ export namespace CredentialQuery {
         `REQUIRED. A string identifying the Credential in the response and, if provided, the constraints in 'credential_sets'.`
       )
     ),
-    claim_sets: v.optional(
-      v.pipe(
-        v.array(v.array(v.pipe(v.string(), v.regex(idRegex)))),
-        vNonEmptyArray(),
-        v.description(
-          `OPTIONAL. A non-empty array containing arrays of identifiers for elements in 'claims' that specifies which combinations of 'claims' for the Credential are requested.`
+    claim_sets: v.pipe(
+      v.optional(
+        v.pipe(
+          v.array(v.array(v.pipe(v.string(), v.regex(idRegex)))),
+          vNonEmptyArray()
         )
+      ),
+      v.description(
+        `OPTIONAL. A non-empty array containing arrays of identifiers for elements in 'claims' that specifies which combinations of 'claims' for the Credential are requested.`
       )
     ),
   });
