@@ -1,5 +1,6 @@
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
+import type { Mdoc, SdJwtVc } from '../u-query.js';
 import { DcqlQuery } from './m-dcql-query.js';
 
 /**
@@ -46,7 +47,48 @@ const exampleMdoc = {
       example_claim: 'example_value',
     },
   },
-};
+} satisfies Mdoc;
+
+const sdJwtVcExample = {
+  credentials: [
+    {
+      id: 'my_credential',
+      format: 'vc+sd-jwt',
+      meta: {
+        vct_values: ['https://credentials.example.com/identity_credential'],
+      },
+      claims: [
+        { path: ['last_name'] },
+        { path: ['first_name'] },
+        { path: ['address', 'street_address'] },
+      ],
+    },
+  ],
+} satisfies DcqlQuery.Input;
+
+const sdJwtVc = {
+  vct: 'https://credentials.example.com/identity_credential',
+  claims: {
+    first_name: 'Arthur',
+    last_name: 'Dent',
+    address: {
+      street_address: '42 Market Street',
+      locality: 'Milliways',
+      postal_code: '12345',
+    },
+    degrees: [
+      {
+        type: 'Bachelor of Science',
+        university: 'University of Betelgeuse',
+      },
+      {
+        type: 'Master of Science',
+        university: 'University of Betelgeuse',
+      },
+    ],
+    nationalities: ['British', 'Betelgeusian'],
+  },
+} satisfies SdJwtVc;
 
 await describe('credential-parser', async () => {
   await it('mdocMvrc example succeeds', _t => {
@@ -61,6 +103,8 @@ await describe('credential-parser', async () => {
         issues: undefined,
         success: true,
         typed: true,
+        credential_index: 0,
+        claim_set_index: undefined,
         output: {
           docType: 'org.iso.7367.1.mVRC',
           namespaces: {
@@ -78,7 +122,7 @@ await describe('credential-parser', async () => {
     const query = DcqlQuery.parse(mdocMvrcQuery);
     DcqlQuery.validate(query);
 
-    const res = DcqlQuery.query(query, [mdocMvrc, exampleMdoc]);
+    const res = DcqlQuery.query(query, [exampleMdoc, mdocMvrc]);
 
     assert(res.areRequiredCredentialsPresent);
     assert.deepStrictEqual(res.query_matches, {
@@ -86,11 +130,43 @@ await describe('credential-parser', async () => {
         issues: undefined,
         success: true,
         typed: true,
+        credential_index: 1,
+        claim_set_index: undefined,
         output: {
           docType: 'org.iso.7367.1.mVRC',
           namespaces: {
             'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
             'org.iso.18013.5.1': { first_name: 'Martin Auer' },
+          },
+        },
+      },
+    });
+
+    console.log(res);
+  });
+
+  await it('sdJwtVc example with multiple credentials succeeds', _t => {
+    const query = DcqlQuery.parse(sdJwtVcExample);
+    DcqlQuery.validate(query);
+
+    const res = DcqlQuery.query(query, [exampleMdoc, sdJwtVc]);
+
+    assert(res.areRequiredCredentialsPresent);
+    assert.deepStrictEqual(res.query_matches, {
+      my_credential: {
+        issues: undefined,
+        success: true,
+        typed: true,
+        credential_index: 1,
+        claim_set_index: undefined,
+        output: {
+          vct: 'https://credentials.example.com/identity_credential',
+          claims: {
+            first_name: 'Arthur',
+            last_name: 'Dent',
+            address: {
+              street_address: '42 Market Street',
+            },
           },
         },
       },
