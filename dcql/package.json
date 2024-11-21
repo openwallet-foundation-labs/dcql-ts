@@ -2,7 +2,7 @@
   "name": "dcql",
   "description": "Digital Credentials Query Language (DCQL)",
   "author": "Martin Auer",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "private": false,
   "main": "./dist/src/index.js",
   "module": "./dist/src/index.js",
