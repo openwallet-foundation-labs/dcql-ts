@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
-import { DcqlPresentationRecord } from '../dcql-presentation/m-dcql-presentation-record.js';
+import { DcqlPresentationQuery } from '../dcql-presentation/m-dcql-presentation-query.js';
 import type {
   DcqlMdocRepresentation,
   DcqlSdJwtVcRepresentation,
@@ -123,10 +123,26 @@ void describe('credential-parser', () => {
       },
     });
 
-    DcqlPresentationRecord.validate(
+    const presentationQueryResult = DcqlPresentationQuery.query(
       [res.credential_matches.my_credential.output],
       { dcqlQuery: query }
     );
+
+    assert.deepStrictEqual(presentationQueryResult.presentation_matches, {
+      my_credential: {
+        success: true,
+        typed: true,
+        presentation_index: 0,
+        claim_set_index: undefined,
+        output: {
+          docType: 'org.iso.7367.1.mVRC',
+          namespaces: {
+            'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
+            'org.iso.18013.5.1': { first_name: 'Martin Auer' },
+          },
+        },
+      },
+    });
   });
 
   void it('mdocMvrc example with multiple credentials succeeds', _t => {
@@ -154,10 +170,26 @@ void describe('credential-parser', () => {
       },
     });
 
-    DcqlPresentationRecord.validate(
+    const presentationQueryResult = DcqlPresentationQuery.query(
       [res.credential_matches.my_credential.output],
       { dcqlQuery: query }
     );
+
+    assert.deepStrictEqual(presentationQueryResult.presentation_matches, {
+      my_credential: {
+        success: true,
+        typed: true,
+        presentation_index: 0,
+        claim_set_index: undefined,
+        output: {
+          docType: 'org.iso.7367.1.mVRC',
+          namespaces: {
+            'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
+            'org.iso.18013.5.1': { first_name: 'Martin Auer' },
+          },
+        },
+      },
+    });
   });
 
   void it('sdJwtVc example with multiple credentials succeeds', _t => {
@@ -188,9 +220,28 @@ void describe('credential-parser', () => {
       },
     });
 
-    DcqlPresentationRecord.validate(
+    const presentationQueryResult = DcqlPresentationQuery.query(
       [res.credential_matches.my_credential.output],
       { dcqlQuery: query }
     );
+
+    assert.deepStrictEqual(presentationQueryResult.presentation_matches, {
+      my_credential: {
+        success: true,
+        typed: true,
+        presentation_index: 0,
+        claim_set_index: undefined,
+        output: {
+          vct: 'https://credentials.example.com/identity_credential',
+          claims: {
+            first_name: 'Arthur',
+            last_name: 'Dent',
+            address: {
+              street_address: '42 Market Street',
+            },
+          },
+        },
+      },
+    });
   });
 });
