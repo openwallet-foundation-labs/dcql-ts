@@ -1,4 +1,4 @@
-export {} from './dcql-presentation/index.js';
+export { DcqlPresentationRecord } from './dcql-presentation/index.js';
 export { DcqlQueryResult } from './dcql-query-result/m-dcql-query-result.js';
 export { DcqlClaimsQuery as ClaimsQuery } from './dcql-query/m-dcql-claims-query.js';
 export { DcqlCredentialQuery } from './dcql-query/m-dcql-credential-query.js';
