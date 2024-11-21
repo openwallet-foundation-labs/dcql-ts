@@ -23,3 +23,9 @@ export class DcqlInvalidClaimsQueryIdError extends DcqlError {
     super({ code: 'BAD_REQUEST', ...opts });
   }
 }
+
+export class DcqlEmptyVpToken extends DcqlError {
+  constructor(opts: { message: string; cause?: unknown }) {
+    super({ code: 'BAD_REQUEST', ...opts });
+  }
+}

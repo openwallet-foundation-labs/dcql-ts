@@ -1,47 +1,16 @@
 import * as v from 'valibot';
-import { idRegex } from '../u-query.js';
+import { idRegex } from '../u-dcql.js';
 
-type SelectableJsonValue =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: SelectableJsonValue }
-  | SelectableJsonValue[];
 /**
  * Specifies claims withing a requested Credential.
  */
-export namespace ClaimsQuery {
+export namespace DcqlClaimsQuery {
   export const vValue = v.union([
     v.string(),
     v.pipe(v.number(), v.integer()),
     v.boolean(),
   ]);
   export type ClaimValue = v.InferOutput<typeof vValue>;
-
-  export const vJsonPrimitive = v.union([
-    v.string(),
-    v.number(),
-    v.boolean(),
-    v.null(),
-  ]);
-
-  export const vJsonArray = v.array(vJsonPrimitive);
-
-  export const vJsonRecord: v.GenericSchema<SelectableJsonValue> = v.record(
-    v.string(),
-    v.union([
-      v.nullable(v.lazy(() => vJsonRecord)),
-      ...vJsonPrimitive.options,
-      vJsonArray,
-    ])
-  );
-
-  export const vJsonValue: v.GenericSchema<SelectableJsonValue> = v.union([
-    vJsonArray,
-    vJsonPrimitive,
-    vJsonRecord,
-  ]);
 
   export const vPath = v.union([
     v.string(),
@@ -104,4 +73,4 @@ export namespace ClaimsQuery {
   export type Input = v.InferInput<typeof vModel>;
   export type Out = v.InferOutput<typeof vModel>;
 }
-export type ClaimsQuery = ClaimsQuery.Out;
+export type DcqlClaimsQuery = DcqlClaimsQuery.Out;

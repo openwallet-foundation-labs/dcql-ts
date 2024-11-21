@@ -3,10 +3,10 @@ import {
   DcqlCredentialSetError,
   DcqlNonUniqueCredentialQueryIdsError,
 } from '../e-dcql.js';
-import { vNonEmptyArray } from '../u-query.js';
+import { vNonEmptyArray } from '../u-dcql.js';
 import { performDcqlQuery } from './dcql-query.js';
-import { CredentialQuery } from './m-credential-query.js';
-import { CredentialSetQuery } from './m-credential-set-query.js';
+import { DcqlCredentialQuery } from './m-dcql-credential-query.js';
+import { CredentialSetQuery } from './m-dcql-credential-set-query.js';
 
 /**
  * The Digital Credentials Query Language (DCQL, pronounced [ˈdakl̩]) is a
@@ -19,7 +19,7 @@ import { CredentialSetQuery } from './m-credential-set-query.js';
 export namespace DcqlQuery {
   export const vModel = v.object({
     credentials: v.pipe(
-      v.array(CredentialQuery.vModel),
+      v.array(DcqlCredentialQuery.vModel),
       vNonEmptyArray(),
       v.description(
         `REQUIRED. A non-empty array of Credential Queries that specify the requested Verifiable Credentials.`
@@ -37,11 +37,15 @@ export namespace DcqlQuery {
   export const validate = (dcqlQuery: Output) => {
     validateUniqueCredentialQueryIds(dcqlQuery);
     validateCredentialSets(dcqlQuery);
-    dcqlQuery.credentials.forEach(CredentialQuery.validate);
+    dcqlQuery.credentials.forEach(DcqlCredentialQuery.validate);
   };
   export const query = performDcqlQuery;
 
-  export const parse = (input: Input) => v.parse(vModel, input);
+  export const parse = (input: Input) => {
+    const parsed = v.parse(vModel, input);
+    validate(parsed);
+    return parsed;
+  };
 }
 export type DcqlQuery = DcqlQuery.Output;
 

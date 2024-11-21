@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import * as v from 'valibot';
-import { ClaimsQuery } from '../dcql-query/m-claims-query.js';
-import type { CredentialQuery } from '../dcql-query/m-credential-query.js';
+import { DcqlClaimsQuery } from '../dcql-query/m-dcql-claims-query.js';
+import type { DcqlCredentialQuery } from '../dcql-query/m-dcql-credential-query.js';
 import { DcqlInvalidClaimsQueryIdError } from '../e-dcql.js';
+import { vJson, vJsonRecord } from '../u-dcql.js';
 
 const getClaimParser = (input: {
   value?: string | number | boolean;
@@ -16,10 +18,10 @@ const getClaimParser = (input: {
     return v.union(values.map(val => v.literal(val)));
   }
 
-  return ClaimsQuery.vValue;
+  return DcqlClaimsQuery.vValue;
 };
 
-export const getNamespacesParser = (claimsQueries: ClaimsQuery.Mdoc[]) => {
+export const getNamespacesParser = (claimsQueries: DcqlClaimsQuery.Mdoc[]) => {
   const claimsForNamespace: Record<
     string,
     ReturnType<typeof getMdocClaimsQueriesForClaimSet>
@@ -46,27 +48,22 @@ export const getNamespacesParser = (claimsQueries: ClaimsQuery.Mdoc[]) => {
 };
 
 const getParserForClaimQuery = (
-  claimQuery: ClaimsQuery.W3cAndSdJwtVc,
+  claimQuery: DcqlClaimsQuery.W3cAndSdJwtVc,
   index: number
-): typeof ClaimsQuery.vJsonRecord => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+): typeof vJson => {
   const pathElement = claimQuery.path[index]!;
   const isLast = index === claimQuery.path.length - 1;
 
-  const claimParser = claimQuery.values
-    ? getClaimParser(claimQuery)
-    : ClaimsQuery.vJsonValue;
+  const claimParser = claimQuery.values ? getClaimParser(claimQuery) : vJson;
 
   if (typeof pathElement === 'number') {
     return isLast
       ? v.pipe(
           v.array(claimParser),
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           v.transform(input => input[pathElement]!)
         )
       : v.pipe(
           v.array(getParserForClaimQuery(claimQuery, index + 1)),
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           v.transform(input => input[pathElement]!)
         );
   }
@@ -85,19 +82,21 @@ const getParserForClaimQuery = (
 };
 
 export const getJsonClaimsParser = (
-  claimsQueries: ClaimsQuery.W3cAndSdJwtVc[]
+  claimsQueries: DcqlClaimsQuery.W3cAndSdJwtVc[]
 ) => {
   const claimParser = v.intersect(
-    claimsQueries.map(claimQuery => getParserForClaimQuery(claimQuery, 0))
+    claimsQueries.map(
+      claimQuery => getParserForClaimQuery(claimQuery, 0) as typeof vJsonRecord
+    )
   );
 
   return claimParser;
 };
 
 export const getMdocClaimsQueriesForClaimSet = (
-  claimsQueries: ClaimsQuery.Mdoc[],
+  claimsQueries: DcqlClaimsQuery.Mdoc[],
   claimSet: string[]
-): ClaimsQuery.Mdoc[] => {
+): DcqlClaimsQuery.Mdoc[] => {
   return claimSet.map(credential_id => {
     const query = claimsQueries.find(query => query.id === credential_id);
     if (!query) {
@@ -110,9 +109,9 @@ export const getMdocClaimsQueriesForClaimSet = (
 };
 
 export const getJsonClaimsQueriesForClaimSet = (
-  claimsQueries: ClaimsQuery.W3cAndSdJwtVc[],
+  claimsQueries: DcqlClaimsQuery.W3cAndSdJwtVc[],
   claimSet: string[]
-): ClaimsQuery.W3cAndSdJwtVc[] => {
+): DcqlClaimsQuery.W3cAndSdJwtVc[] => {
   return claimSet.map(credential_id => {
     const query = claimsQueries.find(query => query.id === credential_id);
     if (!query) {
@@ -125,8 +124,8 @@ export const getJsonClaimsQueriesForClaimSet = (
 };
 
 const getMdocCredentialParser = (
-  credentialQuery: CredentialQuery.Mdoc,
-  claimSet?: NonNullable<CredentialQuery['claim_sets']>[number]
+  credentialQuery: DcqlCredentialQuery.Mdoc,
+  claimSet?: NonNullable<DcqlCredentialQuery['claim_sets']>[number]
 ) => {
   const vDocType = credentialQuery.meta?.doctype_value
     ? v.literal(credentialQuery.meta.doctype_value)
@@ -148,8 +147,8 @@ const getMdocCredentialParser = (
 };
 
 const getJsonCredentialParser = (
-  credentialQuery: CredentialQuery.SdJwtVc | CredentialQuery.W3c,
-  claimSet?: NonNullable<CredentialQuery['claim_sets']>[number]
+  credentialQuery: DcqlCredentialQuery.SdJwtVc | DcqlCredentialQuery.W3c,
+  claimSet?: NonNullable<DcqlCredentialQuery['claim_sets']>[number]
 ) => {
   const claimSetQueries =
     credentialQuery.claims && claimSet
@@ -163,13 +162,13 @@ const getJsonCredentialParser = (
         : v.string(),
       claims: claimSetQueries
         ? getJsonClaimsParser(claimSetQueries)
-        : ClaimsQuery.vJsonRecord,
+        : vJsonRecord,
     });
   } else {
     const credentialParser = v.object({
       claims: claimSetQueries
         ? getJsonClaimsParser(claimSetQueries)
-        : ClaimsQuery.vJsonRecord,
+        : vJsonRecord,
     });
 
     return credentialParser;
@@ -177,8 +176,8 @@ const getJsonCredentialParser = (
 };
 
 export const getCredentialParser = (
-  credentialQuery: CredentialQuery,
-  claimSet?: NonNullable<CredentialQuery['claim_sets']>[number]
+  credentialQuery: DcqlCredentialQuery,
+  claimSet?: NonNullable<DcqlCredentialQuery['claim_sets']>[number]
 ) => {
   if (credentialQuery.claim_sets && !claimSet) {
     throw new Error('asdfasdf');

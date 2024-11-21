@@ -1,5 +1,8 @@
 {
   "extends": "@ausweis/typescript/monorepo-package.json",
   "include": ["src"],
+  "compilerOptions": {
+    "verbatimModuleSyntax": false
+  },
   "exclude": ["node_modules"]
 }

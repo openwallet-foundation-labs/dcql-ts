@@ -1,12 +1,12 @@
 import * as v from 'valibot';
 import { DcqlUndefinedClaimSetIdError } from '../e-dcql.js';
-import { idRegex, vNonEmptyArray } from '../u-query.js';
-import { ClaimsQuery } from './m-claims-query.js';
+import { idRegex, vNonEmptyArray } from '../u-dcql.js';
+import { DcqlClaimsQuery } from './m-dcql-claims-query.js';
 
 /**
  * A Credential Query is an object representing a request for a presentation of one Credential.
  */
-export namespace CredentialQuery {
+export namespace DcqlCredentialQuery {
   const vBase = v.object({
     id: v.pipe(
       v.string(),
@@ -37,7 +37,7 @@ export namespace CredentialQuery {
       )
     ),
     claims: v.pipe(
-      v.optional(v.pipe(v.array(ClaimsQuery.vMdoc), vNonEmptyArray())),
+      v.optional(v.pipe(v.array(DcqlClaimsQuery.vMdoc), vNonEmptyArray())),
       v.description(
         `OPTIONAL. A non-empty array of objects as that specifies claims in the requested Credential.`
       )
@@ -69,7 +69,9 @@ export namespace CredentialQuery {
       )
     ),
     claims: v.pipe(
-      v.optional(v.pipe(v.array(ClaimsQuery.vW3cSdJwtVc), vNonEmptyArray())),
+      v.optional(
+        v.pipe(v.array(DcqlClaimsQuery.vW3cSdJwtVc), vNonEmptyArray())
+      ),
       v.description(
         `OPTIONAL. A non-empty array of objects as that specifies claims in the requested Credential.`
       )
@@ -96,7 +98,7 @@ export namespace CredentialQuery {
     ...vBase.entries,
     format: v.picklist(['jwt_vc_json', 'jwt_vc_json-ld']),
     claims: v.optional(
-      v.pipe(v.array(ClaimsQuery.vW3cSdJwtVc), vNonEmptyArray())
+      v.pipe(v.array(DcqlClaimsQuery.vW3cSdJwtVc), vNonEmptyArray())
     ),
   });
   export type W3c = v.InferOutput<typeof vW3c>;
@@ -109,11 +111,11 @@ export namespace CredentialQuery {
     claimSetIdsAreDefined(credentialQuery);
   };
 }
-export type CredentialQuery = CredentialQuery.Output;
+export type DcqlCredentialQuery = DcqlCredentialQuery.Output;
 
 // --- validations --- //
 
-const claimSetIdsAreDefined = (credentialQuery: CredentialQuery) => {
+const claimSetIdsAreDefined = (credentialQuery: DcqlCredentialQuery) => {
   if (!credentialQuery.claim_sets) return;
   const claimIds = new Set(credentialQuery.claims?.map(claim => claim.id));
 

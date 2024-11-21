@@ -1,6 +1,9 @@
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
-import type { Mdoc, SdJwtVc } from '../u-query.js';
+import type {
+  DcqlMdocRepresentation,
+  DcqlSdJwtVcRepresentation,
+} from '../u-dcql-credential-representation.js';
 import { DcqlQuery } from './m-dcql-query.js';
 
 /**
@@ -47,7 +50,7 @@ const exampleMdoc = {
       example_claim: 'example_value',
     },
   },
-} satisfies Mdoc;
+} satisfies DcqlMdocRepresentation;
 
 const sdJwtVcExample = {
   credentials: [
@@ -88,17 +91,17 @@ const sdJwtVc = {
     ],
     nationalities: ['British', 'Betelgeusian'],
   },
-} satisfies SdJwtVc;
+} satisfies DcqlSdJwtVcRepresentation;
 
-await describe('credential-parser', async () => {
-  await it('mdocMvrc example succeeds', _t => {
+void describe('credential-parser', () => {
+  void it('mdocMvrc example succeeds', _t => {
     const query = DcqlQuery.parse(mdocMvrcQuery);
     DcqlQuery.validate(query);
 
     const res = DcqlQuery.query(query, [mdocMvrc]);
+    assert(res.canBeSatisfied);
 
-    assert(res.areRequiredCredentialsPresent);
-    assert.deepStrictEqual(res.query_matches, {
+    assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         issues: undefined,
         success: true,
@@ -112,20 +115,20 @@ await describe('credential-parser', async () => {
             'org.iso.18013.5.1': { first_name: 'Martin Auer' },
           },
         },
+
+        all: res.credential_matches.my_credential?.all,
       },
     });
-
-    console.log(res);
   });
 
-  await it('mdocMvrc example with multiple credentials succeeds', _t => {
+  void it('mdocMvrc example with multiple credentials succeeds', _t => {
     const query = DcqlQuery.parse(mdocMvrcQuery);
     DcqlQuery.validate(query);
 
     const res = DcqlQuery.query(query, [exampleMdoc, mdocMvrc]);
 
-    assert(res.areRequiredCredentialsPresent);
-    assert.deepStrictEqual(res.query_matches, {
+    assert(res.canBeSatisfied);
+    assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         issues: undefined,
         success: true,
@@ -139,20 +142,19 @@ await describe('credential-parser', async () => {
             'org.iso.18013.5.1': { first_name: 'Martin Auer' },
           },
         },
+        all: res.credential_matches.my_credential?.all,
       },
     });
-
-    console.log(res);
   });
 
-  await it('sdJwtVc example with multiple credentials succeeds', _t => {
+  void it('sdJwtVc example with multiple credentials succeeds', _t => {
     const query = DcqlQuery.parse(sdJwtVcExample);
     DcqlQuery.validate(query);
 
     const res = DcqlQuery.query(query, [exampleMdoc, sdJwtVc]);
 
-    assert(res.areRequiredCredentialsPresent);
-    assert.deepStrictEqual(res.query_matches, {
+    assert(res.canBeSatisfied);
+    assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         issues: undefined,
         success: true,
@@ -169,9 +171,8 @@ await describe('credential-parser', async () => {
             },
           },
         },
+        all: res.credential_matches.my_credential?.all,
       },
     });
-
-    console.log(res);
   });
 });
