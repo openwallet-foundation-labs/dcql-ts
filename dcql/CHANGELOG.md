@@ -1,5 +1,11 @@
 # vp-query
 
+## 0.2.10
+
+### Patch Changes
+
+- 8e23667: fix export
+
 ## 0.2.9
 
 ### Patch Changes
