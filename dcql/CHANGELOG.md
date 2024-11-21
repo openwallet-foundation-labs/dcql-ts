@@ -1,5 +1,11 @@
 # vp-query
 
+## 0.2.11
+
+### Patch Changes
+
+- ebf8f0e: fix: small improvement
+
 ## 0.2.10
 
 ### Patch Changes
