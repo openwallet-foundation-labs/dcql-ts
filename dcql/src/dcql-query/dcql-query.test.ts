@@ -123,14 +123,10 @@ void describe('credential-parser', () => {
       },
     });
 
-    const presentationRecord = DcqlPresentationRecord.parse({
-      my_credential: res.credential_matches.my_credential.output,
-    });
-
-    DcqlPresentationRecord.validate(presentationRecord, {
-      credentials: [res.credential_matches.my_credential.output],
-      dcqlQuery: query,
-    });
+    DcqlPresentationRecord.validate(
+      [res.credential_matches.my_credential.output],
+      { dcqlQuery: query }
+    );
   });
 
   void it('mdocMvrc example with multiple credentials succeeds', _t => {
@@ -158,14 +154,10 @@ void describe('credential-parser', () => {
       },
     });
 
-    const presentationRecord = DcqlPresentationRecord.parse({
-      my_credential: res.credential_matches.my_credential.output,
-    });
-
-    DcqlPresentationRecord.validate(presentationRecord, {
-      credentials: [res.credential_matches.my_credential.output],
-      dcqlQuery: query,
-    });
+    DcqlPresentationRecord.validate(
+      [res.credential_matches.my_credential.output],
+      { dcqlQuery: query }
+    );
   });
 
   void it('sdJwtVc example with multiple credentials succeeds', _t => {
@@ -196,13 +188,9 @@ void describe('credential-parser', () => {
       },
     });
 
-    const presentationRecord = DcqlPresentationRecord.parse({
-      my_credential: res.credential_matches.my_credential.output,
-    });
-
-    DcqlPresentationRecord.validate(presentationRecord, {
-      credentials: [res.credential_matches.my_credential.output],
-      dcqlQuery: query,
-    });
+    DcqlPresentationRecord.validate(
+      [res.credential_matches.my_credential.output],
+      { dcqlQuery: query }
+    );
   });
 });

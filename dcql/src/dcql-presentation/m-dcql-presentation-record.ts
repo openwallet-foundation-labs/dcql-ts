@@ -28,21 +28,26 @@ export namespace DcqlPresentationRecord {
     return JSON.stringify(input);
   };
 
+  /**
+   * Todo: Do the mapping from record to credential internally via a callback
+   * @param dcqlQuery
+   * @param credentials
+   */
   export const validate = (
-    input: Output,
+    credentials: DcqlCredentialRepresentation[],
     ctx: {
       dcqlQuery: DcqlQuery;
-      credentials: DcqlCredentialRepresentation[];
     }
   ) => {
-    if (Object.values(input).length === 0) {
+    const { dcqlQuery } = ctx;
+    if (Object.values(credentials).length === 0) {
       throw new DcqlEmptyPresentationRecord({
-        message: 'Empty Presentation record',
+        message: 'No credentials provided',
       });
     }
 
-    const result = performDcqlQuery(ctx.dcqlQuery, {
-      ...ctx,
+    const result = performDcqlQuery(dcqlQuery, {
+      credentials,
       presentation: true,
     });
 
