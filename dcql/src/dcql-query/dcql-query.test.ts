@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
-import { DcqlPresentationQuery } from '../dcql-presentation/m-dcql-presentation-query.js';
+import { DcqlPresentationQueryResult } from '../dcql-presentation/m-dcql-presentation-query.js';
 import type {
   DcqlMdocRepresentation,
   DcqlSdJwtVcRepresentation,
@@ -123,7 +123,7 @@ void describe('credential-parser', () => {
       },
     });
 
-    const presentationQueryResult = DcqlPresentationQuery.query(
+    const presentationQueryResult = DcqlPresentationQueryResult.query(
       [res.credential_matches.my_credential.output],
       { dcqlQuery: query }
     );
@@ -133,6 +133,7 @@ void describe('credential-parser', () => {
         success: true,
         typed: true,
         presentation_index: 0,
+        presentation_id: 'my_credential',
         claim_set_index: undefined,
         output: {
           docType: 'org.iso.7367.1.mVRC',
@@ -170,7 +171,7 @@ void describe('credential-parser', () => {
       },
     });
 
-    const presentationQueryResult = DcqlPresentationQuery.query(
+    const presentationQueryResult = DcqlPresentationQueryResult.query(
       [res.credential_matches.my_credential.output],
       { dcqlQuery: query }
     );
@@ -180,6 +181,7 @@ void describe('credential-parser', () => {
         success: true,
         typed: true,
         presentation_index: 0,
+        presentation_id: 'my_credential',
         claim_set_index: undefined,
         output: {
           docType: 'org.iso.7367.1.mVRC',
@@ -220,7 +222,7 @@ void describe('credential-parser', () => {
       },
     });
 
-    const presentationQueryResult = DcqlPresentationQuery.query(
+    const presentationQueryResult = DcqlPresentationQueryResult.query(
       [res.credential_matches.my_credential.output],
       { dcqlQuery: query }
     );
@@ -230,6 +232,7 @@ void describe('credential-parser', () => {
         success: true,
         typed: true,
         presentation_index: 0,
+        presentation_id: 'my_credential',
         claim_set_index: undefined,
         output: {
           vct: 'https://credentials.example.com/identity_credential',

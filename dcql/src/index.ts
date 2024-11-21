@@ -1,5 +1,5 @@
 export {
-  DcqlPresentationQuery,
+  DcqlPresentationQueryResult,
   DcqlPresentationRecord,
 } from './dcql-presentation/index.js';
 export { DcqlQueryResult } from './dcql-query-result/m-dcql-query-result.js';
