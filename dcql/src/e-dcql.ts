@@ -24,7 +24,19 @@ export class DcqlInvalidClaimsQueryIdError extends DcqlError {
   }
 }
 
-export class DcqlEmptyVpToken extends DcqlError {
+export class DcqlEmptyPresentationRecordError extends DcqlError {
+  constructor(opts: { message: string; cause?: unknown }) {
+    super({ code: 'BAD_REQUEST', ...opts });
+  }
+}
+
+export class DcqlMissingClaimSetParseError extends DcqlError {
+  constructor(opts: { message: string; cause?: unknown }) {
+    super({ code: 'BAD_REQUEST', ...opts });
+  }
+}
+
+export class DcqlInvalidPresentationRecordError extends DcqlError {
   constructor(opts: { message: string; cause?: unknown }) {
     super({ code: 'BAD_REQUEST', ...opts });
   }

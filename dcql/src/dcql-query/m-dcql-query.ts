@@ -3,6 +3,7 @@ import {
   DcqlCredentialSetError,
   DcqlNonUniqueCredentialQueryIdsError,
 } from '../e-dcql.js';
+import type { DcqlCredentialRepresentation } from '../u-dcql-credential-representation.js';
 import { vNonEmptyArray } from '../u-dcql.js';
 import { performDcqlQuery } from './dcql-query.js';
 import { DcqlCredentialQuery } from './m-dcql-credential-query.js';
@@ -39,7 +40,12 @@ export namespace DcqlQuery {
     validateCredentialSets(dcqlQuery);
     dcqlQuery.credentials.forEach(DcqlCredentialQuery.validate);
   };
-  export const query = performDcqlQuery;
+  export const query = (
+    dcqlQuery: Output,
+    credentials: DcqlCredentialRepresentation[]
+  ) => {
+    return performDcqlQuery(dcqlQuery, { credentials, presentation: false });
+  };
 
   export const parse = (input: Input) => {
     const parsed = v.parse(vModel, input);

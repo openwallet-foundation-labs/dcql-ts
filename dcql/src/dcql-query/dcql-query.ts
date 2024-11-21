@@ -5,15 +5,15 @@ import type { DcqlQuery } from './m-dcql-query.js';
 
 export const performDcqlQuery = (
   dcqlQuery: DcqlQuery.Output,
-  credentials: DcqlCredentialRepresentation[]
+  ctx: {
+    credentials: DcqlCredentialRepresentation[];
+    presentation: boolean;
+  }
 ): DcqlQueryResult => {
   const credentialQueriesResults = Object.fromEntries(
     dcqlQuery.credentials.map(credentialQuery => [
       credentialQuery.id,
-      perfromCredentialQuery(
-        credentialQuery,
-        credentials
-      ) as DcqlQueryResult.CredentialQueryResult,
+      perfromCredentialQuery(credentialQuery, ctx),
     ])
   );
 

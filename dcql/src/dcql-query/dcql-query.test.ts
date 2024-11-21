@@ -1,5 +1,6 @@
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
+import { DcqlPresentationRecord } from '../dcql-presentation/m-dcql-presentation-record.js';
 import type {
   DcqlMdocRepresentation,
   DcqlSdJwtVcRepresentation,
@@ -98,7 +99,9 @@ void describe('credential-parser', () => {
     const query = DcqlQuery.parse(mdocMvrcQuery);
     DcqlQuery.validate(query);
 
-    const res = DcqlQuery.query(query, [mdocMvrc]);
+    const credentials = [mdocMvrc];
+    const res = DcqlQuery.query(query, credentials);
+
     assert(res.canBeSatisfied);
 
     assert.deepStrictEqual(res.credential_matches, {
@@ -118,6 +121,15 @@ void describe('credential-parser', () => {
 
         all: res.credential_matches.my_credential?.all,
       },
+    });
+
+    const presentationRecord = DcqlPresentationRecord.parse({
+      my_credential: res.credential_matches.my_credential.output,
+    });
+
+    DcqlPresentationRecord.validate(presentationRecord, {
+      credentials: [res.credential_matches.my_credential.output],
+      dcqlQuery: query,
     });
   });
 
@@ -144,6 +156,15 @@ void describe('credential-parser', () => {
         },
         all: res.credential_matches.my_credential?.all,
       },
+    });
+
+    const presentationRecord = DcqlPresentationRecord.parse({
+      my_credential: res.credential_matches.my_credential.output,
+    });
+
+    DcqlPresentationRecord.validate(presentationRecord, {
+      credentials: [res.credential_matches.my_credential.output],
+      dcqlQuery: query,
     });
   });
 
@@ -173,6 +194,15 @@ void describe('credential-parser', () => {
         },
         all: res.credential_matches.my_credential?.all,
       },
+    });
+
+    const presentationRecord = DcqlPresentationRecord.parse({
+      my_credential: res.credential_matches.my_credential.output,
+    });
+
+    DcqlPresentationRecord.validate(presentationRecord, {
+      credentials: [res.credential_matches.my_credential.output],
+      dcqlQuery: query,
     });
   });
 });
