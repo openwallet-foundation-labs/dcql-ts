@@ -1,5 +1,11 @@
 # vp-query
 
+## 0.2.5
+
+### Patch Changes
+
+- ee3b44d: feat: add presentation-record validation
+
 ## 0.2.4
 
 ### Patch Changes
