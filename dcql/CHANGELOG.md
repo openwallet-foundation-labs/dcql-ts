@@ -1,5 +1,11 @@
 # vp-query
 
+## 0.2.7
+
+### Patch Changes
+
+- fe6f869: fix: better record validation
+
 ## 0.2.6
 
 ### Patch Changes
