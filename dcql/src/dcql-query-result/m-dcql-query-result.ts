@@ -1,53 +1,62 @@
 import * as v from 'valibot';
-import { ClaimsQuery } from '../dcql-query/m-claims-query.js';
-import { CredentialQuery } from '../dcql-query/m-credential-query.js';
-import { CredentialSetQuery } from '../dcql-query/m-credential-set-query.js';
-import { vNonEmptyArray } from '../u-query.js';
-
-const vCredentialParseSuccess = v.object({
-  success: v.literal(true),
-  typed: v.literal(true),
-  output: v.union([
-    v.object({
-      docType: v.string(),
-      namespaces: v.record(v.string(), v.record(v.string(), v.unknown())),
-    }),
-    v.object({
-      vct: v.string(),
-      claims: ClaimsQuery.vJsonRecord,
-    }),
-    v.object({
-      claims: ClaimsQuery.vJsonRecord,
-    }),
-  ]), // just for mdoc
-  issues: v.optional(v.undefined()),
-  credential_index: v.number(),
-  claim_set_index: v.union([v.number(), v.undefined()]),
-});
-
-const vCredentialParseFailure = v.object({
-  success: v.literal(false),
-  typed: v.boolean(),
-  output: v.unknown(),
-  issues: v.array(v.unknown()),
-  credential_index: v.number(),
-  claim_set_index: v.union([v.number(), v.undefined()]),
-});
+import { DcqlCredentialQuery } from '../dcql-query/m-dcql-credential-query.js';
+import { CredentialSetQuery } from '../dcql-query/m-dcql-credential-set-query.js';
+import { DcqlMdocRepresentation } from '../u-dcql-credential-representation.js';
+import {
+  idRegex,
+  vJsonRecord,
+  vNonEmptyArray,
+  vParseFailure,
+  vParseSuccess,
+} from '../u-dcql.js';
 
 export namespace DcqlQueryResult {
+  export const vW3cCredentialParseOutput = v.object({ claims: vJsonRecord });
+  export type W3cCredentialParseOutput = v.InferOutput<
+    typeof vW3cCredentialParseOutput
+  >;
+
+  export const vSdJwtCredentialParseOutput = v.object({
+    vct: v.string(),
+    claims: vJsonRecord,
+  });
+  export type SdJwtCredentialParseOutput = v.InferOutput<
+    typeof vSdJwtCredentialParseOutput
+  >;
+
+  export const vMdocCredentialParseOutput = v.object({
+    docType: v.string(),
+    namespaces: DcqlMdocRepresentation.vNamespaces,
+  });
+  export type MdocCredentialParseOutput = v.InferOutput<
+    typeof vMdocCredentialParseOutput
+  >;
+
+  const vCredentialParseSuccess = v.object({
+    ...vParseSuccess.entries,
+    output: v.union([
+      vW3cCredentialParseOutput,
+      vSdJwtCredentialParseOutput,
+      vMdocCredentialParseOutput,
+    ]),
+  });
+
   export type CredentialParseSuccess = v.InferOutput<
     typeof vCredentialParseSuccess
   >;
 
+  export const vCredentialParseResult = v.union([
+    vCredentialParseSuccess,
+    vParseFailure,
+  ]);
+
+  export type CredentialParseResult = v.InferOutput<
+    typeof vCredentialParseResult
+  >;
+
   export const vCredentialQueryResult = v.pipe(
     v.array(
-      v.array(
-        v.union([
-          v.undefined(),
-          vCredentialParseSuccess,
-          vCredentialParseFailure,
-        ])
-      )
+      v.array(v.union([v.undefined(), ...vCredentialParseResult.options]))
     ),
     vNonEmptyArray()
   );
@@ -58,24 +67,40 @@ export namespace DcqlQueryResult {
 
   export const vModel = v.object({
     credentials: v.pipe(
-      v.array(CredentialQuery.vModel),
+      v.array(DcqlCredentialQuery.vModel),
       vNonEmptyArray(),
       v.description(
         `REQUIRED. A non-empty array of Credential Queries that specify the requested Verifiable Credentials.`
       )
     ),
-    query_matches: v.record(
-      v.string(),
+
+    credential_matches: v.record(
+      v.pipe(v.string(), v.regex(idRegex)),
       v.union([
-        v.undefined(),
         v.object({
           ...vCredentialParseSuccess.entries,
-          credential_index: v.number(),
+          all: v.pipe(
+            v.array(
+              v.array(
+                v.union([v.undefined(), vCredentialParseSuccess, vParseFailure])
+              )
+            ),
+            vNonEmptyArray()
+          ),
+        }),
+        v.object({
+          ...vParseFailure.entries,
+          all: v.pipe(
+            v.array(
+              v.array(
+                v.union([v.undefined(), vCredentialParseSuccess, vParseFailure])
+              )
+            ),
+            vNonEmptyArray()
+          ),
         }),
       ])
     ),
-
-    credential_query_results: v.record(v.string(), vCredentialQueryResult),
 
     credential_sets: v.optional(
       v.pipe(
@@ -94,9 +119,13 @@ export namespace DcqlQueryResult {
         )
       )
     ),
-    areRequiredCredentialsPresent: v.boolean(),
+
+    canBeSatisfied: v.boolean(),
   });
   export type Input = v.InferInput<typeof vModel>;
   export type Output = v.InferOutput<typeof vModel>;
+
+  export type CredentialMatch = Output['credential_matches'][number];
+  export type CredentialMatchRecord = Output['credential_matches'];
 }
 export type DcqlQueryResult = DcqlQueryResult.Output;

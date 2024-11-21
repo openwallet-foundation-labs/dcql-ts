@@ -1,11 +1,11 @@
-import { queryCredentialFromCredentialQuery as perfromCredentialQuery } from '../dcql-query-result/credential-query-result.js';
+import { queryCredentialFromCredentialQuery as perfromCredentialQuery } from '../dcql-query-result/dcql-credential-query-result.js';
 import type { DcqlQueryResult } from '../dcql-query-result/m-dcql-query-result.js';
-import type { Credential } from '../u-query.js';
+import type { DcqlCredentialRepresentation } from '../u-dcql-credential-representation.js';
 import type { DcqlQuery } from './m-dcql-query.js';
 
 export const performDcqlQuery = (
   dcqlQuery: DcqlQuery.Output,
-  credentials: Credential[]
+  credentials: DcqlCredentialRepresentation[]
 ): DcqlQueryResult => {
   const credentialQueriesResults = Object.fromEntries(
     dcqlQuery.credentials.map(credentialQuery => [
@@ -17,7 +17,7 @@ export const performDcqlQuery = (
     ])
   );
 
-  const bestMatchForQuery = Object.fromEntries(
+  const credentialMatches = Object.fromEntries(
     Object.entries(credentialQueriesResults).map(
       ([key, credentialQueryResult]) => {
         // Find the best match for each credential query
@@ -43,15 +43,21 @@ export const performDcqlQuery = (
           }
         }
 
-        return [key, bestMatch ? { ...bestMatch } : undefined];
+        return [
+          key,
+          bestMatch
+            ? { ...bestMatch, all: credentialQueryResult }
+            : // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              { ...credentialQueryResult[0][0]!, all: credentialQueryResult },
+        ];
       }
     )
-  );
+  ) satisfies DcqlQueryResult.CredentialMatchRecord;
 
   const credentialSetResults = dcqlQuery.credential_sets?.map(set => {
     const matchingOptions = set.options.filter(option =>
       option.every(
-        credentialQueryId => bestMatchForQuery[credentialQueryId]?.success
+        credentialQueryId => credentialMatches[credentialQueryId]?.success
       )
     );
 
@@ -66,13 +72,12 @@ export const performDcqlQuery = (
 
   const dqclQueryMatched = credentialSetResults
     ? credentialSetResults.every(set => !set.required || set.matching_options)
-    : Object.values(bestMatchForQuery).every(query => query?.success);
+    : Object.values(credentialMatches).every(query => query.success);
 
   return {
     ...dcqlQuery,
-    areRequiredCredentialsPresent: dqclQueryMatched,
-    query_matches: bestMatchForQuery,
-    credential_query_results: credentialQueriesResults,
+    canBeSatisfied: dqclQueryMatched,
+    credential_matches: credentialMatches,
     credential_sets: credentialSetResults,
   };
 };

@@ -1,5 +1,5 @@
 import * as v from 'valibot';
-import { vIdString, vNonEmptyArray } from '../u-query.js';
+import { vIdString, vNonEmptyArray } from '../u-dcql.js';
 
 /**
  * A Credential Set Query is an object representing
