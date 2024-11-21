@@ -1,5 +1,11 @@
 # vp-query
 
+## 0.2.6
+
+### Patch Changes
+
+- 6c4d3cc: fix: export presentation-record
+
 ## 0.2.5
 
 ### Patch Changes
