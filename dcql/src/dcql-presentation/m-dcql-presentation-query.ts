@@ -7,7 +7,7 @@ import { DcqlInvalidPresentationRecordError } from '../e-dcql.js';
 import type { DcqlPresentationRepresentation } from '../u-dcql-credential-representation.js';
 import { idRegex } from '../u-dcql.js';
 
-export namespace DcqlPresentationQuery {
+export namespace DcqlPresentationQueryResult {
   export const vModel = v.object({
     ...DcqlQueryResult.vModel.entries,
     canBeSatisfied: v.literal(true),
@@ -18,6 +18,7 @@ export namespace DcqlPresentationQuery {
           DcqlQueryResult.vModel.entries.credential_matches.value.options[0],
           ['all', 'issues', 'credential_index']
         ).entries,
+        presentation_id: v.pipe(v.string(), v.regex(idRegex)),
         presentation_index: v.number(),
       })
     ),
@@ -31,7 +32,7 @@ export namespace DcqlPresentationQuery {
         canBeSatisfied: false;
         presentation_matches?: undefined;
       })
-    | DcqlPresentationQuery;
+    | DcqlPresentationQueryResult;
 
   export const parse = (input: Input | DcqlQueryResult) => {
     return v.parse(vModel, input);
@@ -47,7 +48,7 @@ export namespace DcqlPresentationQuery {
   export const query = (
     presentations: DcqlPresentationRepresentation[],
     ctx: { dcqlQuery: DcqlQuery }
-  ): DcqlPresentationQuery.UnknownResult => {
+  ): DcqlPresentationQueryResult.UnknownResult => {
     const { dcqlQuery } = ctx;
 
     const result = performDcqlQuery(dcqlQuery, {
@@ -63,8 +64,8 @@ export namespace DcqlPresentationQuery {
   };
 
   export const validate = (
-    dcqlQueryResult: DcqlPresentationQuery.UnknownResult
-  ): DcqlPresentationQuery => {
+    dcqlQueryResult: DcqlPresentationQueryResult.UnknownResult
+  ): DcqlPresentationQueryResult => {
     if (!dcqlQueryResult.canBeSatisfied) {
       throw new DcqlInvalidPresentationRecordError({
         message: 'Invalid Presentation record',
@@ -77,7 +78,7 @@ export namespace DcqlPresentationQuery {
 
   export const fromDcqlQueryResult = (
     dcqlQueryResult: DcqlQueryResult
-  ): DcqlPresentationQuery => {
+  ): DcqlPresentationQueryResult => {
     const { canBeSatisfied } = dcqlQueryResult;
     if (!canBeSatisfied) {
       throw new DcqlInvalidPresentationRecordError({
@@ -86,7 +87,7 @@ export namespace DcqlPresentationQuery {
       });
     }
 
-    const presentation_matches: DcqlPresentationQuery['presentation_matches'] =
+    const presentation_matches: DcqlPresentationQueryResult['presentation_matches'] =
       {};
 
     if (!dcqlQueryResult.credential_sets) {
@@ -103,6 +104,7 @@ export namespace DcqlPresentationQuery {
         const { all, issues, credential_index, ...rest } = match;
         presentation_matches[credentialQueryId] = {
           ...rest,
+          presentation_id: credentialQueryId,
           presentation_index: credential_index,
         };
       }
@@ -123,6 +125,7 @@ export namespace DcqlPresentationQuery {
         if (match?.success) {
           const { all, issues, credential_index, ...rest } = match;
           presentation_matches[credentialQueryId] = {
+            presentation_id: credentialQueryId,
             ...rest,
             presentation_index: credential_index,
           };
@@ -144,4 +147,4 @@ export namespace DcqlPresentationQuery {
     };
   };
 }
-export type DcqlPresentationQuery = DcqlPresentationQuery.Output;
+export type DcqlPresentationQueryResult = DcqlPresentationQueryResult.Output;
