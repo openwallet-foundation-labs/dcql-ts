@@ -170,7 +170,7 @@ const getMdocCredentialParser = (
 };
 
 const getJsonCredentialParser = (
-  credentialQuery: DcqlCredentialQuery.SdJwtVc | DcqlCredentialQuery.W3c,
+  credentialQuery: DcqlCredentialQuery.SdJwtVc | DcqlCredentialQuery.W3cVc,
   ctx: {
     claimSet?: NonNullable<DcqlCredentialQuery['claim_sets']>[number];
     presentation: boolean;

@@ -35,3 +35,8 @@ export type DcqlCredentialRepresentation =
   | DcqlMdocRepresentation
   | DcqlSdJwtVcRepresentation
   | DcqlW3cVcRepresentation;
+
+export type DcqlPresentationRepresentation =
+  | DcqlMdocRepresentation
+  | DcqlSdJwtVcRepresentation
+  | DcqlW3cVcRepresentation;

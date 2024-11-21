@@ -94,16 +94,16 @@ export namespace DcqlCredentialQuery {
   });
   export type SdJwtVc = v.InferOutput<typeof vSdJwtVc>;
 
-  export const vW3c = v.object({
+  export const vW3cVc = v.object({
     ...vBase.entries,
     format: v.picklist(['jwt_vc_json', 'jwt_vc_json-ld']),
     claims: v.optional(
       v.pipe(v.array(DcqlClaimsQuery.vW3cSdJwtVc), vNonEmptyArray())
     ),
   });
-  export type W3c = v.InferOutput<typeof vW3c>;
+  export type W3cVc = v.InferOutput<typeof vW3cVc>;
 
-  export const vModel = v.variant('format', [vMdoc, vSdJwtVc, vW3c]);
+  export const vModel = v.variant('format', [vMdoc, vSdJwtVc, vW3cVc]);
   export type Input = v.InferInput<typeof vModel>;
   export type Output = v.InferOutput<typeof vModel>;
 
