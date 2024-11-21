@@ -1,5 +1,5 @@
+export {} from './dcql-presentation/index.js';
 export { DcqlQueryResult } from './dcql-query-result/m-dcql-query-result.js';
-export { DcqlVpToken } from './dcql-query-vp-token/m-dcql-query-vp-token.js';
 export { DcqlClaimsQuery as ClaimsQuery } from './dcql-query/m-dcql-claims-query.js';
 export { DcqlCredentialQuery } from './dcql-query/m-dcql-credential-query.js';
 export { DcqlQuery } from './dcql-query/m-dcql-query.js';

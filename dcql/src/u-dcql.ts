@@ -16,7 +16,13 @@ export const vNonEmptyArray = <T extends unknown[]>() => {
 
 export const vIdString = v.pipe(v.string(), v.regex(idRegex));
 
-type JSON = string | number | boolean | null | { [key: string]: JSON } | JSON[];
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json }
+  | Json[];
 
 export const vJsonLiteral = v.union([
   v.string(),
@@ -28,7 +34,7 @@ export type JsonLiteral = v.InferOutput<typeof vJsonLiteral>;
 
 export const vJsonArray = v.array(vJsonLiteral);
 
-export const vJson: v.GenericSchema<JSON> = v.lazy(() =>
+export const vJson: v.GenericSchema<Json> = v.lazy(() =>
   v.union([vJsonLiteral, v.array(vJson), v.record(v.string(), vJson)])
 );
 
@@ -37,10 +43,10 @@ export type JsonRecord = v.InferOutput<typeof vJsonRecord>;
 
 export const vJsonValue = v.union([vJsonLiteral, vJsonArray, vJsonRecord]);
 
-export const vStringToJson = v.rawTransform<string, JSON>(
+export const vStringToJson = v.rawTransform<string, Json>(
   ({ dataset, addIssue, NEVER }) => {
     try {
-      return JSON.parse(dataset.value) as JSON;
+      return JSON.parse(dataset.value) as Json;
     } catch (error) {
       addIssue({ message: 'Invalid JSON' });
       return NEVER;

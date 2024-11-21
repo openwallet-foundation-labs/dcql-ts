@@ -25,7 +25,9 @@ const claimsPathPointerExample = {
 
 void describe('claims-path', () => {
   void it('name', _t => {
-    const parser = getJsonClaimsParser([{ path: ['name'] }]);
+    const parser = getJsonClaimsParser([{ path: ['name'] }], {
+      presentation: false,
+    });
     const res = v.parse(parser, claimsPathPointerExample);
 
     assert.deepStrictEqual(res, {
@@ -34,7 +36,9 @@ void describe('claims-path', () => {
   });
 
   void it('address', _t => {
-    const parser = getJsonClaimsParser([{ path: ['address'] }]);
+    const parser = getJsonClaimsParser([{ path: ['address'] }], {
+      presentation: false,
+    });
     const res = v.parse(parser, claimsPathPointerExample);
 
     assert.deepStrictEqual(res, {
@@ -47,9 +51,10 @@ void describe('claims-path', () => {
   });
 
   void it('address street address', _t => {
-    const parser = getJsonClaimsParser([
-      { path: ['address', 'street_address'] },
-    ]);
+    const parser = getJsonClaimsParser(
+      [{ path: ['address', 'street_address'] }],
+      { presentation: false }
+    );
     const res = v.parse(parser, claimsPathPointerExample);
 
     assert.deepStrictEqual(res, {
@@ -60,7 +65,9 @@ void describe('claims-path', () => {
   });
 
   void it('nationalities', _t => {
-    const parser = getJsonClaimsParser([{ path: ['nationalities', 1] }]);
+    const parser = getJsonClaimsParser([{ path: ['nationalities', 1] }], {
+      presentation: false,
+    });
     const res = v.parse(parser, claimsPathPointerExample);
 
     assert.deepStrictEqual(res, {
@@ -69,7 +76,9 @@ void describe('claims-path', () => {
   });
 
   void it('all degree types', _t => {
-    const parser = getJsonClaimsParser([{ path: ['degrees', null, 'type'] }]);
+    const parser = getJsonClaimsParser([{ path: ['degrees', null, 'type'] }], {
+      presentation: false,
+    });
     const res = v.parse(parser, claimsPathPointerExample);
 
     assert.deepStrictEqual(res, {
