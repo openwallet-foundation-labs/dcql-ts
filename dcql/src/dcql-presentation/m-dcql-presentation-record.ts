@@ -18,7 +18,7 @@ export namespace DcqlPresentationRecord {
   export type Output = v.InferOutput<typeof vModel>;
   export const parse = (input: Input | string) => {
     if (typeof input === 'string') {
-      v.parse(v.pipe(v.string(), vStringToJson, vModel), input);
+      return v.parse(v.pipe(v.string(), vStringToJson, vModel), input);
     }
 
     return v.parse(vModel, input);
