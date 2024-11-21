@@ -1,5 +1,11 @@
 # vp-query
 
+## 0.2.8
+
+### Patch Changes
+
+- 2ed9103: missing return
+
 ## 0.2.7
 
 ### Patch Changes
