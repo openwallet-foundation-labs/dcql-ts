@@ -1,5 +1,11 @@
 # vp-query
 
+## 0.2.9
+
+### Patch Changes
+
+- 43718b4: feat: presentation matches
+
 ## 0.2.8
 
 ### Patch Changes
