@@ -1,6 +1,6 @@
 import * as v from 'valibot';
 import { DcqlEmptyVpToken } from '../e-dcql.js';
-import { idRegex, vJsonRecord, vStringToTransform } from '../u-dcql.js';
+import { idRegex, vJsonRecord, vStringToJson } from '../u-dcql.js';
 
 export namespace DcqlVpToken {
   export const vModel = v.record(
@@ -12,7 +12,7 @@ export namespace DcqlVpToken {
   export type Output = v.InferOutput<typeof vModel>;
   export const parse = (input: Input | string) => {
     if (typeof input === 'string') {
-      return v.parse(v.pipe(v.string(), vStringToTransform, vModel), input);
+      return v.parse(v.pipe(v.string(), vStringToJson, vModel), input);
     }
 
     return v.parse(vModel, input);

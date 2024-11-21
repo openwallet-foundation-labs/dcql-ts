@@ -2,4 +2,4 @@
 'dcql': patch
 ---
 
-feat: alpha
+feat: dcql alpha

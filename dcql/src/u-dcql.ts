@@ -37,7 +37,7 @@ export type JsonRecord = v.InferOutput<typeof vJsonRecord>;
 
 export const vJsonValue = v.union([vJsonLiteral, vJsonArray, vJsonRecord]);
 
-export const vStringToTransform = v.rawTransform<string, JSON>(
+export const vStringToJson = v.rawTransform<string, JSON>(
   ({ dataset, addIssue, NEVER }) => {
     try {
       return JSON.parse(dataset.value) as JSON;
