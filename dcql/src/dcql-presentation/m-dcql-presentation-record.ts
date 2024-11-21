@@ -54,4 +54,4 @@ export namespace DcqlPresentationRecord {
     }
   };
 }
-export type DcQlPresentationRecord = DcqlPresentationRecord.Output;
+export type DcqlPresentationRecord = DcqlPresentationRecord.Output;
