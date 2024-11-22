@@ -1,5 +1,11 @@
 # vp-query
 
+## 0.2.12
+
+### Patch Changes
+
+- 8f4d8e2: feat: some small improvements
+
 ## 0.2.11
 
 ### Patch Changes
