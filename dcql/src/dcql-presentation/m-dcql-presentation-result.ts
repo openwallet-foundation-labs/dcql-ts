@@ -83,14 +83,19 @@ export namespace DcqlPresentationResult {
       presentationQueriesResults
     )) {
       for (const presentationQueryResultForClaimSet of presentationQueryResult) {
-        const { credential_index, ...result } =
+        const result =
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           presentationQueryResultForClaimSet[0]!;
         if (result.success) {
-          validMatches[queryId] = { ...result, presentation_id: queryId };
+          const { issues, credential_index, ...rest } = result;
+          validMatches[queryId] = { ...rest, presentation_id: queryId };
         } else {
           if (!invalidMatches) invalidMatches = {};
-          invalidMatches[queryId] = { ...result, presentation_id: queryId };
+          const { credential_index, ...rest } = result;
+          invalidMatches[queryId] = {
+            ...rest,
+            presentation_id: queryId,
+          };
         }
       }
     }

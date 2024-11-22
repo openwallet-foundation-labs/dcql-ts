@@ -1,4 +1,5 @@
 import * as v from 'valibot';
+import { DcqlParseError } from './e-dcql';
 
 export type UnknownBaseSchema = v.BaseSchema<
   unknown,
@@ -17,7 +18,33 @@ export class Model<T extends UnknownBaseSchema> {
   }
 
   public parse(input: T) {
-    return v.parse(this.v, input);
+    const result = this.safeParse(input);
+
+    if (result.success) {
+      return result.output;
+    }
+
+    return new DcqlParseError({
+      message: JSON.stringify(result.flattened),
+      cause: result.error,
+    });
+  }
+
+  public safeParse(
+    input: unknown
+  ):
+    | { success: true; output: v.InferOutput<T> }
+    | { success: false; flattened: v.FlatErrors<T>; error: v.ValiError<T> } {
+    const res = v.safeParse(this.input.vModel, input);
+    if (res.success) {
+      return { success: true, output: res.output };
+    } else {
+      return {
+        success: false,
+        error: new v.ValiError(res.issues),
+        flattened: v.flatten<T>(res.issues),
+      };
+    }
   }
 
   public is(input: unknown): input is v.InferOutput<T> {
@@ -25,7 +52,11 @@ export class Model<T extends UnknownBaseSchema> {
   }
 }
 
-export interface InferModelTypes<V extends UnknownBaseSchema> {
-  Input: v.InferInput<V>;
-  Output: v.InferOutput<V>;
-}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type InferModelTypes<T extends Model<any>> =
+  T extends Model<infer U>
+    ? {
+        Input: v.InferInput<U>;
+        Output: v.InferOutput<U>;
+      }
+    : never;
