@@ -18,6 +18,12 @@ export class DcqlNonUniqueCredentialQueryIdsError extends DcqlError {
   }
 }
 
+export class DcqlParseError extends DcqlError {
+  constructor(opts: { message: string; cause?: unknown }) {
+    super({ code: 'BAD_REQUEST', ...opts });
+  }
+}
+
 export class DcqlInvalidClaimsQueryIdError extends DcqlError {
   constructor(opts: { message: string; cause?: unknown }) {
     super({ code: 'BAD_REQUEST', ...opts });
