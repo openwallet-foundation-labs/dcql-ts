@@ -1,19 +1,19 @@
-import { queryCredentialFromCredentialQuery as perfromCredentialQuery } from '../dcql-query-result/dcql-credential-query-result.js';
+import { queryCredentialFromCredentialQuery } from '../dcql-query-result/dcql-credential-query-result.js';
 import type { DcqlQueryResult } from '../dcql-query-result/m-dcql-query-result.js';
-import type { DcqlCredentialRepresentation } from '../u-dcql-credential-representation.js';
+import type { DcqlCredential } from '../u-dcql-credential.js';
 import type { DcqlQuery } from './m-dcql-query.js';
 
 export const performDcqlQuery = (
   dcqlQuery: DcqlQuery.Output,
   ctx: {
-    credentials: DcqlCredentialRepresentation[];
+    credentials: DcqlCredential[];
     presentation: boolean;
   }
 ): DcqlQueryResult => {
   const credentialQueriesResults = Object.fromEntries(
     dcqlQuery.credentials.map(credentialQuery => [
       credentialQuery.id,
-      perfromCredentialQuery(credentialQuery, ctx),
+      queryCredentialFromCredentialQuery(credentialQuery, ctx),
     ])
   );
 
@@ -77,7 +77,8 @@ export const performDcqlQuery = (
   return {
     ...dcqlQuery,
     canBeSatisfied: dqclQueryMatched,
-    credential_matches: credentialMatches,
+    credential_matches:
+      credentialMatches as DcqlQueryResult['credential_matches'],
     credential_sets: credentialSetResults,
   };
 };

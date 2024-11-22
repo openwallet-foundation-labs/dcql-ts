@@ -1,7 +1,7 @@
 import * as v from 'valibot';
 import { idRegex, vJsonRecord, vStringToJson } from '../u-dcql.js';
 
-export namespace DcqlPresentationRecord {
+export namespace DcqlPresentation {
   export const vModel = v.record(
     v.pipe(v.string(), v.regex(idRegex)),
     v.union([v.string(), vJsonRecord])
@@ -21,4 +21,4 @@ export namespace DcqlPresentationRecord {
     return JSON.stringify(input);
   };
 }
-export type DcqlPresentationRecord = DcqlPresentationRecord.Output;
+export type DcqlPresentation = DcqlPresentation.Output;
