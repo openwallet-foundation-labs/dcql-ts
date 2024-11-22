@@ -1,7 +1,7 @@
 import * as v from 'valibot';
 import { DcqlCredentialQuery } from '../dcql-query/m-dcql-credential-query.js';
 import { CredentialSetQuery } from '../dcql-query/m-dcql-credential-set-query.js';
-import { DcqlMdocRepresentation } from '../u-dcql-credential-representation.js';
+import { DcqlMdocCredential } from '../u-dcql-credential.js';
 import {
   idRegex,
   vJsonRecord,
@@ -26,7 +26,7 @@ export namespace DcqlQueryResult {
 
   export const vMdocCredentialParseOutput = v.object({
     docType: v.string(),
-    namespaces: DcqlMdocRepresentation.vNamespaces,
+    namespaces: DcqlMdocCredential.vNamespaces,
   });
   export type MdocCredentialParseOutput = v.InferOutput<
     typeof vMdocCredentialParseOutput
@@ -81,8 +81,15 @@ export namespace DcqlQueryResult {
           ...vCredentialParseSuccess.entries,
           all: v.pipe(
             v.array(
-              v.array(
-                v.union([v.undefined(), vCredentialParseSuccess, vParseFailure])
+              v.pipe(
+                v.array(
+                  v.union([
+                    v.undefined(),
+                    vCredentialParseSuccess,
+                    vParseFailure,
+                  ])
+                ),
+                vNonEmptyArray()
               )
             ),
             vNonEmptyArray()
@@ -92,8 +99,15 @@ export namespace DcqlQueryResult {
           ...vParseFailure.entries,
           all: v.pipe(
             v.array(
-              v.array(
-                v.union([v.undefined(), vCredentialParseSuccess, vParseFailure])
+              v.pipe(
+                v.array(
+                  v.union([
+                    v.undefined(),
+                    vCredentialParseSuccess,
+                    vParseFailure,
+                  ])
+                ),
+                vNonEmptyArray()
               )
             ),
             vNonEmptyArray()
@@ -125,7 +139,7 @@ export namespace DcqlQueryResult {
   export type Input = v.InferInput<typeof vModel>;
   export type Output = v.InferOutput<typeof vModel>;
 
-  export type CredentialMatch = Output['credential_matches'][number];
-  export type CredentialMatchRecord = Output['credential_matches'];
+  export type CredentialMatch = Input['credential_matches'][number];
+  export type CredentialMatchRecord = Input['credential_matches'];
 }
 export type DcqlQueryResult = DcqlQueryResult.Output;

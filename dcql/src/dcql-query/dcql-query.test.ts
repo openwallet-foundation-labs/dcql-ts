@@ -1,10 +1,10 @@
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
-import { DcqlPresentationQueryResult } from '../dcql-presentation/m-dcql-presentation-query.js';
+import { DcqlPresentationResult } from '../dcql-presentation/m-dcql-presentation-result.js';
 import type {
-  DcqlMdocRepresentation,
-  DcqlSdJwtVcRepresentation,
-} from '../u-dcql-credential-representation.js';
+  DcqlMdocCredential,
+  DcqlSdJwtVcCredential,
+} from '../u-dcql-credential.js';
 import { DcqlQuery } from './m-dcql-query.js';
 
 /**
@@ -51,7 +51,7 @@ const exampleMdoc = {
       example_claim: 'example_value',
     },
   },
-} satisfies DcqlMdocRepresentation;
+} satisfies DcqlMdocCredential;
 
 const sdJwtVcExample = {
   credentials: [
@@ -92,7 +92,7 @@ const sdJwtVc = {
     ],
     nationalities: ['British', 'Betelgeusian'],
   },
-} satisfies DcqlSdJwtVcRepresentation;
+} satisfies DcqlSdJwtVcCredential;
 
 void describe('credential-parser', () => {
   void it('mdocMvrc example succeeds', _t => {
@@ -123,16 +123,15 @@ void describe('credential-parser', () => {
       },
     });
 
-    const presentationQueryResult = DcqlPresentationQueryResult.query(
-      [res.credential_matches.my_credential.output],
+    const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
+      { my_credential: res.credential_matches.my_credential.output },
       { dcqlQuery: query }
     );
 
-    assert.deepStrictEqual(presentationQueryResult.presentation_matches, {
+    assert.deepStrictEqual(presentationQueryResult.valid_matches, {
       my_credential: {
         success: true,
         typed: true,
-        presentation_index: 0,
         presentation_id: 'my_credential',
         claim_set_index: undefined,
         output: {
@@ -171,16 +170,15 @@ void describe('credential-parser', () => {
       },
     });
 
-    const presentationQueryResult = DcqlPresentationQueryResult.query(
-      [res.credential_matches.my_credential.output],
+    const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
+      { my_credential: res.credential_matches.my_credential.output },
       { dcqlQuery: query }
     );
 
-    assert.deepStrictEqual(presentationQueryResult.presentation_matches, {
+    assert.deepStrictEqual(presentationQueryResult.valid_matches, {
       my_credential: {
         success: true,
         typed: true,
-        presentation_index: 0,
         presentation_id: 'my_credential',
         claim_set_index: undefined,
         output: {
@@ -222,16 +220,15 @@ void describe('credential-parser', () => {
       },
     });
 
-    const presentationQueryResult = DcqlPresentationQueryResult.query(
-      [res.credential_matches.my_credential.output],
+    const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
+      { my_credential: res.credential_matches.my_credential.output },
       { dcqlQuery: query }
     );
 
-    assert.deepStrictEqual(presentationQueryResult.presentation_matches, {
+    assert.deepStrictEqual(presentationQueryResult.valid_matches, {
       my_credential: {
         success: true,
         typed: true,
-        presentation_index: 0,
         presentation_id: 'my_credential',
         claim_set_index: undefined,
         output: {

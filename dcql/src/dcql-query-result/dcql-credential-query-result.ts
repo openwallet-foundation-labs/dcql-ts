@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import * as v from 'valibot';
 import type { DcqlCredentialQuery } from '../dcql-query/m-dcql-credential-query.js';
-import type { DcqlCredentialRepresentation } from '../u-dcql-credential-representation.js';
+import type { DcqlCredential } from '../u-dcql-credential.js';
 import type {} from '../u-dcql.js';
 import { getCredentialParser } from './dcql-claims-query-result.js';
 import type { DcqlQueryResult } from './m-dcql-query-result.js';
@@ -9,7 +9,7 @@ import type { DcqlQueryResult } from './m-dcql-query-result.js';
 export const queryCredentialFromCredentialQuery = (
   credentialQuery: DcqlCredentialQuery,
   ctx: {
-    credentials: DcqlCredentialRepresentation[];
+    credentials: DcqlCredential[];
     presentation: boolean;
   }
 ): DcqlQueryResult.CredentialQueryResult => {
