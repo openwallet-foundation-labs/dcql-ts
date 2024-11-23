@@ -1,5 +1,11 @@
 # vp-query
 
+## 0.2.13
+
+### Patch Changes
+
+- 84f8c0f: fix: some restructurings
+
 ## 0.2.12
 
 ### Patch Changes
