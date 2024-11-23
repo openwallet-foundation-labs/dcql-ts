@@ -1,11 +1,14 @@
 import * as v from 'valibot';
 
-import { queryCredentialFromCredentialQuery } from '../dcql-query-result/dcql-credential-query-result.js';
+import {
+  DcqlInvalidPresentationRecordError,
+  DcqlPresentationResultError,
+} from '../dcql-error/e-dcql.js';
+import { runCredentialQuery } from '../dcql-parser/dcql-credential-query-result.js';
 import { DcqlQueryResult } from '../dcql-query-result/m-dcql-query-result.js';
 import type { DcqlQuery } from '../dcql-query/m-dcql-query.js';
-import { DcqlInvalidPresentationRecordError } from '../e-dcql.js';
-import type { DcqlCredentialPresentation } from '../u-dcql-credential-presentation.js';
 import { idRegex } from '../u-dcql.js';
+import type { DcqlCredentialPresentation } from './m-dcql-credential-presentation.js';
 
 export namespace DcqlPresentationResult {
   export const vModel = v.object({
@@ -63,12 +66,14 @@ export namespace DcqlPresentationResult {
           c => c.id === queryId
         );
         if (!credentialQuery) {
-          throw new Error('TODO: handle missing credential query');
+          throw new DcqlPresentationResultError({
+            message: `Query ${queryId} not found in the dcql query. Cannot validate presentation.`,
+          });
         }
 
         return [
           queryId,
-          queryCredentialFromCredentialQuery(credentialQuery, {
+          runCredentialQuery(credentialQuery, {
             presentation: true,
             credentials: [presentation],
           }),

@@ -1,7 +1,7 @@
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
 import * as v from 'valibot';
-import { getJsonClaimsParser } from '../dcql-query-result/dcql-claims-query-result.js';
+import { getJsonClaimsParser } from './dcql-claims-query-result.js';
 
 const claimsPathPointerExample = {
   name: 'Arthur Dent',

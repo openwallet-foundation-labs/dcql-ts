@@ -1,5 +1,5 @@
 import * as v from 'valibot';
-import { DcqlParseError } from './e-dcql';
+import { DcqlParseError } from './dcql-error/e-dcql';
 
 export type UnknownBaseSchema = v.BaseSchema<
   unknown,

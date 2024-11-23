@@ -1,5 +1,5 @@
 import * as v from 'valibot';
-import { DcqlUndefinedClaimSetIdError } from '../e-dcql.js';
+import { DcqlUndefinedClaimSetIdError } from '../dcql-error/e-dcql.js';
 import { idRegex, vNonEmptyArray } from '../u-dcql.js';
 import { DcqlClaimsQuery } from './m-dcql-claims-query.js';
 

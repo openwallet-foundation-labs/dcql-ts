@@ -20,7 +20,7 @@ export class DcqlNonUniqueCredentialQueryIdsError extends DcqlError {
 
 export class DcqlParseError extends DcqlError {
   constructor(opts: { message: string; cause?: unknown }) {
-    super({ code: 'BAD_REQUEST', ...opts });
+    super({ code: 'PARSE_ERROR', ...opts });
   }
 }
 
@@ -32,11 +32,17 @@ export class DcqlInvalidClaimsQueryIdError extends DcqlError {
 
 export class DcqlMissingClaimSetParseError extends DcqlError {
   constructor(opts: { message: string; cause?: unknown }) {
-    super({ code: 'BAD_REQUEST', ...opts });
+    super({ code: 'PARSE_ERROR', ...opts });
   }
 }
 
 export class DcqlInvalidPresentationRecordError extends DcqlError {
+  constructor(opts: { message: string; cause?: unknown }) {
+    super({ code: 'BAD_REQUEST', ...opts });
+  }
+}
+
+export class DcqlPresentationResultError extends DcqlError {
   constructor(opts: { message: string; cause?: unknown }) {
     super({ code: 'BAD_REQUEST', ...opts });
   }

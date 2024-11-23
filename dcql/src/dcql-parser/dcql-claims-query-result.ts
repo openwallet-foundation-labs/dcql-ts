@@ -1,10 +1,10 @@
 import * as v from 'valibot';
-import { DcqlClaimsQuery } from '../dcql-query/m-dcql-claims-query.js';
-import type { DcqlCredentialQuery } from '../dcql-query/m-dcql-credential-query.js';
 import {
   DcqlInvalidClaimsQueryIdError,
   DcqlMissingClaimSetParseError,
-} from '../e-dcql.js';
+} from '../dcql-error/e-dcql.js';
+import { DcqlClaimsQuery } from '../dcql-query/m-dcql-claims-query.js';
+import type { DcqlCredentialQuery } from '../dcql-query/m-dcql-credential-query.js';
 import { vJson, vJsonRecord } from '../u-dcql.js';
 
 const getClaimParser = (input: {
@@ -49,7 +49,7 @@ export const getNamespacesParser = (claimsQueries: DcqlClaimsQuery.Mdoc[]) => {
   return v.object(Object.fromEntries(parsersForNamespaces));
 };
 
-const getParserForClaimQuery = (
+const getClaimQueryParser = (
   claimQuery: DcqlClaimsQuery.W3cAndSdJwtVc,
   ctx: { index: number; presentation: boolean }
 ): typeof vJson => {
@@ -62,7 +62,7 @@ const getParserForClaimQuery = (
   if (typeof pathElement === 'number') {
     const elementParser = isLast
       ? vClaimParser
-      : getParserForClaimQuery(claimQuery, { ...ctx, index: index + 1 });
+      : getClaimQueryParser(claimQuery, { ...ctx, index: index + 1 });
 
     if (presentation) {
       // We allow both the concrete value and an array of one value
@@ -86,14 +86,12 @@ const getParserForClaimQuery = (
     return v.object({
       [pathElement]: isLast
         ? vClaimParser
-        : getParserForClaimQuery(claimQuery, { ...ctx, index: index + 1 }),
+        : getClaimQueryParser(claimQuery, { ...ctx, index: index + 1 }),
     });
   } else {
     return isLast
       ? v.array(vClaimParser)
-      : v.array(
-          getParserForClaimQuery(claimQuery, { ...ctx, index: index + 1 })
-        );
+      : v.array(getClaimQueryParser(claimQuery, { ...ctx, index: index + 1 }));
   }
 };
 
@@ -104,7 +102,7 @@ export const getJsonClaimsParser = (
   const claimParser = v.intersect(
     claimsQueries.map(
       claimQuery =>
-        getParserForClaimQuery(claimQuery, {
+        getClaimQueryParser(claimQuery, {
           ...ctx,
           index: 0,
         }) as typeof vJsonRecord
@@ -144,13 +142,13 @@ export const getJsonClaimsQueriesForClaimSet = (
   });
 };
 
-const getMdocCredentialParser = (
+const getMdocParser = (
   credentialQuery: DcqlCredentialQuery.Mdoc,
   ctx: { claimSet?: NonNullable<DcqlCredentialQuery['claim_sets']>[number] }
 ) => {
   const { claimSet } = ctx;
 
-  const vDocType = credentialQuery.meta?.doctype_value
+  const vDoctype = credentialQuery.meta?.doctype_value
     ? v.literal(credentialQuery.meta.doctype_value)
     : v.string();
 
@@ -160,7 +158,8 @@ const getMdocCredentialParser = (
       : credentialQuery.claims;
 
   const credentialParser = v.object({
-    docType: vDocType,
+    credentialFormat: v.literal('mso_mdoc'),
+    doctype: vDoctype,
     namespaces: claimSetQueries
       ? getNamespacesParser(claimSetQueries)
       : v.record(v.string(), v.record(v.string(), v.unknown())),
@@ -169,7 +168,7 @@ const getMdocCredentialParser = (
   return credentialParser;
 };
 
-const getJsonCredentialParser = (
+const getW3cVcSdJwtVcParser = (
   credentialQuery: DcqlCredentialQuery.SdJwtVc | DcqlCredentialQuery.W3cVc,
   ctx: {
     claimSet?: NonNullable<DcqlCredentialQuery['claim_sets']>[number];
@@ -184,6 +183,7 @@ const getJsonCredentialParser = (
 
   if (credentialQuery.format === 'vc+sd-jwt') {
     return v.object({
+      credentialFormat: v.literal('vc+sd-jwt'),
       vct: credentialQuery.meta?.vct_values
         ? v.picklist(credentialQuery.meta.vct_values)
         : v.string(),
@@ -193,6 +193,7 @@ const getJsonCredentialParser = (
     });
   } else {
     const credentialParser = v.object({
+      credentialFormat: v.picklist(['jwt_vc_json', 'jwt_vc_json-ld']),
       claims: claimSetQueries
         ? getJsonClaimsParser(claimSetQueries, ctx)
         : vJsonRecord,
@@ -202,7 +203,7 @@ const getJsonCredentialParser = (
   }
 };
 
-export const getCredentialParser = (
+export const getCredentialQueryParser = (
   credentialQuery: DcqlCredentialQuery,
   ctx: {
     claimSet?: NonNullable<DcqlCredentialQuery['claim_sets']>[number];
@@ -216,8 +217,8 @@ export const getCredentialParser = (
   }
 
   if (credentialQuery.format === 'mso_mdoc') {
-    return getMdocCredentialParser(credentialQuery, ctx);
+    return getMdocParser(credentialQuery, ctx);
   } else {
-    return getJsonCredentialParser(credentialQuery, ctx);
+    return getW3cVcSdJwtVcParser(credentialQuery, ctx);
   }
 };
