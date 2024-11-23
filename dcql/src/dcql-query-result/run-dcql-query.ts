@@ -1,9 +1,9 @@
-import { queryCredentialFromCredentialQuery } from '../dcql-query-result/dcql-credential-query-result.js';
-import type { DcqlQueryResult } from '../dcql-query-result/m-dcql-query-result.js';
+import { runCredentialQuery } from '../dcql-parser/dcql-credential-query-result.js';
+import type { DcqlQuery } from '../dcql-query/m-dcql-query.js';
 import type { DcqlCredential } from '../u-dcql-credential.js';
-import type { DcqlQuery } from './m-dcql-query.js';
+import type { DcqlQueryResult } from './m-dcql-query-result.js';
 
-export const performDcqlQuery = (
+export const runDcqlQuery = (
   dcqlQuery: DcqlQuery.Output,
   ctx: {
     credentials: DcqlCredential[];
@@ -13,7 +13,7 @@ export const performDcqlQuery = (
   const credentialQueriesResults = Object.fromEntries(
     dcqlQuery.credentials.map(credentialQuery => [
       credentialQuery.id,
-      queryCredentialFromCredentialQuery(credentialQuery, ctx),
+      runCredentialQuery(credentialQuery, ctx),
     ])
   );
 
@@ -29,17 +29,21 @@ export const performDcqlQuery = (
             result => result?.success == true
           );
 
-          if (!bestMatch) {
-            bestMatch = bestMatchForCredential;
+          if (!bestMatch && bestMatchForCredential) {
+            const { issues, ...matchWithoutIssues } = bestMatchForCredential;
+            bestMatch = matchWithoutIssues;
             continue;
           }
 
           if (
             bestMatchForCredential &&
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            bestMatchForCredential.claim_set_index! < bestMatch.claim_set_index!
+            bestMatchForCredential.claim_set_index! <
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+              bestMatch?.claim_set_index!
           ) {
-            bestMatch = bestMatchForCredential;
+            const { issues, ...matchWithoutIssues } = bestMatchForCredential;
+            bestMatch = matchWithoutIssues;
           }
         }
 

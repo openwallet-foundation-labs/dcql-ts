@@ -1,7 +1,7 @@
 import * as v from 'valibot';
-import type { InferModelTypes } from './model';
-import { Model } from './model.js';
 import { vJsonRecord } from './u-dcql.js';
+import type { InferModelTypes } from './u-model';
+import { Model } from './u-model.js';
 
 export namespace DcqlMdocCredential {
   export const vNamespaces = v.record(
@@ -9,7 +9,8 @@ export namespace DcqlMdocCredential {
     v.record(v.string(), v.unknown())
   );
   export const vModel = v.object({
-    docType: v.string(),
+    credentialFormat: v.literal('mso_mdoc'),
+    doctype: v.string(),
     namespaces: vNamespaces,
   });
 
@@ -22,6 +23,7 @@ export type DcqlMdocCredential = DcqlMdocCredential.Model['Output'];
 export namespace DcqlSdJwtVcCredential {
   export const vClaims = vJsonRecord;
   export const vModel = v.object({
+    credentialFormat: v.literal('vc+sd-jwt'),
     vct: v.string(),
     claims: vClaims,
   });
@@ -34,27 +36,23 @@ export type DcqlSdJwtVcCredential = DcqlSdJwtVcCredential.Model['Output'];
 export namespace DcqlW3cVcCredential {
   export const vClaims = vJsonRecord;
   export const vModel = v.object({
+    credentialFormat: v.picklist(['jwt_vc_json-ld', 'jwt_vc_json']),
     claims: vClaims,
   });
-  export type Input = v.InferInput<typeof vModel>;
-  export type Output = v.InferOutput<typeof vModel>;
-  export const parse = (input: Input): Output => {
-    return v.parse(vModel, input);
-  };
-  export type Claims = Output['claims'];
+
+  export const model = new Model({ vModel });
+  export type Model = InferModelTypes<typeof model>;
+  export type Claims = Model['Output']['claims'];
 }
-export type DcqlW3cVcCredential = DcqlW3cVcCredential.Output;
+export type DcqlW3cVcCredential = DcqlW3cVcCredential.Model['Output'];
 
 export namespace DcqlCredential {
-  export const vModel = v.union([
+  export const vModel = v.variant('credentialFormat', [
     DcqlMdocCredential.vModel,
     DcqlSdJwtVcCredential.vModel,
     DcqlW3cVcCredential.vModel,
   ]);
-  export type Input = v.InferInput<typeof vModel>;
-  export type Output = v.InferOutput<typeof vModel>;
-  export const parse = (input: Input) => {
-    return v.parse(vModel, input);
-  };
+  export const model = new Model({ vModel });
+  export type Model = InferModelTypes<typeof model>;
 }
-export type DcqlCredential = DcqlCredential.Output;
+export type DcqlCredential = DcqlCredential.Model['Output'];

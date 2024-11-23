@@ -34,7 +34,8 @@ const mdocMvrcQuery = {
 } satisfies DcqlQuery.Input;
 
 const mdocMvrc = {
-  docType: 'org.iso.7367.1.mVRC',
+  credentialFormat: 'mso_mdoc',
+  doctype: 'org.iso.7367.1.mVRC',
   namespaces: {
     'org.iso.7367.1': {
       vehicle_holder: 'Martin Auer',
@@ -42,10 +43,11 @@ const mdocMvrc = {
     },
     'org.iso.18013.5.1': { first_name: 'Martin Auer' },
   },
-};
+} satisfies DcqlMdocCredential;
 
 const exampleMdoc = {
-  docType: 'example_doctype',
+  credentialFormat: 'mso_mdoc',
+  doctype: 'example_doctype',
   namespaces: {
     example_namespaces: {
       example_claim: 'example_value',
@@ -71,6 +73,7 @@ const sdJwtVcExample = {
 } satisfies DcqlQuery.Input;
 
 const sdJwtVc = {
+  credentialFormat: 'vc+sd-jwt',
   vct: 'https://credentials.example.com/identity_credential',
   claims: {
     first_name: 'Arthur',
@@ -106,13 +109,13 @@ void describe('credential-parser', () => {
 
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
-        issues: undefined,
         success: true,
         typed: true,
         credential_index: 0,
         claim_set_index: undefined,
         output: {
-          docType: 'org.iso.7367.1.mVRC',
+          credentialFormat: 'mso_mdoc' as const,
+          doctype: 'org.iso.7367.1.mVRC',
           namespaces: {
             'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
             'org.iso.18013.5.1': { first_name: 'Martin Auer' },
@@ -135,7 +138,8 @@ void describe('credential-parser', () => {
         presentation_id: 'my_credential',
         claim_set_index: undefined,
         output: {
-          docType: 'org.iso.7367.1.mVRC',
+          credentialFormat: 'mso_mdoc' as const,
+          doctype: 'org.iso.7367.1.mVRC',
           namespaces: {
             'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
             'org.iso.18013.5.1': { first_name: 'Martin Auer' },
@@ -154,13 +158,13 @@ void describe('credential-parser', () => {
     assert(res.canBeSatisfied);
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
-        issues: undefined,
         success: true,
         typed: true,
         credential_index: 1,
         claim_set_index: undefined,
         output: {
-          docType: 'org.iso.7367.1.mVRC',
+          credentialFormat: 'mso_mdoc' as const,
+          doctype: 'org.iso.7367.1.mVRC',
           namespaces: {
             'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
             'org.iso.18013.5.1': { first_name: 'Martin Auer' },
@@ -182,7 +186,8 @@ void describe('credential-parser', () => {
         presentation_id: 'my_credential',
         claim_set_index: undefined,
         output: {
-          docType: 'org.iso.7367.1.mVRC',
+          credentialFormat: 'mso_mdoc' as const,
+          doctype: 'org.iso.7367.1.mVRC',
           namespaces: {
             'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
             'org.iso.18013.5.1': { first_name: 'Martin Auer' },
@@ -201,12 +206,12 @@ void describe('credential-parser', () => {
     assert(res.canBeSatisfied);
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
-        issues: undefined,
         success: true,
         typed: true,
         credential_index: 1,
         claim_set_index: undefined,
         output: {
+          credentialFormat: 'vc+sd-jwt' as const,
           vct: 'https://credentials.example.com/identity_credential',
           claims: {
             first_name: 'Arthur',
@@ -232,6 +237,7 @@ void describe('credential-parser', () => {
         presentation_id: 'my_credential',
         claim_set_index: undefined,
         output: {
+          credentialFormat: 'vc+sd-jwt' as const,
           vct: 'https://credentials.example.com/identity_credential',
           claims: {
             first_name: 'Arthur',

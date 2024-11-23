@@ -2,10 +2,10 @@ import * as v from 'valibot';
 import {
   DcqlCredentialSetError,
   DcqlNonUniqueCredentialQueryIdsError,
-} from '../e-dcql.js';
+} from '../dcql-error/e-dcql.js';
+import { runDcqlQuery } from '../dcql-query-result/run-dcql-query.js';
 import type { DcqlCredential } from '../u-dcql-credential.js';
 import { vNonEmptyArray } from '../u-dcql.js';
-import { performDcqlQuery } from './dcql-query.js';
 import { DcqlCredentialQuery } from './m-dcql-credential-query.js';
 import { CredentialSetQuery } from './m-dcql-credential-set-query.js';
 
@@ -41,7 +41,7 @@ export namespace DcqlQuery {
     dcqlQuery.credentials.forEach(DcqlCredentialQuery.validate);
   };
   export const query = (dcqlQuery: Output, credentials: DcqlCredential[]) => {
-    return performDcqlQuery(dcqlQuery, { credentials, presentation: false });
+    return runDcqlQuery(dcqlQuery, { credentials, presentation: false });
   };
 
   export const parse = (input: Input) => {

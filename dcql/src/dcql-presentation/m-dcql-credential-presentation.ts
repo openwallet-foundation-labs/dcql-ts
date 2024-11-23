@@ -1,11 +1,11 @@
 import * as v from 'valibot';
-import type { InferModelTypes } from './model';
-import { Model } from './model';
 import {
   DcqlMdocCredential,
   DcqlSdJwtVcCredential,
   DcqlW3cVcCredential,
-} from './u-dcql-credential';
+} from '../u-dcql-credential';
+import type { InferModelTypes } from '../u-model';
+import { Model } from '../u-model';
 
 export namespace DcqlMdocPresentation {
   export const model = new Model({ vModel: DcqlMdocCredential.vModel });

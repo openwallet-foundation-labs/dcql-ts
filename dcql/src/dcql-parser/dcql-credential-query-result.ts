@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import * as v from 'valibot';
+import type { DcqlQueryResult } from '../dcql-query-result/m-dcql-query-result.js';
 import type { DcqlCredentialQuery } from '../dcql-query/m-dcql-credential-query.js';
 import type { DcqlCredential } from '../u-dcql-credential.js';
 import type {} from '../u-dcql.js';
-import { getCredentialParser } from './dcql-claims-query-result.js';
-import type { DcqlQueryResult } from './m-dcql-query-result.js';
+import { getCredentialQueryParser } from './dcql-claims-query-result.js';
 
-export const queryCredentialFromCredentialQuery = (
+export const runCredentialQuery = (
   credentialQuery: DcqlCredentialQuery,
   ctx: {
     credentials: DcqlCredential[];
@@ -22,7 +22,7 @@ export const queryCredentialFromCredentialQuery = (
   > = new Array(claimSets.length).fill([]);
 
   for (const [claimSetIndex, claim_set] of claimSets.entries()) {
-    const credentialParser = getCredentialParser(credentialQuery, {
+    const credentialParser = getCredentialQueryParser(credentialQuery, {
       claimSet: claim_set,
       presentation,
     });

@@ -1,44 +1,18 @@
 import * as v from 'valibot';
 import { DcqlCredentialQuery } from '../dcql-query/m-dcql-credential-query.js';
 import { CredentialSetQuery } from '../dcql-query/m-dcql-credential-set-query.js';
-import { DcqlMdocCredential } from '../u-dcql-credential.js';
+import { DcqlCredential } from '../u-dcql-credential.js';
 import {
   idRegex,
-  vJsonRecord,
   vNonEmptyArray,
   vParseFailure,
   vParseSuccess,
 } from '../u-dcql.js';
 
 export namespace DcqlQueryResult {
-  export const vW3cCredentialParseOutput = v.object({ claims: vJsonRecord });
-  export type W3cCredentialParseOutput = v.InferOutput<
-    typeof vW3cCredentialParseOutput
-  >;
-
-  export const vSdJwtCredentialParseOutput = v.object({
-    vct: v.string(),
-    claims: vJsonRecord,
-  });
-  export type SdJwtCredentialParseOutput = v.InferOutput<
-    typeof vSdJwtCredentialParseOutput
-  >;
-
-  export const vMdocCredentialParseOutput = v.object({
-    docType: v.string(),
-    namespaces: DcqlMdocCredential.vNamespaces,
-  });
-  export type MdocCredentialParseOutput = v.InferOutput<
-    typeof vMdocCredentialParseOutput
-  >;
-
   const vCredentialParseSuccess = v.object({
     ...vParseSuccess.entries,
-    output: v.union([
-      vW3cCredentialParseOutput,
-      vSdJwtCredentialParseOutput,
-      vMdocCredentialParseOutput,
-    ]),
+    output: DcqlCredential.model.v,
   });
 
   export type CredentialParseSuccess = v.InferOutput<
