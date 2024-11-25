@@ -1,5 +1,11 @@
 # vp-query
 
+## 0.2.16
+
+### Patch Changes
+
+- e001636: fix: small restructure
+
 ## 0.2.15
 
 ### Patch Changes
