@@ -158,7 +158,7 @@ const getMdocParser = (
       : credentialQuery.claims;
 
   const credentialParser = v.object({
-    credentialFormat: v.literal('mso_mdoc'),
+    credential_format: v.literal('mso_mdoc'),
     doctype: vDoctype,
     namespaces: claimSetQueries
       ? getNamespacesParser(claimSetQueries)
@@ -183,7 +183,7 @@ const getW3cVcSdJwtVcParser = (
 
   if (credentialQuery.format === 'vc+sd-jwt') {
     return v.object({
-      credentialFormat: v.literal('vc+sd-jwt'),
+      credential_format: v.literal('vc+sd-jwt'),
       vct: credentialQuery.meta?.vct_values
         ? v.picklist(credentialQuery.meta.vct_values)
         : v.string(),
@@ -193,7 +193,7 @@ const getW3cVcSdJwtVcParser = (
     });
   } else {
     const credentialParser = v.object({
-      credentialFormat: v.picklist(['jwt_vc_json', 'jwt_vc_json-ld']),
+      credential_format: v.picklist(['jwt_vc_json', 'jwt_vc_json-ld']),
       claims: claimSetQueries
         ? getJsonClaimsParser(claimSetQueries, ctx)
         : vJsonRecord,

@@ -51,8 +51,7 @@ export const runDcqlQuery = (
           key,
           bestMatch
             ? { ...bestMatch, all: credentialQueryResult }
-            : // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              { ...credentialQueryResult[0][0]!, all: credentialQueryResult },
+            : { success: false, all: credentialQueryResult },
         ];
       }
     )

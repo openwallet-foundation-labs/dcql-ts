@@ -1,12 +1,6 @@
 import * as v from 'valibot';
+import { DcqlCredential } from './u-dcql-credential';
 export const idRegex = /^[a-zA-Z0-9_-]+$/;
-
-export const vCredentialFormat = v.picklist([
-  'mso_mdoc',
-  'vc+sd-jwt',
-  'jwt_vc_json',
-  'jwt_vc_json-ld',
-]);
 
 export const vNonEmptyArray = <T extends unknown[]>() => {
   return v.custom<[T[number], ...T]>(input =>
@@ -54,22 +48,20 @@ export const vStringToJson = v.rawTransform<string, Json>(
   }
 );
 
-export const vParseSuccess = v.object({
+export const vCredentialParseSuccess = v.object({
   success: v.literal(true),
   typed: v.literal(true),
-  output: v.unknown(),
   issues: v.optional(v.undefined()),
-  credential_index: v.number(),
+  input_credential_index: v.number(),
   claim_set_index: v.union([v.number(), v.undefined()]),
+  output: DcqlCredential.model.v,
 });
 
-export const vParseFailure = v.object({
+export const vCredentialParseFailure = v.object({
   success: v.literal(false),
   typed: v.boolean(),
   output: v.unknown(),
   issues: v.pipe(v.array(v.unknown()), vNonEmptyArray()),
-  credential_index: v.number(),
+  input_credential_index: v.number(),
   claim_set_index: v.union([v.number(), v.undefined()]),
 });
-
-export const vParseResult = v.union([vParseSuccess, vParseFailure]);

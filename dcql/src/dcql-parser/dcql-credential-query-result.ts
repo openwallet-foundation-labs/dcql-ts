@@ -47,7 +47,7 @@ export const runCredentialQuery = (
         ...(parseResult.issues && {
           flattened: v.flatten<typeof credentialParser>(parseResult.issues),
         }),
-        credential_index: credentialIndex,
+        input_credential_index: credentialIndex,
         claim_set_index: credentialQuery.claim_sets ? claimSetIndex : undefined,
       });
     }
