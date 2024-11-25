@@ -1,5 +1,11 @@
 # vp-query
 
+## 0.2.15
+
+### Patch Changes
+
+- faaa8cb: fix: use variant
+
 ## 0.2.14
 
 ### Patch Changes
