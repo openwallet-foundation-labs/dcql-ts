@@ -54,7 +54,7 @@ export const vCredentialParseSuccess = v.object({
   issues: v.optional(v.undefined()),
   input_credential_index: v.number(),
   claim_set_index: v.union([v.number(), v.undefined()]),
-  output: DcqlCredential.model.v,
+  output: DcqlCredential.vModel,
 });
 
 export const vCredentialParseFailure = v.object({
