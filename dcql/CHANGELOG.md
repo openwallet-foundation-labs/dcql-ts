@@ -1,5 +1,11 @@
 # vp-query
 
+## 0.2.14
+
+### Patch Changes
+
+- afc44eb: fix: incorporate implementation feedback
+
 ## 0.2.13
 
 ### Patch Changes
