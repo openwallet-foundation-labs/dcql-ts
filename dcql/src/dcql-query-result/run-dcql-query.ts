@@ -1,3 +1,4 @@
+import type * as v from 'valibot';
 import { runCredentialQuery } from '../dcql-parser/dcql-credential-query-result.js';
 import type { DcqlQuery } from '../dcql-query/m-dcql-query.js';
 import type { DcqlCredential } from '../u-dcql-credential.js';
@@ -21,8 +22,9 @@ export const runDcqlQuery = (
     Object.entries(credentialQueriesResults).map(
       ([key, credentialQueryResult]) => {
         // Find the best match for each credential query
-        let bestMatch: DcqlQueryResult.CredentialParseSuccess | undefined =
-          undefined;
+        let bestMatch:
+          | v.InferOutput<typeof DcqlCredential.vParseSuccess>
+          | undefined = undefined;
 
         for (const credentialParseResult of credentialQueryResult) {
           const bestMatchForCredential = credentialParseResult.find(

@@ -1,5 +1,4 @@
 import * as v from 'valibot';
-import { DcqlCredential } from './u-dcql-credential';
 export const idRegex = /^[a-zA-Z0-9_-]+$/;
 
 export const vNonEmptyArray = <T extends unknown[]>() => {
@@ -47,21 +46,3 @@ export const vStringToJson = v.rawTransform<string, Json>(
     }
   }
 );
-
-export const vCredentialParseSuccess = v.object({
-  success: v.literal(true),
-  typed: v.literal(true),
-  issues: v.optional(v.undefined()),
-  input_credential_index: v.number(),
-  claim_set_index: v.union([v.number(), v.undefined()]),
-  output: DcqlCredential.vModel,
-});
-
-export const vCredentialParseFailure = v.object({
-  success: v.literal(false),
-  typed: v.boolean(),
-  output: v.unknown(),
-  issues: v.pipe(v.array(v.unknown()), vNonEmptyArray()),
-  input_credential_index: v.number(),
-  claim_set_index: v.union([v.number(), v.undefined()]),
-});
