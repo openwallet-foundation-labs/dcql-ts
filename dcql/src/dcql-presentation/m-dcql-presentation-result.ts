@@ -7,7 +7,8 @@ import {
 import { runCredentialQuery } from '../dcql-parser/dcql-credential-query-result.js';
 import { DcqlQueryResult } from '../dcql-query-result/m-dcql-query-result.js';
 import type { DcqlQuery } from '../dcql-query/m-dcql-query.js';
-import { idRegex, vCredentialParseFailure } from '../u-dcql.js';
+import { DcqlCredential } from '../u-dcql-credential.js';
+import { idRegex } from '../u-dcql.js';
 import type { DcqlCredentialPresentation } from './m-dcql-credential-presentation.js';
 
 export namespace DcqlPresentationResult {
@@ -18,7 +19,7 @@ export namespace DcqlPresentationResult {
       v.record(
         v.pipe(v.string(), v.regex(idRegex)),
         v.object({
-          ...v.omit(vCredentialParseFailure, ['input_credential_index'])
+          ...v.omit(DcqlCredential.vParseFailure, ['input_credential_index'])
             .entries,
           presentation_id: v.pipe(v.string(), v.regex(idRegex)),
         })
@@ -29,10 +30,10 @@ export namespace DcqlPresentationResult {
     valid_matches: v.record(
       v.pipe(v.string(), v.regex(idRegex)),
       v.object({
-        ...v.omit(
-          DcqlQueryResult.vModel.entries.credential_matches.value.options[0],
-          ['all', 'issues', 'input_credential_index']
-        ).entries,
+        ...v.omit(DcqlCredential.vParseSuccess, [
+          'issues',
+          'input_credential_index',
+        ]).entries,
         presentation_id: v.pipe(v.string(), v.regex(idRegex)),
       })
     ),

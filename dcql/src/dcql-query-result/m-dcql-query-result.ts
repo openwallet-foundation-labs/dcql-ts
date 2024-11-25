@@ -1,25 +1,17 @@
 import * as v from 'valibot';
 import { DcqlCredentialQuery } from '../dcql-query/m-dcql-credential-query.js';
 import { CredentialSetQuery } from '../dcql-query/m-dcql-credential-set-query.js';
-import {
-  idRegex,
-  vCredentialParseFailure,
-  vCredentialParseSuccess,
-  vNonEmptyArray,
-} from '../u-dcql.js';
+import { DcqlCredential } from '../u-dcql-credential.js';
+import { idRegex, vNonEmptyArray } from '../u-dcql.js';
 
 export namespace DcqlQueryResult {
-  export type CredentialParseSuccess = v.InferOutput<
-    typeof vCredentialParseSuccess
-  >;
-
   export const vCredentialQueryResult = v.pipe(
     v.array(
       v.array(
         v.union([
           v.undefined(),
-          vCredentialParseSuccess,
-          vCredentialParseFailure,
+          DcqlCredential.vParseSuccess,
+          DcqlCredential.vParseFailure,
         ])
       )
     ),
@@ -43,15 +35,15 @@ export namespace DcqlQueryResult {
       v.pipe(v.string(), v.regex(idRegex)),
       v.union([
         v.object({
-          ...vCredentialParseSuccess.entries,
+          ...DcqlCredential.vParseSuccess.entries,
           all: v.pipe(
             v.array(
               v.pipe(
                 v.array(
                   v.union([
                     v.undefined(),
-                    vCredentialParseSuccess,
-                    vCredentialParseFailure,
+                    DcqlCredential.vParseSuccess,
+                    DcqlCredential.vParseFailure,
                   ])
                 ),
                 vNonEmptyArray()
@@ -61,15 +53,15 @@ export namespace DcqlQueryResult {
           ),
         }),
         v.object({
-          success: vCredentialParseFailure.entries.success,
+          success: DcqlCredential.vParseFailure.entries.success,
           all: v.pipe(
             v.array(
               v.pipe(
                 v.array(
                   v.union([
                     v.undefined(),
-                    vCredentialParseSuccess,
-                    vCredentialParseFailure,
+                    DcqlCredential.vParseSuccess,
+                    DcqlCredential.vParseFailure,
                   ])
                 ),
                 vNonEmptyArray()
