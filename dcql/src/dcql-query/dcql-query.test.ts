@@ -34,7 +34,7 @@ const mdocMvrcQuery = {
 } satisfies DcqlQuery.Input;
 
 const mdocMvrc = {
-  credentialFormat: 'mso_mdoc',
+  credential_format: 'mso_mdoc',
   doctype: 'org.iso.7367.1.mVRC',
   namespaces: {
     'org.iso.7367.1': {
@@ -46,7 +46,7 @@ const mdocMvrc = {
 } satisfies DcqlMdocCredential;
 
 const exampleMdoc = {
-  credentialFormat: 'mso_mdoc',
+  credential_format: 'mso_mdoc',
   doctype: 'example_doctype',
   namespaces: {
     example_namespaces: {
@@ -73,7 +73,7 @@ const sdJwtVcExample = {
 } satisfies DcqlQuery.Input;
 
 const sdJwtVc = {
-  credentialFormat: 'vc+sd-jwt',
+  credential_format: 'vc+sd-jwt',
   vct: 'https://credentials.example.com/identity_credential',
   claims: {
     first_name: 'Arthur',
@@ -98,6 +98,174 @@ const sdJwtVc = {
 } satisfies DcqlSdJwtVcCredential;
 
 void describe('credential-parser', () => {
+  void it('mvrc query fails with invalid mdoc', _t => {
+    const query = DcqlQuery.parse(mdocMvrcQuery);
+    DcqlQuery.validate(query);
+
+    const credentials = [exampleMdoc];
+    const res = DcqlQuery.query(query, credentials);
+
+    assert(!res.canBeSatisfied);
+    assert.deepStrictEqual(res.credential_matches, {
+      my_credential: {
+        success: false,
+        all: [
+          [
+            {
+              typed: false,
+              success: false,
+              output: {
+                credential_format: 'mso_mdoc',
+                doctype: 'example_doctype',
+                namespaces: {},
+              },
+              issues: [
+                {
+                  kind: 'schema',
+                  type: 'literal',
+                  input: 'example_doctype',
+                  expected: '"org.iso.7367.1.mVRC"',
+                  received: '"example_doctype"',
+                  message:
+                    'Invalid type: Expected "org.iso.7367.1.mVRC" but received "example_doctype"',
+                  requirement: undefined,
+                  path: [
+                    {
+                      type: 'object',
+                      origin: 'value',
+                      input: {
+                        credential_format: 'mso_mdoc',
+                        doctype: 'example_doctype',
+                        namespaces: {
+                          example_namespaces: {
+                            example_claim: 'example_value',
+                          },
+                        },
+                      },
+                      key: 'doctype',
+                      value: 'example_doctype',
+                    },
+                  ],
+                  issues: undefined,
+                  lang: undefined,
+                  abortEarly: undefined,
+                  abortPipeEarly: undefined,
+                },
+                {
+                  kind: 'schema',
+                  type: 'object',
+                  input: undefined,
+                  expected: 'Object',
+                  received: 'undefined',
+                  message:
+                    'Invalid type: Expected Object but received undefined',
+                  requirement: undefined,
+                  path: [
+                    {
+                      type: 'object',
+                      origin: 'value',
+                      input: {
+                        credential_format: 'mso_mdoc',
+                        doctype: 'example_doctype',
+                        namespaces: {
+                          example_namespaces: {
+                            example_claim: 'example_value',
+                          },
+                        },
+                      },
+                      key: 'namespaces',
+                      value: {
+                        example_namespaces: {
+                          example_claim: 'example_value',
+                        },
+                      },
+                    },
+                    {
+                      type: 'object',
+                      origin: 'value',
+                      input: {
+                        example_namespaces: {
+                          example_claim: 'example_value',
+                        },
+                      },
+                      key: 'org.iso.7367.1',
+                      value: undefined,
+                    },
+                  ],
+                  issues: undefined,
+                  lang: undefined,
+                  abortEarly: undefined,
+                  abortPipeEarly: undefined,
+                },
+                {
+                  kind: 'schema',
+                  type: 'object',
+                  input: undefined,
+                  expected: 'Object',
+                  received: 'undefined',
+                  message:
+                    'Invalid type: Expected Object but received undefined',
+                  requirement: undefined,
+                  path: [
+                    {
+                      type: 'object',
+                      origin: 'value',
+                      input: {
+                        credential_format: 'mso_mdoc',
+                        doctype: 'example_doctype',
+                        namespaces: {
+                          example_namespaces: {
+                            example_claim: 'example_value',
+                          },
+                        },
+                      },
+                      key: 'namespaces',
+                      value: {
+                        example_namespaces: {
+                          example_claim: 'example_value',
+                        },
+                      },
+                    },
+                    {
+                      type: 'object',
+                      origin: 'value',
+                      input: {
+                        example_namespaces: {
+                          example_claim: 'example_value',
+                        },
+                      },
+                      key: 'org.iso.18013.5.1',
+                      value: undefined,
+                    },
+                  ],
+                  issues: undefined,
+                  lang: undefined,
+                  abortEarly: undefined,
+                  abortPipeEarly: undefined,
+                },
+              ],
+              flattened: {
+                nested: {
+                  doctype: [
+                    'Invalid type: Expected "org.iso.7367.1.mVRC" but received "example_doctype"',
+                  ],
+                  'namespaces.org.iso.7367.1': [
+                    'Invalid type: Expected Object but received undefined',
+                  ],
+                  'namespaces.org.iso.18013.5.1': [
+                    'Invalid type: Expected Object but received undefined',
+                  ],
+                },
+              },
+              input_credential_index: 0,
+              claim_set_index: undefined,
+            },
+          ],
+        ],
+      },
+    });
+  });
+
   void it('mdocMvrc example succeeds', _t => {
     const query = DcqlQuery.parse(mdocMvrcQuery);
     DcqlQuery.validate(query);
@@ -111,10 +279,10 @@ void describe('credential-parser', () => {
       my_credential: {
         success: true,
         typed: true,
-        credential_index: 0,
+        input_credential_index: 0,
         claim_set_index: undefined,
         output: {
-          credentialFormat: 'mso_mdoc' as const,
+          credential_format: 'mso_mdoc' as const,
           doctype: 'org.iso.7367.1.mVRC',
           namespaces: {
             'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
@@ -138,7 +306,7 @@ void describe('credential-parser', () => {
         presentation_id: 'my_credential',
         claim_set_index: undefined,
         output: {
-          credentialFormat: 'mso_mdoc' as const,
+          credential_format: 'mso_mdoc' as const,
           doctype: 'org.iso.7367.1.mVRC',
           namespaces: {
             'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
@@ -160,10 +328,10 @@ void describe('credential-parser', () => {
       my_credential: {
         success: true,
         typed: true,
-        credential_index: 1,
+        input_credential_index: 1,
         claim_set_index: undefined,
         output: {
-          credentialFormat: 'mso_mdoc' as const,
+          credential_format: 'mso_mdoc' as const,
           doctype: 'org.iso.7367.1.mVRC',
           namespaces: {
             'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
@@ -186,7 +354,7 @@ void describe('credential-parser', () => {
         presentation_id: 'my_credential',
         claim_set_index: undefined,
         output: {
-          credentialFormat: 'mso_mdoc' as const,
+          credential_format: 'mso_mdoc' as const,
           doctype: 'org.iso.7367.1.mVRC',
           namespaces: {
             'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
@@ -208,10 +376,10 @@ void describe('credential-parser', () => {
       my_credential: {
         success: true,
         typed: true,
-        credential_index: 1,
+        input_credential_index: 1,
         claim_set_index: undefined,
         output: {
-          credentialFormat: 'vc+sd-jwt' as const,
+          credential_format: 'vc+sd-jwt' as const,
           vct: 'https://credentials.example.com/identity_credential',
           claims: {
             first_name: 'Arthur',
@@ -237,7 +405,7 @@ void describe('credential-parser', () => {
         presentation_id: 'my_credential',
         claim_set_index: undefined,
         output: {
-          credentialFormat: 'vc+sd-jwt' as const,
+          credential_format: 'vc+sd-jwt' as const,
           vct: 'https://credentials.example.com/identity_credential',
           claims: {
             first_name: 'Arthur',

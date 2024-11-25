@@ -9,7 +9,7 @@ export namespace DcqlMdocCredential {
     v.record(v.string(), v.unknown())
   );
   export const vModel = v.object({
-    credentialFormat: v.literal('mso_mdoc'),
+    credential_format: v.literal('mso_mdoc'),
     doctype: v.string(),
     namespaces: vNamespaces,
   });
@@ -23,7 +23,7 @@ export type DcqlMdocCredential = DcqlMdocCredential.Model['Output'];
 export namespace DcqlSdJwtVcCredential {
   export const vClaims = vJsonRecord;
   export const vModel = v.object({
-    credentialFormat: v.literal('vc+sd-jwt'),
+    credential_format: v.literal('vc+sd-jwt'),
     vct: v.string(),
     claims: vClaims,
   });
@@ -36,7 +36,7 @@ export type DcqlSdJwtVcCredential = DcqlSdJwtVcCredential.Model['Output'];
 export namespace DcqlW3cVcCredential {
   export const vClaims = vJsonRecord;
   export const vModel = v.object({
-    credentialFormat: v.picklist(['jwt_vc_json-ld', 'jwt_vc_json']),
+    credential_format: v.picklist(['jwt_vc_json-ld', 'jwt_vc_json']),
     claims: vClaims,
   });
 
@@ -47,7 +47,7 @@ export namespace DcqlW3cVcCredential {
 export type DcqlW3cVcCredential = DcqlW3cVcCredential.Model['Output'];
 
 export namespace DcqlCredential {
-  export const vModel = v.variant('credentialFormat', [
+  export const vModel = v.variant('credential_format', [
     DcqlMdocCredential.vModel,
     DcqlSdJwtVcCredential.vModel,
     DcqlW3cVcCredential.vModel,

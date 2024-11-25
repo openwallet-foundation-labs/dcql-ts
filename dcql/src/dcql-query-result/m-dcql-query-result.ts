@@ -1,36 +1,27 @@
 import * as v from 'valibot';
 import { DcqlCredentialQuery } from '../dcql-query/m-dcql-credential-query.js';
 import { CredentialSetQuery } from '../dcql-query/m-dcql-credential-set-query.js';
-import { DcqlCredential } from '../u-dcql-credential.js';
 import {
   idRegex,
+  vCredentialParseFailure,
+  vCredentialParseSuccess,
   vNonEmptyArray,
-  vParseFailure,
-  vParseSuccess,
 } from '../u-dcql.js';
 
 export namespace DcqlQueryResult {
-  const vCredentialParseSuccess = v.object({
-    ...vParseSuccess.entries,
-    output: DcqlCredential.model.v,
-  });
-
   export type CredentialParseSuccess = v.InferOutput<
     typeof vCredentialParseSuccess
   >;
 
-  export const vCredentialParseResult = v.union([
-    vCredentialParseSuccess,
-    vParseFailure,
-  ]);
-
-  export type CredentialParseResult = v.InferOutput<
-    typeof vCredentialParseResult
-  >;
-
   export const vCredentialQueryResult = v.pipe(
     v.array(
-      v.array(v.union([v.undefined(), ...vCredentialParseResult.options]))
+      v.array(
+        v.union([
+          v.undefined(),
+          vCredentialParseSuccess,
+          vCredentialParseFailure,
+        ])
+      )
     ),
     vNonEmptyArray()
   );
@@ -60,7 +51,7 @@ export namespace DcqlQueryResult {
                   v.union([
                     v.undefined(),
                     vCredentialParseSuccess,
-                    vParseFailure,
+                    vCredentialParseFailure,
                   ])
                 ),
                 vNonEmptyArray()
@@ -70,7 +61,7 @@ export namespace DcqlQueryResult {
           ),
         }),
         v.object({
-          ...vParseFailure.entries,
+          success: vCredentialParseFailure.entries.success,
           all: v.pipe(
             v.array(
               v.pipe(
@@ -78,7 +69,7 @@ export namespace DcqlQueryResult {
                   v.union([
                     v.undefined(),
                     vCredentialParseSuccess,
-                    vParseFailure,
+                    vCredentialParseFailure,
                   ])
                 ),
                 vNonEmptyArray()

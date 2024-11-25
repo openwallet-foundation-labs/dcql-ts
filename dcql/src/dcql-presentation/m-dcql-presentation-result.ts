@@ -7,7 +7,7 @@ import {
 import { runCredentialQuery } from '../dcql-parser/dcql-credential-query-result.js';
 import { DcqlQueryResult } from '../dcql-query-result/m-dcql-query-result.js';
 import type { DcqlQuery } from '../dcql-query/m-dcql-query.js';
-import { idRegex } from '../u-dcql.js';
+import { idRegex, vCredentialParseFailure } from '../u-dcql.js';
 import type { DcqlCredentialPresentation } from './m-dcql-credential-presentation.js';
 
 export namespace DcqlPresentationResult {
@@ -18,10 +18,8 @@ export namespace DcqlPresentationResult {
       v.record(
         v.pipe(v.string(), v.regex(idRegex)),
         v.object({
-          ...v.omit(
-            DcqlQueryResult.vModel.entries.credential_matches.value.options[1],
-            ['all', 'credential_index']
-          ).entries,
+          ...v.omit(vCredentialParseFailure, ['input_credential_index'])
+            .entries,
           presentation_id: v.pipe(v.string(), v.regex(idRegex)),
         })
       ),
@@ -33,7 +31,7 @@ export namespace DcqlPresentationResult {
       v.object({
         ...v.omit(
           DcqlQueryResult.vModel.entries.credential_matches.value.options[0],
-          ['all', 'issues', 'credential_index']
+          ['all', 'issues', 'input_credential_index']
         ).entries,
         presentation_id: v.pipe(v.string(), v.regex(idRegex)),
       })
@@ -92,11 +90,11 @@ export namespace DcqlPresentationResult {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           presentationQueryResultForClaimSet[0]!;
         if (result.success) {
-          const { issues, credential_index, ...rest } = result;
+          const { issues, input_credential_index, ...rest } = result;
           validMatches[queryId] = { ...rest, presentation_id: queryId };
         } else {
           if (!invalidMatches) invalidMatches = {};
-          const { credential_index, ...rest } = result;
+          const { input_credential_index, ...rest } = result;
           invalidMatches[queryId] = {
             ...rest,
             presentation_id: queryId,
