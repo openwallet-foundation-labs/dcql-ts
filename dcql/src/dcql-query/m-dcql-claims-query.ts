@@ -10,14 +10,12 @@ export namespace DcqlClaimsQuery {
     v.pipe(v.number(), v.integer()),
     v.boolean(),
   ]);
-  export type ClaimValue = v.InferOutput<typeof vValue>;
 
   export const vPath = v.union([
     v.string(),
     v.pipe(v.number(), v.integer(), v.minValue(0)),
     v.null(),
   ]);
-  export type ClaimPath = v.InferOutput<typeof vPath>;
 
   export const vW3cSdJwtVc = v.object({
     id: v.pipe(

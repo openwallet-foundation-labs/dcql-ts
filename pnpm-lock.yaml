@@ -28,8 +28,8 @@ catalogs:
       specifier: ^5.6.2
       version: 5.6.3
     valibot:
-      specifier: 0.37.0
-      version: 0.37.0
+      specifier: 1.0.0-beta.8
+      version: 1.0.0-beta.8
 
 importers:
 
@@ -58,7 +58,7 @@ importers:
     dependencies:
       valibot:
         specifier: 'catalog:'
-        version: 0.37.0(typescript@5.6.3)
+        version: 1.0.0-beta.8(typescript@5.6.3)
     devDependencies:
       '@ausweis/eslint':
         specifier: 'catalog:'
@@ -2204,8 +2204,8 @@ packages:
   v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
 
-  valibot@0.37.0:
-    resolution: {integrity: sha512-FQz52I8RXgFgOHym3XHYSREbNtkgSjF9prvMFH1nBsRyfL6SfCzoT1GuSDTlbsuPubM7/6Kbw0ZMQb8A+V+VsQ==}
+  valibot@1.0.0-beta.8:
+    resolution: {integrity: sha512-OPAwJZtowb0j91b+bd77+ny7D1VVzsCzD7Jl9waLUlMprTsfI9Y3HHbW3hAQD7wKDKHsmGEesuiYWaYvcZL2wg==}
     peerDependencies:
       typescript: '>=5'
     peerDependenciesMeta:
@@ -4894,7 +4894,7 @@ snapshots:
 
   v8-compile-cache-lib@3.0.1: {}
 
-  valibot@0.37.0(typescript@5.6.3):
+  valibot@1.0.0-beta.8(typescript@5.6.3):
     optionalDependencies:
       typescript: 5.6.3
 

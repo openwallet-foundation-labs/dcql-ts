@@ -97,7 +97,7 @@ const sdJwtVc = {
   },
 } satisfies DcqlSdJwtVcCredential;
 
-void describe('credential-parser', () => {
+void describe('dcql-query', () => {
   void it('mvrc query fails with invalid mdoc', _t => {
     const query = DcqlQuery.parse(mdocMvrcQuery);
     DcqlQuery.validate(query);
@@ -266,6 +266,54 @@ void describe('credential-parser', () => {
     });
   });
 
+  void it('mdocMvrc example with multiple credentials succeeds', _t => {
+    const query = DcqlQuery.parse(mdocMvrcQuery);
+    DcqlQuery.validate(query);
+
+    const res = DcqlQuery.query(query, [exampleMdoc, mdocMvrc]);
+
+    assert(res.canBeSatisfied);
+    assert.deepStrictEqual(res.credential_matches, {
+      my_credential: {
+        success: true,
+        typed: true,
+        input_credential_index: 1,
+        claim_set_index: undefined,
+        output: {
+          credential_format: 'mso_mdoc' as const,
+          doctype: 'org.iso.7367.1.mVRC',
+          namespaces: {
+            'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
+            'org.iso.18013.5.1': { first_name: 'Martin Auer' },
+          },
+        },
+        all: res.credential_matches.my_credential?.all,
+      },
+    });
+
+    const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
+      { my_credential: res.credential_matches.my_credential.output },
+      { dcqlQuery: query }
+    );
+
+    assert.deepStrictEqual(presentationQueryResult.valid_matches, {
+      my_credential: {
+        success: true,
+        typed: true,
+        presentation_id: 'my_credential',
+        claim_set_index: undefined,
+        output: {
+          credential_format: 'mso_mdoc' as const,
+          doctype: 'org.iso.7367.1.mVRC',
+          namespaces: {
+            'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
+            'org.iso.18013.5.1': { first_name: 'Martin Auer' },
+          },
+        },
+      },
+    });
+  });
+
   void it('mdocMvrc example succeeds', _t => {
     const query = DcqlQuery.parse(mdocMvrcQuery);
     DcqlQuery.validate(query);
@@ -365,7 +413,7 @@ void describe('credential-parser', () => {
     });
   });
 
-  void it('sdJwtVc example with multiple credentials succeeds', _t => {
+  void it('sdJwtVc example with multiple credentials succeeds (no-json-transform)', _t => {
     const query = DcqlQuery.parse(sdJwtVcExample);
     DcqlQuery.validate(query);
 

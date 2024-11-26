@@ -3,8 +3,9 @@ import {
   DcqlInvalidClaimsQueryIdError,
   DcqlMissingClaimSetParseError,
 } from '../dcql-error/e-dcql.js';
-import { DcqlClaimsQuery } from '../dcql-query/m-dcql-claims-query.js';
+import type { DcqlClaimsQuery } from '../dcql-query/m-dcql-claims-query.js';
 import type { DcqlCredentialQuery } from '../dcql-query/m-dcql-credential-query.js';
+import { vWithJT } from '../u-dcql';
 import { vJson, vJsonRecord } from '../u-dcql.js';
 
 const getClaimParser = (input: {
@@ -13,14 +14,14 @@ const getClaimParser = (input: {
 }) => {
   const { value, values } = input;
   if (value) {
-    return v.literal(value);
+    return vWithJT(v.literal(value));
   }
 
   if (values) {
-    return v.union(values.map(val => v.literal(val)));
+    return vWithJT(v.union(values.map(val => v.literal(val))));
   }
 
-  return DcqlClaimsQuery.vValue;
+  return v.nonNullish(v.any());
 };
 
 export const getNamespacesParser = (claimsQueries: DcqlClaimsQuery.Mdoc[]) => {
@@ -57,7 +58,7 @@ const getClaimQueryParser = (
   const pathElement = claimQuery.path[index];
   const isLast = index === claimQuery.path.length - 1;
 
-  const vClaimParser = claimQuery.values ? getClaimParser(claimQuery) : vJson;
+  const vClaimParser = getClaimParser(claimQuery);
 
   if (typeof pathElement === 'number') {
     const elementParser = isLast
