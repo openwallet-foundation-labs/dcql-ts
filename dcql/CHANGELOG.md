@@ -1,5 +1,11 @@
 # vp-query
 
+## 0.2.17
+
+### Patch Changes
+
+- 8bfd258: feat: allow claim-json transform
+
 ## 0.2.16
 
 ### Patch Changes
