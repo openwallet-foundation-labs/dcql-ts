@@ -31,7 +31,24 @@ const mdocMvrcQuery = {
       ],
     },
   ],
-} satisfies DcqlQuery.Input;
+} satisfies DcqlQuery;
+
+const sdJwtVcExampleQuery = {
+  credentials: [
+    {
+      id: 'my_credential',
+      format: 'vc+sd-jwt',
+      meta: {
+        vct_values: ['https://credentials.example.com/identity_credential'],
+      },
+      claims: [
+        { path: ['last_name'] },
+        { path: ['first_name'] },
+        { path: ['address', 'street_address'] },
+      ],
+    },
+  ],
+} satisfies DcqlQuery;
 
 class ValueClass {
   constructor(private value: unknown) {}
@@ -40,7 +57,7 @@ class ValueClass {
   }
 }
 
-const mdocMvrcJson = {
+const mdocWithJT = {
   credential_format: 'mso_mdoc',
   doctype: 'org.iso.7367.1.mVRC',
   namespaces: {
@@ -49,16 +66,6 @@ const mdocMvrcJson = {
       non_disclosed: 'secret',
     },
     'org.iso.18013.5.1': { first_name: new ValueClass('Martin Auer') },
-  },
-} satisfies DcqlMdocCredential;
-
-const exampleMdoc = {
-  credential_format: 'mso_mdoc',
-  doctype: 'example_doctype',
-  namespaces: {
-    example_namespaces: {
-      example_claim: 'example_value',
-    },
   },
 } satisfies DcqlMdocCredential;
 
@@ -93,7 +100,7 @@ void describe('dcql-query-with-json-transform', () => {
     const query = DcqlQuery.parse(mdocMvrcQuery);
     DcqlQuery.validate(query);
 
-    const credentials = [mdocMvrcJson];
+    const credentials = [mdocWithJT];
     const res = DcqlQuery.query(query, credentials);
 
     assert(res.canBeSatisfied);
@@ -140,35 +147,37 @@ void describe('dcql-query-with-json-transform', () => {
     });
   });
 
-  void it('mdocMvrc example succeeds (with-json-transform)', _t => {
-    const query = DcqlQuery.parse(mdocMvrcQuery);
+  void it('sdJwtVc example with multiple credentials succeeds', _t => {
+    const query = DcqlQuery.parse(sdJwtVcExampleQuery);
     DcqlQuery.validate(query);
 
-    const credentials = [mdocMvrcJson];
-    const res = DcqlQuery.query(query, credentials);
+    // @ts-expect-error ValueClass is not a valid type
+    const res = DcqlQuery.query(query, [mdocWithJT, sdJwtVcWithJT]);
 
     assert(res.canBeSatisfied);
-
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
         typed: true,
-        input_credential_index: 0,
+        input_credential_index: 1,
         claim_set_index: undefined,
         output: {
-          credential_format: 'mso_mdoc' as const,
-          doctype: 'org.iso.7367.1.mVRC',
-          namespaces: {
-            'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
-            'org.iso.18013.5.1': { first_name: new ValueClass('Martin Auer') },
+          credential_format: 'vc+sd-jwt' as const,
+          vct: 'https://credentials.example.com/identity_credential',
+          claims: {
+            first_name: 'Arthur',
+            last_name: 'Dent',
+            address: {
+              street_address: new ValueClass('42 Market Street'),
+            },
           },
         },
-
         all: res.credential_matches.my_credential?.all,
       },
     });
 
     const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
+      // @ts-expect-error ValueClass is not a valid type
       { my_credential: res.credential_matches.my_credential.output },
       { dcqlQuery: query }
     );
@@ -180,11 +189,14 @@ void describe('dcql-query-with-json-transform', () => {
         presentation_id: 'my_credential',
         claim_set_index: undefined,
         output: {
-          credential_format: 'mso_mdoc' as const,
-          doctype: 'org.iso.7367.1.mVRC',
-          namespaces: {
-            'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
-            'org.iso.18013.5.1': { first_name: new ValueClass('Martin Auer') },
+          credential_format: 'vc+sd-jwt' as const,
+          vct: 'https://credentials.example.com/identity_credential',
+          claims: {
+            first_name: 'Arthur',
+            last_name: 'Dent',
+            address: {
+              street_address: new ValueClass('42 Market Street'),
+            },
           },
         },
       },
