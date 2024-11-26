@@ -16,22 +16,14 @@ const mdocMvrcQuery = {
     {
       id: 'my_credential',
       format: 'mso_mdoc' as const,
-      meta: {
-        doctype_value: 'org.iso.7367.1.mVRC',
-      },
+      meta: { doctype_value: 'org.iso.7367.1.mVRC' },
       claims: [
-        {
-          namespace: 'org.iso.7367.1',
-          claim_name: 'vehicle_holder',
-        },
-        {
-          namespace: 'org.iso.18013.5.1',
-          claim_name: 'first_name',
-        },
+        { namespace: 'org.iso.7367.1', claim_name: 'vehicle_holder' },
+        { namespace: 'org.iso.18013.5.1', claim_name: 'first_name' },
       ],
     },
   ],
-} satisfies DcqlQuery.Input;
+} satisfies DcqlQuery;
 
 const mdocMvrc = {
   credential_format: 'mso_mdoc',
@@ -55,7 +47,7 @@ const exampleMdoc = {
   },
 } satisfies DcqlMdocCredential;
 
-const sdJwtVcExample = {
+const sdJwtVcExampleQuery = {
   credentials: [
     {
       id: 'my_credential',
@@ -70,7 +62,7 @@ const sdJwtVcExample = {
       ],
     },
   ],
-} satisfies DcqlQuery.Input;
+} satisfies DcqlQuery;
 
 const sdJwtVc = {
   credential_format: 'vc+sd-jwt',
@@ -270,7 +262,7 @@ void describe('dcql-query', () => {
     const query = DcqlQuery.parse(mdocMvrcQuery);
     DcqlQuery.validate(query);
 
-    const res = DcqlQuery.query(query, [exampleMdoc, mdocMvrc]);
+    const res = DcqlQuery.query(query, [mdocMvrc]);
 
     assert(res.canBeSatisfied);
     assert.deepStrictEqual(res.credential_matches, {
@@ -413,8 +405,8 @@ void describe('dcql-query', () => {
     });
   });
 
-  void it('sdJwtVc example with multiple credentials succeeds (no-json-transform)', _t => {
-    const query = DcqlQuery.parse(sdJwtVcExample);
+  void it('sdJwtVc example with multiple credentials succeeds', _t => {
+    const query = DcqlQuery.parse(sdJwtVcExampleQuery);
     DcqlQuery.validate(query);
 
     const res = DcqlQuery.query(query, [exampleMdoc, sdJwtVc]);

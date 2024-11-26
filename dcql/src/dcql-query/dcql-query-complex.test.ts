@@ -3077,12 +3077,14 @@ void describe('complex-mdoc-query', () => {
     });
 
     const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       {
         'mdl-id': res.credential_matches['mdl-id'].output,
         'mdl-address': res.credential_matches['mdl-address'].output,
         'photo_card-address':
           res.credential_matches['photo_card-address'].output,
         'photo_card-id': res.credential_matches['photo_card-id'].output,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as any,
       { dcqlQuery: query }
     );
