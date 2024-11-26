@@ -237,7 +237,7 @@ void describe('complex-mdoc-query', () => {
           typed: true,
           success: true,
           output: {
-            credential_format: 'mso_mdoc' as const,
+            credential_format: 'mso_mdoc',
             doctype: 'org.iso.18013.5.1.mDL',
             namespaces: {
               'org.iso.18013.5.1': {
@@ -282,12 +282,12 @@ void describe('complex-mdoc-query', () => {
                 issues: [
                   {
                     kind: 'schema',
-                    type: 'union',
+                    type: 'non_nullish',
                     input: undefined,
-                    expected: 'string | number | boolean',
+                    expected: '(!null & !undefined)',
                     received: 'undefined',
                     message:
-                      'Invalid type: Expected string | number | boolean but received undefined',
+                      'Invalid type: Expected (!null & !undefined) but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -342,65 +342,19 @@ void describe('complex-mdoc-query', () => {
                         value: undefined,
                       },
                     ],
-                    issues: [
-                      {
-                        kind: 'schema',
-                        type: 'string',
-                        input: undefined,
-                        expected: 'string',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected string but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                      {
-                        kind: 'schema',
-                        type: 'number',
-                        input: undefined,
-                        expected: 'number',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected number but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                      {
-                        kind: 'schema',
-                        type: 'boolean',
-                        input: undefined,
-                        expected: 'boolean',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected boolean but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                    ],
+                    issues: undefined,
                     lang: undefined,
                     abortEarly: undefined,
                     abortPipeEarly: undefined,
                   },
                   {
                     kind: 'schema',
-                    type: 'union',
+                    type: 'non_nullish',
                     input: undefined,
-                    expected: 'string | number | boolean',
+                    expected: '(!null & !undefined)',
                     received: 'undefined',
                     message:
-                      'Invalid type: Expected string | number | boolean but received undefined',
+                      'Invalid type: Expected (!null & !undefined) but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -455,65 +409,19 @@ void describe('complex-mdoc-query', () => {
                         value: undefined,
                       },
                     ],
-                    issues: [
-                      {
-                        kind: 'schema',
-                        type: 'string',
-                        input: undefined,
-                        expected: 'string',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected string but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                      {
-                        kind: 'schema',
-                        type: 'number',
-                        input: undefined,
-                        expected: 'number',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected number but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                      {
-                        kind: 'schema',
-                        type: 'boolean',
-                        input: undefined,
-                        expected: 'boolean',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected boolean but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                    ],
+                    issues: undefined,
                     lang: undefined,
                     abortEarly: undefined,
                     abortPipeEarly: undefined,
                   },
                   {
                     kind: 'schema',
-                    type: 'union',
+                    type: 'non_nullish',
                     input: undefined,
-                    expected: 'string | number | boolean',
+                    expected: '(!null & !undefined)',
                     received: 'undefined',
                     message:
-                      'Invalid type: Expected string | number | boolean but received undefined',
+                      'Invalid type: Expected (!null & !undefined) but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -568,53 +476,7 @@ void describe('complex-mdoc-query', () => {
                         value: undefined,
                       },
                     ],
-                    issues: [
-                      {
-                        kind: 'schema',
-                        type: 'string',
-                        input: undefined,
-                        expected: 'string',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected string but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                      {
-                        kind: 'schema',
-                        type: 'number',
-                        input: undefined,
-                        expected: 'number',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected number but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                      {
-                        kind: 'schema',
-                        type: 'boolean',
-                        input: undefined,
-                        expected: 'boolean',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected boolean but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                    ],
+                    issues: undefined,
                     lang: undefined,
                     abortEarly: undefined,
                     abortPipeEarly: undefined,
@@ -623,13 +485,13 @@ void describe('complex-mdoc-query', () => {
                 flattened: {
                   nested: {
                     'namespaces.org.iso.18013.5.1.given_name': [
-                      'Invalid type: Expected string | number | boolean but received undefined',
+                      'Invalid type: Expected (!null & !undefined) but received undefined',
                     ],
                     'namespaces.org.iso.18013.5.1.family_name': [
-                      'Invalid type: Expected string | number | boolean but received undefined',
+                      'Invalid type: Expected (!null & !undefined) but received undefined',
                     ],
                     'namespaces.org.iso.18013.5.1.portrait': [
-                      'Invalid type: Expected string | number | boolean but received undefined',
+                      'Invalid type: Expected (!null & !undefined) but received undefined',
                     ],
                   },
                 },
@@ -1121,7 +983,7 @@ void describe('complex-mdoc-query', () => {
           typed: true,
           success: true,
           output: {
-            credential_format: 'mso_mdoc' as const,
+            credential_format: 'mso_mdoc',
             doctype: 'org.iso.18013.5.1.mDL',
             namespaces: {
               'org.iso.18013.5.1': {
@@ -1147,12 +1009,12 @@ void describe('complex-mdoc-query', () => {
                 issues: [
                   {
                     kind: 'schema',
-                    type: 'union',
+                    type: 'non_nullish',
                     input: undefined,
-                    expected: 'string | number | boolean',
+                    expected: '(!null & !undefined)',
                     received: 'undefined',
                     message:
-                      'Invalid type: Expected string | number | boolean but received undefined',
+                      'Invalid type: Expected (!null & !undefined) but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -1207,65 +1069,19 @@ void describe('complex-mdoc-query', () => {
                         value: undefined,
                       },
                     ],
-                    issues: [
-                      {
-                        kind: 'schema',
-                        type: 'string',
-                        input: undefined,
-                        expected: 'string',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected string but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                      {
-                        kind: 'schema',
-                        type: 'number',
-                        input: undefined,
-                        expected: 'number',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected number but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                      {
-                        kind: 'schema',
-                        type: 'boolean',
-                        input: undefined,
-                        expected: 'boolean',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected boolean but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                    ],
+                    issues: undefined,
                     lang: undefined,
                     abortEarly: undefined,
                     abortPipeEarly: undefined,
                   },
                   {
                     kind: 'schema',
-                    type: 'union',
+                    type: 'non_nullish',
                     input: undefined,
-                    expected: 'string | number | boolean',
+                    expected: '(!null & !undefined)',
                     received: 'undefined',
                     message:
-                      'Invalid type: Expected string | number | boolean but received undefined',
+                      'Invalid type: Expected (!null & !undefined) but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -1320,53 +1136,7 @@ void describe('complex-mdoc-query', () => {
                         value: undefined,
                       },
                     ],
-                    issues: [
-                      {
-                        kind: 'schema',
-                        type: 'string',
-                        input: undefined,
-                        expected: 'string',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected string but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                      {
-                        kind: 'schema',
-                        type: 'number',
-                        input: undefined,
-                        expected: 'number',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected number but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                      {
-                        kind: 'schema',
-                        type: 'boolean',
-                        input: undefined,
-                        expected: 'boolean',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected boolean but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                    ],
+                    issues: undefined,
                     lang: undefined,
                     abortEarly: undefined,
                     abortPipeEarly: undefined,
@@ -1375,10 +1145,10 @@ void describe('complex-mdoc-query', () => {
                 flattened: {
                   nested: {
                     'namespaces.org.iso.18013.5.1.resident_address': [
-                      'Invalid type: Expected string | number | boolean but received undefined',
+                      'Invalid type: Expected (!null & !undefined) but received undefined',
                     ],
                     'namespaces.org.iso.18013.5.1.resident_country': [
-                      'Invalid type: Expected string | number | boolean but received undefined',
+                      'Invalid type: Expected (!null & !undefined) but received undefined',
                     ],
                   },
                 },
@@ -1887,7 +1657,7 @@ void describe('complex-mdoc-query', () => {
           typed: true,
           success: true,
           output: {
-            credential_format: 'mso_mdoc' as const,
+            credential_format: 'mso_mdoc',
             doctype: 'org.iso.23220.photoid.1',
             namespaces: {
               'org.iso.23220.1': {
@@ -2148,12 +1918,12 @@ void describe('complex-mdoc-query', () => {
                 issues: [
                   {
                     kind: 'schema',
-                    type: 'union',
+                    type: 'non_nullish',
                     input: undefined,
-                    expected: 'string | number | boolean',
+                    expected: '(!null & !undefined)',
                     received: 'undefined',
                     message:
-                      'Invalid type: Expected string | number | boolean but received undefined',
+                      'Invalid type: Expected (!null & !undefined) but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -2208,65 +1978,19 @@ void describe('complex-mdoc-query', () => {
                         value: undefined,
                       },
                     ],
-                    issues: [
-                      {
-                        kind: 'schema',
-                        type: 'string',
-                        input: undefined,
-                        expected: 'string',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected string but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                      {
-                        kind: 'schema',
-                        type: 'number',
-                        input: undefined,
-                        expected: 'number',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected number but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                      {
-                        kind: 'schema',
-                        type: 'boolean',
-                        input: undefined,
-                        expected: 'boolean',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected boolean but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                    ],
+                    issues: undefined,
                     lang: undefined,
                     abortEarly: undefined,
                     abortPipeEarly: undefined,
                   },
                   {
                     kind: 'schema',
-                    type: 'union',
+                    type: 'non_nullish',
                     input: undefined,
-                    expected: 'string | number | boolean',
+                    expected: '(!null & !undefined)',
                     received: 'undefined',
                     message:
-                      'Invalid type: Expected string | number | boolean but received undefined',
+                      'Invalid type: Expected (!null & !undefined) but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -2321,65 +2045,19 @@ void describe('complex-mdoc-query', () => {
                         value: undefined,
                       },
                     ],
-                    issues: [
-                      {
-                        kind: 'schema',
-                        type: 'string',
-                        input: undefined,
-                        expected: 'string',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected string but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                      {
-                        kind: 'schema',
-                        type: 'number',
-                        input: undefined,
-                        expected: 'number',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected number but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                      {
-                        kind: 'schema',
-                        type: 'boolean',
-                        input: undefined,
-                        expected: 'boolean',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected boolean but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                    ],
+                    issues: undefined,
                     lang: undefined,
                     abortEarly: undefined,
                     abortPipeEarly: undefined,
                   },
                   {
                     kind: 'schema',
-                    type: 'union',
+                    type: 'non_nullish',
                     input: undefined,
-                    expected: 'string | number | boolean',
+                    expected: '(!null & !undefined)',
                     received: 'undefined',
                     message:
-                      'Invalid type: Expected string | number | boolean but received undefined',
+                      'Invalid type: Expected (!null & !undefined) but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -2434,53 +2112,7 @@ void describe('complex-mdoc-query', () => {
                         value: undefined,
                       },
                     ],
-                    issues: [
-                      {
-                        kind: 'schema',
-                        type: 'string',
-                        input: undefined,
-                        expected: 'string',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected string but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                      {
-                        kind: 'schema',
-                        type: 'number',
-                        input: undefined,
-                        expected: 'number',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected number but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                      {
-                        kind: 'schema',
-                        type: 'boolean',
-                        input: undefined,
-                        expected: 'boolean',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected boolean but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                    ],
+                    issues: undefined,
                     lang: undefined,
                     abortEarly: undefined,
                     abortPipeEarly: undefined,
@@ -2489,13 +2121,13 @@ void describe('complex-mdoc-query', () => {
                 flattened: {
                   nested: {
                     'namespaces.org.iso.23220.1.given_name': [
-                      'Invalid type: Expected string | number | boolean but received undefined',
+                      'Invalid type: Expected (!null & !undefined) but received undefined',
                     ],
                     'namespaces.org.iso.23220.1.family_name': [
-                      'Invalid type: Expected string | number | boolean but received undefined',
+                      'Invalid type: Expected (!null & !undefined) but received undefined',
                     ],
                     'namespaces.org.iso.23220.1.portrait': [
-                      'Invalid type: Expected string | number | boolean but received undefined',
+                      'Invalid type: Expected (!null & !undefined) but received undefined',
                     ],
                   },
                 },
@@ -2771,7 +2403,7 @@ void describe('complex-mdoc-query', () => {
           typed: true,
           success: true,
           output: {
-            credential_format: 'mso_mdoc' as const,
+            credential_format: 'mso_mdoc',
             doctype: 'org.iso.23220.photoid.1',
             namespaces: {
               'org.iso.23220.1': {
@@ -3013,12 +2645,12 @@ void describe('complex-mdoc-query', () => {
                 issues: [
                   {
                     kind: 'schema',
-                    type: 'union',
+                    type: 'non_nullish',
                     input: undefined,
-                    expected: 'string | number | boolean',
+                    expected: '(!null & !undefined)',
                     received: 'undefined',
                     message:
-                      'Invalid type: Expected string | number | boolean but received undefined',
+                      'Invalid type: Expected (!null & !undefined) but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -3073,65 +2705,19 @@ void describe('complex-mdoc-query', () => {
                         value: undefined,
                       },
                     ],
-                    issues: [
-                      {
-                        kind: 'schema',
-                        type: 'string',
-                        input: undefined,
-                        expected: 'string',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected string but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                      {
-                        kind: 'schema',
-                        type: 'number',
-                        input: undefined,
-                        expected: 'number',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected number but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                      {
-                        kind: 'schema',
-                        type: 'boolean',
-                        input: undefined,
-                        expected: 'boolean',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected boolean but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                    ],
+                    issues: undefined,
                     lang: undefined,
                     abortEarly: undefined,
                     abortPipeEarly: undefined,
                   },
                   {
                     kind: 'schema',
-                    type: 'union',
+                    type: 'non_nullish',
                     input: undefined,
-                    expected: 'string | number | boolean',
+                    expected: '(!null & !undefined)',
                     received: 'undefined',
                     message:
-                      'Invalid type: Expected string | number | boolean but received undefined',
+                      'Invalid type: Expected (!null & !undefined) but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -3186,53 +2772,7 @@ void describe('complex-mdoc-query', () => {
                         value: undefined,
                       },
                     ],
-                    issues: [
-                      {
-                        kind: 'schema',
-                        type: 'string',
-                        input: undefined,
-                        expected: 'string',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected string but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                      {
-                        kind: 'schema',
-                        type: 'number',
-                        input: undefined,
-                        expected: 'number',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected number but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                      {
-                        kind: 'schema',
-                        type: 'boolean',
-                        input: undefined,
-                        expected: 'boolean',
-                        received: 'undefined',
-                        message:
-                          'Invalid type: Expected boolean but received undefined',
-                        requirement: undefined,
-                        path: undefined,
-                        issues: undefined,
-                        lang: undefined,
-                        abortEarly: undefined,
-                        abortPipeEarly: undefined,
-                      },
-                    ],
+                    issues: undefined,
                     lang: undefined,
                     abortEarly: undefined,
                     abortPipeEarly: undefined,
@@ -3241,10 +2781,10 @@ void describe('complex-mdoc-query', () => {
                 flattened: {
                   nested: {
                     'namespaces.org.iso.23220.1.resident_address': [
-                      'Invalid type: Expected string | number | boolean but received undefined',
+                      'Invalid type: Expected (!null & !undefined) but received undefined',
                     ],
                     'namespaces.org.iso.23220.1.resident_country': [
-                      'Invalid type: Expected string | number | boolean but received undefined',
+                      'Invalid type: Expected (!null & !undefined) but received undefined',
                     ],
                   },
                 },
@@ -3543,7 +3083,7 @@ void describe('complex-mdoc-query', () => {
         'photo_card-address':
           res.credential_matches['photo_card-address'].output,
         'photo_card-id': res.credential_matches['photo_card-id'].output,
-      },
+      } as any,
       { dcqlQuery: query }
     );
 
