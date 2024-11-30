@@ -1,5 +1,11 @@
 # vp-query
 
+## 0.2.18
+
+### Patch Changes
+
+- 18d7b17: feat: support new dc+sd-jwt format identifier
+
 ## 0.2.17
 
 ### Patch Changes
