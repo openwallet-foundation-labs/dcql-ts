@@ -37,7 +37,7 @@ const sdJwtVcExampleQuery = {
   credentials: [
     {
       id: 'my_credential',
-      format: 'vc+sd-jwt',
+      format: 'dc+sd-jwt',
       meta: {
         vct_values: ['https://credentials.example.com/identity_credential'],
       },
@@ -70,7 +70,7 @@ const mdocWithJT = {
 } satisfies DcqlMdocCredential;
 
 const sdJwtVcWithJT = {
-  credential_format: 'vc+sd-jwt',
+  credential_format: 'dc+sd-jwt',
   vct: 'https://credentials.example.com/identity_credential',
   claims: {
     first_name: 'Arthur',
@@ -162,7 +162,7 @@ void describe('dcql-query-with-json-transform', () => {
         input_credential_index: 1,
         claim_set_index: undefined,
         output: {
-          credential_format: 'vc+sd-jwt' as const,
+          credential_format: 'dc+sd-jwt' as const,
           vct: 'https://credentials.example.com/identity_credential',
           claims: {
             first_name: 'Arthur',
@@ -189,7 +189,7 @@ void describe('dcql-query-with-json-transform', () => {
         presentation_id: 'my_credential',
         claim_set_index: undefined,
         output: {
-          credential_format: 'vc+sd-jwt' as const,
+          credential_format: 'dc+sd-jwt' as const,
           vct: 'https://credentials.example.com/identity_credential',
           claims: {
             first_name: 'Arthur',

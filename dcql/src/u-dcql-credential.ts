@@ -23,7 +23,7 @@ export type DcqlMdocCredential = DcqlMdocCredential.Model['Output'];
 export namespace DcqlSdJwtVcCredential {
   export const vClaims = vJsonRecord;
   export const vModel = v.object({
-    credential_format: v.literal('vc+sd-jwt'),
+    credential_format: v.picklist(['vc+sd-jwt', 'dc+sd-jwt']),
     vct: v.string(),
     claims: vClaims,
   });

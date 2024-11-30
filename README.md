@@ -8,7 +8,7 @@ DCQL enables Verifiers to request Verifiable Presentations that match specific q
 - Create and validate DCQL queries
 - Match queries against Verifiable Credentials
 - Validate presentation results
-- Handle various credential formats including mso_mdoc and vc+sd-jwt and w3c vc's.
+- Handle various credential formats including mso_mdoc and dc+sd-jwt and w3c vc's.
 
 ## Installation
 
