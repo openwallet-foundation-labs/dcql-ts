@@ -182,9 +182,12 @@ const getW3cVcSdJwtVcParser = (
       ? getJsonClaimsQueriesForClaimSet(credentialQuery.claims, claimSet)
       : credentialQuery.claims;
 
-  if (credentialQuery.format === 'vc+sd-jwt') {
+  if (
+    credentialQuery.format === 'vc+sd-jwt' ||
+    credentialQuery.format === 'dc+sd-jwt'
+  ) {
     return v.object({
-      credential_format: v.literal('vc+sd-jwt'),
+      credential_format: v.literal(credentialQuery.format),
       vct: credentialQuery.meta?.vct_values
         ? v.picklist(credentialQuery.meta.vct_values)
         : v.string(),

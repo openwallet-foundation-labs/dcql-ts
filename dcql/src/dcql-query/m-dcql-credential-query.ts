@@ -63,7 +63,7 @@ export namespace DcqlCredentialQuery {
   export const vSdJwtVc = v.object({
     ...vBase.entries,
     format: v.pipe(
-      v.literal('vc+sd-jwt'),
+      v.picklist(['vc+sd-jwt', 'dc+sd-jwt']),
       v.description(
         `REQUIRED. A string that specifies the format of the requested Verifiable Credential.`
       )
