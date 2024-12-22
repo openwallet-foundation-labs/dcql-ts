@@ -1,11 +1,8 @@
-import assert from 'node:assert';
-import { describe, it } from 'node:test';
-import { DcqlPresentationResult } from '../dcql-presentation/m-dcql-presentation-result.js';
-import type {
-  DcqlMdocCredential,
-  DcqlSdJwtVcCredential,
-} from '../u-dcql-credential.js';
-import { DcqlQuery } from './m-dcql-query.js';
+import assert from 'node:assert'
+import { describe, it } from 'vitest'
+import { DcqlPresentationResult } from '../dcql-presentation/m-dcql-presentation-result.js'
+import type { DcqlMdocCredential, DcqlSdJwtVcCredential } from '../u-dcql-credential.js'
+import { DcqlQuery } from './m-dcql-query.js'
 
 /**
  * The following is a non-normative example of a DCQL query that requests
@@ -100,7 +97,7 @@ const complexMdocQuery = {
       options: [['mdl-address'], ['photo_card-address']],
     },
   ],
-} satisfies DcqlQuery.Input;
+} satisfies DcqlQuery.Input
 
 const mdocMdlId = {
   credential_format: 'mso_mdoc',
@@ -112,7 +109,7 @@ const mdocMdlId = {
       portrait: 'https://example.com/portrait',
     },
   },
-} satisfies DcqlMdocCredential;
+} satisfies DcqlMdocCredential
 
 const mdocMdlAddress = {
   credential_format: 'mso_mdoc',
@@ -124,7 +121,7 @@ const mdocMdlAddress = {
       non_disclosed: 'secret',
     },
   },
-} satisfies DcqlMdocCredential;
+} satisfies DcqlMdocCredential
 
 const mdocPhotoCardId = {
   credential_format: 'mso_mdoc',
@@ -136,7 +133,7 @@ const mdocPhotoCardId = {
       portrait: 'https://example.com/portrait',
     },
   },
-} satisfies DcqlMdocCredential;
+} satisfies DcqlMdocCredential
 
 const mdocPhotoCardAddress = {
   credential_format: 'mso_mdoc',
@@ -148,7 +145,7 @@ const mdocPhotoCardAddress = {
       non_disclosed: 'secret',
     },
   },
-} satisfies DcqlMdocCredential;
+} satisfies DcqlMdocCredential
 
 const mdocExample = {
   credential_format: 'mso_mdoc',
@@ -158,7 +155,7 @@ const mdocExample = {
       example_claim: 'example_value',
     },
   },
-} satisfies DcqlMdocCredential;
+} satisfies DcqlMdocCredential
 
 const sdJwtVcExample = {
   credential_format: 'vc+sd-jwt',
@@ -183,28 +180,28 @@ const sdJwtVcExample = {
     ],
     nationalities: ['British', 'Betelgeusian'],
   },
-} satisfies DcqlSdJwtVcCredential;
+} satisfies DcqlSdJwtVcCredential
 
-void describe('complex-mdoc-query', () => {
-  void it('fails with no credentials', _t => {
-    const query = DcqlQuery.parse(complexMdocQuery);
-    DcqlQuery.validate(query);
+describe('complex-mdoc-query', () => {
+  it('fails with no credentials', (_t) => {
+    const query = DcqlQuery.parse(complexMdocQuery)
+    DcqlQuery.validate(query)
 
-    const res = DcqlQuery.query(query, []);
-    assert(!res.canBeSatisfied);
-  });
+    const res = DcqlQuery.query(query, [])
+    assert(!res.canBeSatisfied)
+  })
 
-  void it('fails with credentials that do not satisfy a required claim_set', _t => {
-    const query = DcqlQuery.parse(complexMdocQuery);
-    DcqlQuery.validate(query);
+  it('fails with credentials that do not satisfy a required claim_set', (_t) => {
+    const query = DcqlQuery.parse(complexMdocQuery)
+    DcqlQuery.validate(query)
 
-    const res = DcqlQuery.query(query, [mdocMdlAddress, mdocPhotoCardAddress]);
-    assert(!res.canBeSatisfied);
-  });
+    const res = DcqlQuery.query(query, [mdocMdlAddress, mdocPhotoCardAddress])
+    assert(!res.canBeSatisfied)
+  })
 
-  void it('succeeds if all credentials are present', _t => {
-    const query = DcqlQuery.parse(complexMdocQuery);
-    DcqlQuery.validate(query);
+  it('succeeds if all credentials are present', (_t) => {
+    const query = DcqlQuery.parse(complexMdocQuery)
+    DcqlQuery.validate(query)
 
     const res = DcqlQuery.query(query, [
       mdocMdlId,
@@ -213,7 +210,7 @@ void describe('complex-mdoc-query', () => {
       mdocPhotoCardAddress,
       mdocExample,
       sdJwtVcExample,
-    ]);
+    ])
 
     assert.deepStrictEqual(res, {
       credentials: complexMdocQuery.credentials,
@@ -286,8 +283,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: '(!null & !undefined)',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected (!null & !undefined) but received undefined',
+                    message: 'Invalid type: Expected (!null & !undefined) but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -353,8 +349,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: '(!null & !undefined)',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected (!null & !undefined) but received undefined',
+                    message: 'Invalid type: Expected (!null & !undefined) but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -420,8 +415,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: '(!null & !undefined)',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected (!null & !undefined) but received undefined',
+                    message: 'Invalid type: Expected (!null & !undefined) but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -513,8 +507,7 @@ void describe('complex-mdoc-query', () => {
                     input: 'org.iso.23220.photoid.1',
                     expected: '"org.iso.18013.5.1.mDL"',
                     received: '"org.iso.23220.photoid.1"',
-                    message:
-                      'Invalid type: Expected "org.iso.18013.5.1.mDL" but received "org.iso.23220.photoid.1"',
+                    message: 'Invalid type: Expected "org.iso.18013.5.1.mDL" but received "org.iso.23220.photoid.1"',
                     requirement: undefined,
                     path: [
                       {
@@ -546,8 +539,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: 'Object',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected Object but received undefined',
+                    message: 'Invalid type: Expected Object but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -595,12 +587,8 @@ void describe('complex-mdoc-query', () => {
                 ],
                 flattened: {
                   nested: {
-                    doctype: [
-                      'Invalid type: Expected "org.iso.18013.5.1.mDL" but received "org.iso.23220.photoid.1"',
-                    ],
-                    'namespaces.org.iso.18013.5.1': [
-                      'Invalid type: Expected Object but received undefined',
-                    ],
+                    doctype: ['Invalid type: Expected "org.iso.18013.5.1.mDL" but received "org.iso.23220.photoid.1"'],
+                    'namespaces.org.iso.18013.5.1': ['Invalid type: Expected Object but received undefined'],
                   },
                 },
                 input_credential_index: 2,
@@ -621,8 +609,7 @@ void describe('complex-mdoc-query', () => {
                     input: 'org.iso.23220.photoid.1',
                     expected: '"org.iso.18013.5.1.mDL"',
                     received: '"org.iso.23220.photoid.1"',
-                    message:
-                      'Invalid type: Expected "org.iso.18013.5.1.mDL" but received "org.iso.23220.photoid.1"',
+                    message: 'Invalid type: Expected "org.iso.18013.5.1.mDL" but received "org.iso.23220.photoid.1"',
                     requirement: undefined,
                     path: [
                       {
@@ -654,8 +641,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: 'Object',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected Object but received undefined',
+                    message: 'Invalid type: Expected Object but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -703,12 +689,8 @@ void describe('complex-mdoc-query', () => {
                 ],
                 flattened: {
                   nested: {
-                    doctype: [
-                      'Invalid type: Expected "org.iso.18013.5.1.mDL" but received "org.iso.23220.photoid.1"',
-                    ],
-                    'namespaces.org.iso.18013.5.1': [
-                      'Invalid type: Expected Object but received undefined',
-                    ],
+                    doctype: ['Invalid type: Expected "org.iso.18013.5.1.mDL" but received "org.iso.23220.photoid.1"'],
+                    'namespaces.org.iso.18013.5.1': ['Invalid type: Expected Object but received undefined'],
                   },
                 },
                 input_credential_index: 3,
@@ -729,8 +711,7 @@ void describe('complex-mdoc-query', () => {
                     input: 'example_doctype',
                     expected: '"org.iso.18013.5.1.mDL"',
                     received: '"example_doctype"',
-                    message:
-                      'Invalid type: Expected "org.iso.18013.5.1.mDL" but received "example_doctype"',
+                    message: 'Invalid type: Expected "org.iso.18013.5.1.mDL" but received "example_doctype"',
                     requirement: undefined,
                     path: [
                       {
@@ -760,8 +741,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: 'Object',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected Object but received undefined',
+                    message: 'Invalid type: Expected Object but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -803,12 +783,8 @@ void describe('complex-mdoc-query', () => {
                 ],
                 flattened: {
                   nested: {
-                    doctype: [
-                      'Invalid type: Expected "org.iso.18013.5.1.mDL" but received "example_doctype"',
-                    ],
-                    'namespaces.org.iso.18013.5.1': [
-                      'Invalid type: Expected Object but received undefined',
-                    ],
+                    doctype: ['Invalid type: Expected "org.iso.18013.5.1.mDL" but received "example_doctype"'],
+                    'namespaces.org.iso.18013.5.1': ['Invalid type: Expected Object but received undefined'],
                   },
                 },
                 input_credential_index: 4,
@@ -827,8 +803,7 @@ void describe('complex-mdoc-query', () => {
                     input: 'vc+sd-jwt',
                     expected: '"mso_mdoc"',
                     received: '"vc+sd-jwt"',
-                    message:
-                      'Invalid type: Expected "mso_mdoc" but received "vc+sd-jwt"',
+                    message: 'Invalid type: Expected "mso_mdoc" but received "vc+sd-jwt"',
                     requirement: undefined,
                     path: [
                       {
@@ -873,8 +848,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: '"org.iso.18013.5.1.mDL"',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected "org.iso.18013.5.1.mDL" but received undefined',
+                    message: 'Invalid type: Expected "org.iso.18013.5.1.mDL" but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -919,8 +893,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: 'Object',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected Object but received undefined',
+                    message: 'Invalid type: Expected Object but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -962,15 +935,9 @@ void describe('complex-mdoc-query', () => {
                 ],
                 flattened: {
                   nested: {
-                    credential_format: [
-                      'Invalid type: Expected "mso_mdoc" but received "vc+sd-jwt"',
-                    ],
-                    doctype: [
-                      'Invalid type: Expected "org.iso.18013.5.1.mDL" but received undefined',
-                    ],
-                    namespaces: [
-                      'Invalid type: Expected Object but received undefined',
-                    ],
+                    credential_format: ['Invalid type: Expected "mso_mdoc" but received "vc+sd-jwt"'],
+                    doctype: ['Invalid type: Expected "org.iso.18013.5.1.mDL" but received undefined'],
+                    namespaces: ['Invalid type: Expected Object but received undefined'],
                   },
                 },
                 input_credential_index: 5,
@@ -1013,8 +980,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: '(!null & !undefined)',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected (!null & !undefined) but received undefined',
+                    message: 'Invalid type: Expected (!null & !undefined) but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -1080,8 +1046,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: '(!null & !undefined)',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected (!null & !undefined) but received undefined',
+                    message: 'Invalid type: Expected (!null & !undefined) but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -1187,8 +1152,7 @@ void describe('complex-mdoc-query', () => {
                     input: 'org.iso.23220.photoid.1',
                     expected: '"org.iso.18013.5.1.mDL"',
                     received: '"org.iso.23220.photoid.1"',
-                    message:
-                      'Invalid type: Expected "org.iso.18013.5.1.mDL" but received "org.iso.23220.photoid.1"',
+                    message: 'Invalid type: Expected "org.iso.18013.5.1.mDL" but received "org.iso.23220.photoid.1"',
                     requirement: undefined,
                     path: [
                       {
@@ -1220,8 +1184,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: 'Object',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected Object but received undefined',
+                    message: 'Invalid type: Expected Object but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -1269,12 +1232,8 @@ void describe('complex-mdoc-query', () => {
                 ],
                 flattened: {
                   nested: {
-                    doctype: [
-                      'Invalid type: Expected "org.iso.18013.5.1.mDL" but received "org.iso.23220.photoid.1"',
-                    ],
-                    'namespaces.org.iso.18013.5.1': [
-                      'Invalid type: Expected Object but received undefined',
-                    ],
+                    doctype: ['Invalid type: Expected "org.iso.18013.5.1.mDL" but received "org.iso.23220.photoid.1"'],
+                    'namespaces.org.iso.18013.5.1': ['Invalid type: Expected Object but received undefined'],
                   },
                 },
                 input_credential_index: 2,
@@ -1295,8 +1254,7 @@ void describe('complex-mdoc-query', () => {
                     input: 'org.iso.23220.photoid.1',
                     expected: '"org.iso.18013.5.1.mDL"',
                     received: '"org.iso.23220.photoid.1"',
-                    message:
-                      'Invalid type: Expected "org.iso.18013.5.1.mDL" but received "org.iso.23220.photoid.1"',
+                    message: 'Invalid type: Expected "org.iso.18013.5.1.mDL" but received "org.iso.23220.photoid.1"',
                     requirement: undefined,
                     path: [
                       {
@@ -1328,8 +1286,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: 'Object',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected Object but received undefined',
+                    message: 'Invalid type: Expected Object but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -1377,12 +1334,8 @@ void describe('complex-mdoc-query', () => {
                 ],
                 flattened: {
                   nested: {
-                    doctype: [
-                      'Invalid type: Expected "org.iso.18013.5.1.mDL" but received "org.iso.23220.photoid.1"',
-                    ],
-                    'namespaces.org.iso.18013.5.1': [
-                      'Invalid type: Expected Object but received undefined',
-                    ],
+                    doctype: ['Invalid type: Expected "org.iso.18013.5.1.mDL" but received "org.iso.23220.photoid.1"'],
+                    'namespaces.org.iso.18013.5.1': ['Invalid type: Expected Object but received undefined'],
                   },
                 },
                 input_credential_index: 3,
@@ -1403,8 +1356,7 @@ void describe('complex-mdoc-query', () => {
                     input: 'example_doctype',
                     expected: '"org.iso.18013.5.1.mDL"',
                     received: '"example_doctype"',
-                    message:
-                      'Invalid type: Expected "org.iso.18013.5.1.mDL" but received "example_doctype"',
+                    message: 'Invalid type: Expected "org.iso.18013.5.1.mDL" but received "example_doctype"',
                     requirement: undefined,
                     path: [
                       {
@@ -1434,8 +1386,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: 'Object',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected Object but received undefined',
+                    message: 'Invalid type: Expected Object but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -1477,12 +1428,8 @@ void describe('complex-mdoc-query', () => {
                 ],
                 flattened: {
                   nested: {
-                    doctype: [
-                      'Invalid type: Expected "org.iso.18013.5.1.mDL" but received "example_doctype"',
-                    ],
-                    'namespaces.org.iso.18013.5.1': [
-                      'Invalid type: Expected Object but received undefined',
-                    ],
+                    doctype: ['Invalid type: Expected "org.iso.18013.5.1.mDL" but received "example_doctype"'],
+                    'namespaces.org.iso.18013.5.1': ['Invalid type: Expected Object but received undefined'],
                   },
                 },
                 input_credential_index: 4,
@@ -1501,8 +1448,7 @@ void describe('complex-mdoc-query', () => {
                     input: 'vc+sd-jwt',
                     expected: '"mso_mdoc"',
                     received: '"vc+sd-jwt"',
-                    message:
-                      'Invalid type: Expected "mso_mdoc" but received "vc+sd-jwt"',
+                    message: 'Invalid type: Expected "mso_mdoc" but received "vc+sd-jwt"',
                     requirement: undefined,
                     path: [
                       {
@@ -1547,8 +1493,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: '"org.iso.18013.5.1.mDL"',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected "org.iso.18013.5.1.mDL" but received undefined',
+                    message: 'Invalid type: Expected "org.iso.18013.5.1.mDL" but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -1593,8 +1538,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: 'Object',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected Object but received undefined',
+                    message: 'Invalid type: Expected Object but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -1636,15 +1580,9 @@ void describe('complex-mdoc-query', () => {
                 ],
                 flattened: {
                   nested: {
-                    credential_format: [
-                      'Invalid type: Expected "mso_mdoc" but received "vc+sd-jwt"',
-                    ],
-                    doctype: [
-                      'Invalid type: Expected "org.iso.18013.5.1.mDL" but received undefined',
-                    ],
-                    namespaces: [
-                      'Invalid type: Expected Object but received undefined',
-                    ],
+                    credential_format: ['Invalid type: Expected "mso_mdoc" but received "vc+sd-jwt"'],
+                    doctype: ['Invalid type: Expected "org.iso.18013.5.1.mDL" but received undefined'],
+                    namespaces: ['Invalid type: Expected Object but received undefined'],
                   },
                 },
                 input_credential_index: 5,
@@ -1686,8 +1624,7 @@ void describe('complex-mdoc-query', () => {
                     input: 'org.iso.18013.5.1.mDL',
                     expected: '"org.iso.23220.photoid.1"',
                     received: '"org.iso.18013.5.1.mDL"',
-                    message:
-                      'Invalid type: Expected "org.iso.23220.photoid.1" but received "org.iso.18013.5.1.mDL"',
+                    message: 'Invalid type: Expected "org.iso.23220.photoid.1" but received "org.iso.18013.5.1.mDL"',
                     requirement: undefined,
                     path: [
                       {
@@ -1719,8 +1656,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: 'Object',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected Object but received undefined',
+                    message: 'Invalid type: Expected Object but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -1768,12 +1704,8 @@ void describe('complex-mdoc-query', () => {
                 ],
                 flattened: {
                   nested: {
-                    doctype: [
-                      'Invalid type: Expected "org.iso.23220.photoid.1" but received "org.iso.18013.5.1.mDL"',
-                    ],
-                    'namespaces.org.iso.23220.1': [
-                      'Invalid type: Expected Object but received undefined',
-                    ],
+                    doctype: ['Invalid type: Expected "org.iso.23220.photoid.1" but received "org.iso.18013.5.1.mDL"'],
+                    'namespaces.org.iso.23220.1': ['Invalid type: Expected Object but received undefined'],
                   },
                 },
                 input_credential_index: 0,
@@ -1794,8 +1726,7 @@ void describe('complex-mdoc-query', () => {
                     input: 'org.iso.18013.5.1.mDL',
                     expected: '"org.iso.23220.photoid.1"',
                     received: '"org.iso.18013.5.1.mDL"',
-                    message:
-                      'Invalid type: Expected "org.iso.23220.photoid.1" but received "org.iso.18013.5.1.mDL"',
+                    message: 'Invalid type: Expected "org.iso.23220.photoid.1" but received "org.iso.18013.5.1.mDL"',
                     requirement: undefined,
                     path: [
                       {
@@ -1827,8 +1758,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: 'Object',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected Object but received undefined',
+                    message: 'Invalid type: Expected Object but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -1876,12 +1806,8 @@ void describe('complex-mdoc-query', () => {
                 ],
                 flattened: {
                   nested: {
-                    doctype: [
-                      'Invalid type: Expected "org.iso.23220.photoid.1" but received "org.iso.18013.5.1.mDL"',
-                    ],
-                    'namespaces.org.iso.23220.1': [
-                      'Invalid type: Expected Object but received undefined',
-                    ],
+                    doctype: ['Invalid type: Expected "org.iso.23220.photoid.1" but received "org.iso.18013.5.1.mDL"'],
+                    'namespaces.org.iso.23220.1': ['Invalid type: Expected Object but received undefined'],
                   },
                 },
                 input_credential_index: 1,
@@ -1922,8 +1848,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: '(!null & !undefined)',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected (!null & !undefined) but received undefined',
+                    message: 'Invalid type: Expected (!null & !undefined) but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -1989,8 +1914,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: '(!null & !undefined)',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected (!null & !undefined) but received undefined',
+                    message: 'Invalid type: Expected (!null & !undefined) but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -2056,8 +1980,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: '(!null & !undefined)',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected (!null & !undefined) but received undefined',
+                    message: 'Invalid type: Expected (!null & !undefined) but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -2149,8 +2072,7 @@ void describe('complex-mdoc-query', () => {
                     input: 'example_doctype',
                     expected: '"org.iso.23220.photoid.1"',
                     received: '"example_doctype"',
-                    message:
-                      'Invalid type: Expected "org.iso.23220.photoid.1" but received "example_doctype"',
+                    message: 'Invalid type: Expected "org.iso.23220.photoid.1" but received "example_doctype"',
                     requirement: undefined,
                     path: [
                       {
@@ -2180,8 +2102,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: 'Object',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected Object but received undefined',
+                    message: 'Invalid type: Expected Object but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -2223,12 +2144,8 @@ void describe('complex-mdoc-query', () => {
                 ],
                 flattened: {
                   nested: {
-                    doctype: [
-                      'Invalid type: Expected "org.iso.23220.photoid.1" but received "example_doctype"',
-                    ],
-                    'namespaces.org.iso.23220.1': [
-                      'Invalid type: Expected Object but received undefined',
-                    ],
+                    doctype: ['Invalid type: Expected "org.iso.23220.photoid.1" but received "example_doctype"'],
+                    'namespaces.org.iso.23220.1': ['Invalid type: Expected Object but received undefined'],
                   },
                 },
                 input_credential_index: 4,
@@ -2247,8 +2164,7 @@ void describe('complex-mdoc-query', () => {
                     input: 'vc+sd-jwt',
                     expected: '"mso_mdoc"',
                     received: '"vc+sd-jwt"',
-                    message:
-                      'Invalid type: Expected "mso_mdoc" but received "vc+sd-jwt"',
+                    message: 'Invalid type: Expected "mso_mdoc" but received "vc+sd-jwt"',
                     requirement: undefined,
                     path: [
                       {
@@ -2293,8 +2209,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: '"org.iso.23220.photoid.1"',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected "org.iso.23220.photoid.1" but received undefined',
+                    message: 'Invalid type: Expected "org.iso.23220.photoid.1" but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -2339,8 +2254,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: 'Object',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected Object but received undefined',
+                    message: 'Invalid type: Expected Object but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -2382,15 +2296,9 @@ void describe('complex-mdoc-query', () => {
                 ],
                 flattened: {
                   nested: {
-                    credential_format: [
-                      'Invalid type: Expected "mso_mdoc" but received "vc+sd-jwt"',
-                    ],
-                    doctype: [
-                      'Invalid type: Expected "org.iso.23220.photoid.1" but received undefined',
-                    ],
-                    namespaces: [
-                      'Invalid type: Expected Object but received undefined',
-                    ],
+                    credential_format: ['Invalid type: Expected "mso_mdoc" but received "vc+sd-jwt"'],
+                    doctype: ['Invalid type: Expected "org.iso.23220.photoid.1" but received undefined'],
+                    namespaces: ['Invalid type: Expected Object but received undefined'],
                   },
                 },
                 input_credential_index: 5,
@@ -2431,8 +2339,7 @@ void describe('complex-mdoc-query', () => {
                     input: 'org.iso.18013.5.1.mDL',
                     expected: '"org.iso.23220.photoid.1"',
                     received: '"org.iso.18013.5.1.mDL"',
-                    message:
-                      'Invalid type: Expected "org.iso.23220.photoid.1" but received "org.iso.18013.5.1.mDL"',
+                    message: 'Invalid type: Expected "org.iso.23220.photoid.1" but received "org.iso.18013.5.1.mDL"',
                     requirement: undefined,
                     path: [
                       {
@@ -2464,8 +2371,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: 'Object',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected Object but received undefined',
+                    message: 'Invalid type: Expected Object but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -2513,12 +2419,8 @@ void describe('complex-mdoc-query', () => {
                 ],
                 flattened: {
                   nested: {
-                    doctype: [
-                      'Invalid type: Expected "org.iso.23220.photoid.1" but received "org.iso.18013.5.1.mDL"',
-                    ],
-                    'namespaces.org.iso.23220.1': [
-                      'Invalid type: Expected Object but received undefined',
-                    ],
+                    doctype: ['Invalid type: Expected "org.iso.23220.photoid.1" but received "org.iso.18013.5.1.mDL"'],
+                    'namespaces.org.iso.23220.1': ['Invalid type: Expected Object but received undefined'],
                   },
                 },
                 input_credential_index: 0,
@@ -2539,8 +2441,7 @@ void describe('complex-mdoc-query', () => {
                     input: 'org.iso.18013.5.1.mDL',
                     expected: '"org.iso.23220.photoid.1"',
                     received: '"org.iso.18013.5.1.mDL"',
-                    message:
-                      'Invalid type: Expected "org.iso.23220.photoid.1" but received "org.iso.18013.5.1.mDL"',
+                    message: 'Invalid type: Expected "org.iso.23220.photoid.1" but received "org.iso.18013.5.1.mDL"',
                     requirement: undefined,
                     path: [
                       {
@@ -2572,8 +2473,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: 'Object',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected Object but received undefined',
+                    message: 'Invalid type: Expected Object but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -2621,12 +2521,8 @@ void describe('complex-mdoc-query', () => {
                 ],
                 flattened: {
                   nested: {
-                    doctype: [
-                      'Invalid type: Expected "org.iso.23220.photoid.1" but received "org.iso.18013.5.1.mDL"',
-                    ],
-                    'namespaces.org.iso.23220.1': [
-                      'Invalid type: Expected Object but received undefined',
-                    ],
+                    doctype: ['Invalid type: Expected "org.iso.23220.photoid.1" but received "org.iso.18013.5.1.mDL"'],
+                    'namespaces.org.iso.23220.1': ['Invalid type: Expected Object but received undefined'],
                   },
                 },
                 input_credential_index: 1,
@@ -2649,8 +2545,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: '(!null & !undefined)',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected (!null & !undefined) but received undefined',
+                    message: 'Invalid type: Expected (!null & !undefined) but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -2716,8 +2611,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: '(!null & !undefined)',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected (!null & !undefined) but received undefined',
+                    message: 'Invalid type: Expected (!null & !undefined) but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -2823,8 +2717,7 @@ void describe('complex-mdoc-query', () => {
                     input: 'example_doctype',
                     expected: '"org.iso.23220.photoid.1"',
                     received: '"example_doctype"',
-                    message:
-                      'Invalid type: Expected "org.iso.23220.photoid.1" but received "example_doctype"',
+                    message: 'Invalid type: Expected "org.iso.23220.photoid.1" but received "example_doctype"',
                     requirement: undefined,
                     path: [
                       {
@@ -2854,8 +2747,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: 'Object',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected Object but received undefined',
+                    message: 'Invalid type: Expected Object but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -2897,12 +2789,8 @@ void describe('complex-mdoc-query', () => {
                 ],
                 flattened: {
                   nested: {
-                    doctype: [
-                      'Invalid type: Expected "org.iso.23220.photoid.1" but received "example_doctype"',
-                    ],
-                    'namespaces.org.iso.23220.1': [
-                      'Invalid type: Expected Object but received undefined',
-                    ],
+                    doctype: ['Invalid type: Expected "org.iso.23220.photoid.1" but received "example_doctype"'],
+                    'namespaces.org.iso.23220.1': ['Invalid type: Expected Object but received undefined'],
                   },
                 },
                 input_credential_index: 4,
@@ -2921,8 +2809,7 @@ void describe('complex-mdoc-query', () => {
                     input: 'vc+sd-jwt',
                     expected: '"mso_mdoc"',
                     received: '"vc+sd-jwt"',
-                    message:
-                      'Invalid type: Expected "mso_mdoc" but received "vc+sd-jwt"',
+                    message: 'Invalid type: Expected "mso_mdoc" but received "vc+sd-jwt"',
                     requirement: undefined,
                     path: [
                       {
@@ -2967,8 +2854,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: '"org.iso.23220.photoid.1"',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected "org.iso.23220.photoid.1" but received undefined',
+                    message: 'Invalid type: Expected "org.iso.23220.photoid.1" but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -3013,8 +2899,7 @@ void describe('complex-mdoc-query', () => {
                     input: undefined,
                     expected: 'Object',
                     received: 'undefined',
-                    message:
-                      'Invalid type: Expected Object but received undefined',
+                    message: 'Invalid type: Expected Object but received undefined',
                     requirement: undefined,
                     path: [
                       {
@@ -3056,15 +2941,9 @@ void describe('complex-mdoc-query', () => {
                 ],
                 flattened: {
                   nested: {
-                    credential_format: [
-                      'Invalid type: Expected "mso_mdoc" but received "vc+sd-jwt"',
-                    ],
-                    doctype: [
-                      'Invalid type: Expected "org.iso.23220.photoid.1" but received undefined',
-                    ],
-                    namespaces: [
-                      'Invalid type: Expected Object but received undefined',
-                    ],
+                    credential_format: ['Invalid type: Expected "mso_mdoc" but received "vc+sd-jwt"'],
+                    doctype: ['Invalid type: Expected "org.iso.23220.photoid.1" but received undefined'],
+                    namespaces: ['Invalid type: Expected Object but received undefined'],
                   },
                 },
                 input_credential_index: 5,
@@ -3074,20 +2953,18 @@ void describe('complex-mdoc-query', () => {
           ],
         },
       },
-    });
+    })
 
     const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       {
         'mdl-id': res.credential_matches['mdl-id'].output,
         'mdl-address': res.credential_matches['mdl-address'].output,
-        'photo_card-address':
-          res.credential_matches['photo_card-address'].output,
+        'photo_card-address': res.credential_matches['photo_card-address'].output,
         'photo_card-id': res.credential_matches['photo_card-id'].output,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       } as any,
       { dcqlQuery: query }
-    );
+    )
 
     assert.deepStrictEqual(presentationQueryResult, {
       credentials: [
@@ -3262,6 +3139,6 @@ void describe('complex-mdoc-query', () => {
         },
       },
       invalid_matches: undefined,
-    });
-  });
-});
+    })
+  })
+})

@@ -1,21 +1,13 @@
-import * as v from 'valibot';
-import { idRegex } from '../u-dcql.js';
+import * as v from 'valibot'
+import { idRegex } from '../u-dcql.js'
 
 /**
  * Specifies claims withing a requested Credential.
  */
 export namespace DcqlClaimsQuery {
-  export const vValue = v.union([
-    v.string(),
-    v.pipe(v.number(), v.integer()),
-    v.boolean(),
-  ]);
+  export const vValue = v.union([v.string(), v.pipe(v.number(), v.integer()), v.boolean()])
 
-  export const vPath = v.union([
-    v.string(),
-    v.pipe(v.number(), v.integer(), v.minValue(0)),
-    v.null(),
-  ]);
+  export const vPath = v.union([v.string(), v.pipe(v.number(), v.integer(), v.minValue(0)), v.null()])
 
   export const vW3cSdJwtVc = v.object({
     id: v.pipe(
@@ -36,8 +28,8 @@ export namespace DcqlClaimsQuery {
         'An array of strings, integers or boolean values that specifies the expected values of the claim. If the values property is present, the Wallet SHOULD return the claim only if the type and value of the claim both match for at least one of the elements in the array.'
       )
     ),
-  });
-  export type W3cAndSdJwtVc = v.InferOutput<typeof vW3cSdJwtVc>;
+  })
+  export type W3cAndSdJwtVc = v.InferOutput<typeof vW3cSdJwtVc>
 
   export const vMdoc = v.object({
     id: v.pipe(
@@ -64,11 +56,11 @@ export namespace DcqlClaimsQuery {
         'An array of strings, integers or boolean values that specifies the expected values of the claim. If the values property is present, the Wallet SHOULD return the claim only if the type and value of the claim both match for at least one of the elements in the array.'
       )
     ),
-  });
-  export type Mdoc = v.InferOutput<typeof vMdoc>;
+  })
+  export type Mdoc = v.InferOutput<typeof vMdoc>
 
-  export const vModel = v.union([vMdoc, vW3cSdJwtVc]);
-  export type Input = v.InferInput<typeof vModel>;
-  export type Out = v.InferOutput<typeof vModel>;
+  export const vModel = v.union([vMdoc, vW3cSdJwtVc])
+  export type Input = v.InferInput<typeof vModel>
+  export type Out = v.InferOutput<typeof vModel>
 }
-export type DcqlClaimsQuery = DcqlClaimsQuery.Out;
+export type DcqlClaimsQuery = DcqlClaimsQuery.Out

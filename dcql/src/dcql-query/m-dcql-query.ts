@@ -1,13 +1,10 @@
-import * as v from 'valibot';
-import {
-  DcqlCredentialSetError,
-  DcqlNonUniqueCredentialQueryIdsError,
-} from '../dcql-error/e-dcql.js';
-import { runDcqlQuery } from '../dcql-query-result/run-dcql-query.js';
-import type { DcqlCredential } from '../u-dcql-credential.js';
-import { vNonEmptyArray } from '../u-dcql.js';
-import { DcqlCredentialQuery } from './m-dcql-credential-query.js';
-import { CredentialSetQuery } from './m-dcql-credential-set-query.js';
+import * as v from 'valibot'
+import { DcqlCredentialSetError, DcqlNonUniqueCredentialQueryIdsError } from '../dcql-error/e-dcql.js'
+import { runDcqlQuery } from '../dcql-query-result/run-dcql-query.js'
+import type { DcqlCredential } from '../u-dcql-credential.js'
+import { vNonEmptyArray } from '../u-dcql.js'
+import { DcqlCredentialQuery } from './m-dcql-credential-query.js'
+import { CredentialSetQuery } from './m-dcql-credential-set-query.js'
 
 /**
  * The Digital Credentials Query Language (DCQL, pronounced [ˈdakl̩]) is a
@@ -23,57 +20,57 @@ export namespace DcqlQuery {
       v.array(DcqlCredentialQuery.vModel),
       vNonEmptyArray(),
       v.description(
-        `REQUIRED. A non-empty array of Credential Queries that specify the requested Verifiable Credentials.`
+        'REQUIRED. A non-empty array of Credential Queries that specify the requested Verifiable Credentials.'
       )
     ),
     credential_sets: v.pipe(
       v.optional(v.pipe(v.array(CredentialSetQuery.vModel), vNonEmptyArray())),
       v.description(
-        `OPTIONAL. A non-empty array of credential set queries that specifies additional constraints on which of the requested Verifiable Credentials to return.`
+        'OPTIONAL. A non-empty array of credential set queries that specifies additional constraints on which of the requested Verifiable Credentials to return.'
       )
     ),
-  });
-  export type Input = v.InferInput<typeof vModel>;
-  export type Output = v.InferOutput<typeof vModel>;
+  })
+  export type Input = v.InferInput<typeof vModel>
+  export type Output = v.InferOutput<typeof vModel>
   export const validate = (dcqlQuery: Output) => {
-    validateUniqueCredentialQueryIds(dcqlQuery);
-    validateCredentialSets(dcqlQuery);
-    dcqlQuery.credentials.forEach(DcqlCredentialQuery.validate);
-  };
+    validateUniqueCredentialQueryIds(dcqlQuery)
+    validateCredentialSets(dcqlQuery)
+    dcqlQuery.credentials.forEach(DcqlCredentialQuery.validate)
+  }
   export const query = (dcqlQuery: Output, credentials: DcqlCredential[]) => {
-    return runDcqlQuery(dcqlQuery, { credentials, presentation: false });
-  };
+    return runDcqlQuery(dcqlQuery, { credentials, presentation: false })
+  }
 
   export const parse = (input: Input) => {
-    return v.parse(vModel, input);
-  };
+    return v.parse(vModel, input)
+  }
 }
-export type DcqlQuery = DcqlQuery.Output;
+export type DcqlQuery = DcqlQuery.Output
 
 // --- validations --- //
 
 const validateUniqueCredentialQueryIds = (query: DcqlQuery.Output) => {
-  const ids = query.credentials.map(c => c.id);
-  const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index);
+  const ids = query.credentials.map((c) => c.id)
+  const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index)
 
   if (duplicates.length > 0) {
     throw new DcqlNonUniqueCredentialQueryIdsError({
       message: `Duplicate credential query ids found: ${duplicates.join(', ')}`,
-    });
+    })
   }
-};
+}
 
 const validateCredentialSets = (query: DcqlQuery.Output) => {
-  if (!query.credential_sets) return;
+  if (!query.credential_sets) return
 
-  const credentialQueryIds = new Set(query.credentials.map(c => c.id));
+  const credentialQueryIds = new Set(query.credentials.map((c) => c.id))
 
-  const undefinedCredentialQueryIds: string[] = [];
+  const undefinedCredentialQueryIds: string[] = []
   for (const credential_set of query.credential_sets) {
     for (const credentialSetOption of credential_set.options) {
       for (const credentialQueryId of credentialSetOption) {
         if (!credentialQueryIds.has(credentialQueryId)) {
-          undefinedCredentialQueryIds.push(credentialQueryId);
+          undefinedCredentialQueryIds.push(credentialQueryId)
         }
       }
     }
@@ -82,6 +79,6 @@ const validateCredentialSets = (query: DcqlQuery.Output) => {
   if (undefinedCredentialQueryIds.length > 0) {
     throw new DcqlCredentialSetError({
       message: `Credential set contains undefined credential id${undefinedCredentialQueryIds.length === 1 ? '' : '`s'} '${undefinedCredentialQueryIds.join(', ')}'`,
-    });
+    })
   }
-};
+}
