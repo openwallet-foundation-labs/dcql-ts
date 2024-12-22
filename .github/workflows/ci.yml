@@ -19,7 +19,7 @@ env:
   TURBO_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
 jobs:
-  format:
+  format-and-lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,8 +27,8 @@ jobs:
       - name: Setup
         uses: ./.github/setup
 
-      - name: Format
-        run: pnpm format
+      - name: Format and Lint
+        run: pnpm format-and-lint
 
   build:
     runs-on: ubuntu-latest
