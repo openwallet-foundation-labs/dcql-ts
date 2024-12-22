@@ -31,6 +31,5 @@
     "@changesets/cli": "^2.27.7",
     "@turbo/gen": "^2.1.3",
     "turbo": "^2.1.3"
-  },
-  "prettier": "@ausweis/prettier"
+  }
 }

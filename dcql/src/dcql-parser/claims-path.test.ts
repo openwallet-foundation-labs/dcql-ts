@@ -1,7 +1,6 @@
-import assert from 'node:assert';
-import { describe, it } from 'node:test';
-import * as v from 'valibot';
-import { getJsonClaimsParser } from './dcql-claims-query-result.js';
+import * as v from 'valibot'
+import { describe, expect, it } from 'vitest'
+import { getJsonClaimsParser } from './dcql-claims-query-result.js'
 
 const claimsPathPointerExample = {
   name: 'Arthur Dent',
@@ -21,68 +20,63 @@ const claimsPathPointerExample = {
     },
   ],
   nationalities: ['British', 'Betelgeusian'],
-};
+}
 
-void describe('claims-path', () => {
-  void it('name', _t => {
+describe('claims-path', () => {
+  it('name', (_t) => {
     const parser = getJsonClaimsParser([{ path: ['name'] }], {
       presentation: false,
-    });
-    const res = v.parse(parser, claimsPathPointerExample);
+    })
+    const res = v.parse(parser, claimsPathPointerExample)
 
-    assert.deepStrictEqual(res, {
-      name: 'Arthur Dent',
-    });
-  });
+    expect(res).toEqual({ name: 'Arthur Dent' })
+  })
 
-  void it('address', _t => {
+  it('address', (_t) => {
     const parser = getJsonClaimsParser([{ path: ['address'] }], {
       presentation: false,
-    });
-    const res = v.parse(parser, claimsPathPointerExample);
+    })
+    const res = v.parse(parser, claimsPathPointerExample)
 
-    assert.deepStrictEqual(res, {
+    expect(res).toEqual({
       address: {
         street_address: '42 Market Street',
         locality: 'Milliways',
         postal_code: '12345',
       },
-    });
-  });
+    })
+  })
 
-  void it('address street address', _t => {
-    const parser = getJsonClaimsParser(
-      [{ path: ['address', 'street_address'] }],
-      { presentation: false }
-    );
-    const res = v.parse(parser, claimsPathPointerExample);
+  it('address street address', (_t) => {
+    const parser = getJsonClaimsParser([{ path: ['address', 'street_address'] }], { presentation: false })
+    const res = v.parse(parser, claimsPathPointerExample)
 
-    assert.deepStrictEqual(res, {
+    expect(res).toEqual({
       address: {
         street_address: '42 Market Street',
       },
-    });
-  });
+    })
+  })
 
-  void it('nationalities', _t => {
+  it('nationalities', (_t) => {
     const parser = getJsonClaimsParser([{ path: ['nationalities', 1] }], {
       presentation: false,
-    });
-    const res = v.parse(parser, claimsPathPointerExample);
+    })
+    const res = v.parse(parser, claimsPathPointerExample)
 
-    assert.deepStrictEqual(res, {
+    expect(res).toEqual({
       nationalities: 'Betelgeusian',
-    });
-  });
+    })
+  })
 
-  void it('all degree types', _t => {
+  it('all degree types', (_t) => {
     const parser = getJsonClaimsParser([{ path: ['degrees', null, 'type'] }], {
       presentation: false,
-    });
-    const res = v.parse(parser, claimsPathPointerExample);
+    })
+    const res = v.parse(parser, claimsPathPointerExample)
 
-    assert.deepStrictEqual(res, {
+    expect(res).toEqual({
       degrees: [{ type: 'Bachelor of Science' }, { type: 'Master of Science' }],
-    });
-  });
-});
+    })
+  })
+})

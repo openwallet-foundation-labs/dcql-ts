@@ -35,13 +35,7 @@
         "noRestrictedGlobals": {
           "level": "error",
           "options": {
-            "deniedGlobals": [
-              "URL",
-              "URLSearchParams",
-              "fetch",
-              "Response",
-              "Headers"
-            ]
+            "deniedGlobals": ["URL", "URLSearchParams", "fetch", "Response", "Headers"]
           }
         }
       },

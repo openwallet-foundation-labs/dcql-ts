@@ -1,15 +1,12 @@
-import * as v from 'valibot';
+import * as v from 'valibot'
 
-import {
-  DcqlInvalidPresentationRecordError,
-  DcqlPresentationResultError,
-} from '../dcql-error/e-dcql.js';
-import { runCredentialQuery } from '../dcql-parser/dcql-credential-query-result.js';
-import { DcqlQueryResult } from '../dcql-query-result/m-dcql-query-result.js';
-import type { DcqlQuery } from '../dcql-query/m-dcql-query.js';
-import { DcqlCredential } from '../u-dcql-credential.js';
-import { idRegex } from '../u-dcql.js';
-import type { DcqlCredentialPresentation } from './m-dcql-credential-presentation.js';
+import { DcqlInvalidPresentationRecordError, DcqlPresentationResultError } from '../dcql-error/e-dcql.js'
+import { runCredentialQuery } from '../dcql-parser/dcql-credential-query-result.js'
+import { DcqlQueryResult } from '../dcql-query-result/m-dcql-query-result.js'
+import type { DcqlQuery } from '../dcql-query/m-dcql-query.js'
+import { DcqlCredential } from '../u-dcql-credential.js'
+import { idRegex } from '../u-dcql.js'
+import type { DcqlCredentialPresentation } from './m-dcql-credential-presentation.js'
 
 export namespace DcqlPresentationResult {
   export const vModel = v.object({
@@ -19,8 +16,7 @@ export namespace DcqlPresentationResult {
       v.record(
         v.pipe(v.string(), v.regex(idRegex)),
         v.object({
-          ...v.omit(DcqlCredential.vParseFailure, ['input_credential_index'])
-            .entries,
+          ...v.omit(DcqlCredential.vParseFailure, ['input_credential_index']).entries,
           presentation_id: v.pipe(v.string(), v.regex(idRegex)),
         })
       ),
@@ -30,21 +26,18 @@ export namespace DcqlPresentationResult {
     valid_matches: v.record(
       v.pipe(v.string(), v.regex(idRegex)),
       v.object({
-        ...v.omit(DcqlCredential.vParseSuccess, [
-          'issues',
-          'input_credential_index',
-        ]).entries,
+        ...v.omit(DcqlCredential.vParseSuccess, ['issues', 'input_credential_index']).entries,
         presentation_id: v.pipe(v.string(), v.regex(idRegex)),
       })
     ),
-  });
+  })
 
-  export type Input = v.InferInput<typeof vModel>;
-  export type Output = v.InferOutput<typeof vModel>;
+  export type Input = v.InferInput<typeof vModel>
+  export type Output = v.InferOutput<typeof vModel>
 
   export const parse = (input: Input | DcqlQueryResult) => {
-    return v.parse(vModel, input);
-  };
+    return v.parse(vModel, input)
+  }
 
   /**
    * Query if the presentation record can be satisfied by the provided presentations
@@ -57,17 +50,15 @@ export namespace DcqlPresentationResult {
     dcqlPresentation: Record<string, DcqlCredentialPresentation>,
     ctx: { dcqlQuery: DcqlQuery }
   ): Output => {
-    const { dcqlQuery } = ctx;
+    const { dcqlQuery } = ctx
 
     const presentationQueriesResults = Object.fromEntries(
       Object.entries(dcqlPresentation).map(([queryId, presentation]) => {
-        const credentialQuery = dcqlQuery.credentials.find(
-          c => c.id === queryId
-        );
+        const credentialQuery = dcqlQuery.credentials.find((c) => c.id === queryId)
         if (!credentialQuery) {
           throw new DcqlPresentationResultError({
             message: `Query ${queryId} not found in the dcql query. Cannot validate presentation.`,
-          });
+          })
         }
 
         return [
@@ -76,53 +67,45 @@ export namespace DcqlPresentationResult {
             presentation: true,
             credentials: [presentation],
           }),
-        ];
+        ]
       })
-    );
+    )
 
-    let invalidMatches: DcqlPresentationResult['invalid_matches'] = undefined;
-    const validMatches: DcqlPresentationResult['valid_matches'] = {};
+    let invalidMatches: DcqlPresentationResult['invalid_matches'] = undefined
+    const validMatches: DcqlPresentationResult['valid_matches'] = {}
 
-    for (const [queryId, presentationQueryResult] of Object.entries(
-      presentationQueriesResults
-    )) {
+    for (const [queryId, presentationQueryResult] of Object.entries(presentationQueriesResults)) {
       for (const presentationQueryResultForClaimSet of presentationQueryResult) {
-        const result =
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          presentationQueryResultForClaimSet[0]!;
+        // biome-ignore lint/style/noNonNullAssertion: <explanation>
+        const result = presentationQueryResultForClaimSet[0]!
         if (result.success) {
-          const { issues, input_credential_index, ...rest } = result;
-          validMatches[queryId] = { ...rest, presentation_id: queryId };
+          const { issues, input_credential_index, ...rest } = result
+          validMatches[queryId] = { ...rest, presentation_id: queryId }
         } else {
-          if (!invalidMatches) invalidMatches = {};
-          const { input_credential_index, ...rest } = result;
+          if (!invalidMatches) invalidMatches = {}
+          const { input_credential_index, ...rest } = result
           invalidMatches[queryId] = {
             ...rest,
             presentation_id: queryId,
-          };
+          }
         }
       }
     }
 
-    const credentialSetResults = dcqlQuery.credential_sets?.map(set => {
-      const matchingOptions = set.options.filter(option =>
-        option.every(
-          credentialQueryId => validMatches[credentialQueryId]?.success
-        )
-      );
+    const credentialSetResults = dcqlQuery.credential_sets?.map((set) => {
+      const matchingOptions = set.options.filter((option) =>
+        option.every((credentialQueryId) => validMatches[credentialQueryId]?.success)
+      )
 
       return {
         ...set,
-        matching_options:
-          matchingOptions.length > 0
-            ? (matchingOptions as [string[], ...string[][]])
-            : undefined,
-      };
-    }) as DcqlQueryResult.Output['credential_sets'];
+        matching_options: matchingOptions.length > 0 ? (matchingOptions as [string[], ...string[][]]) : undefined,
+      }
+    }) as DcqlQueryResult.Output['credential_sets']
 
     const dqclQueryMatched = credentialSetResults
-      ? credentialSetResults.every(set => !set.required || set.matching_options)
-      : !invalidMatches;
+      ? credentialSetResults.every((set) => !set.required || set.matching_options)
+      : !invalidMatches
 
     return {
       ...dcqlQuery,
@@ -130,18 +113,18 @@ export namespace DcqlPresentationResult {
       valid_matches: validMatches,
       invalid_matches: invalidMatches,
       credential_sets: credentialSetResults,
-    };
-  };
+    }
+  }
 
   export const validate = (dcqlQueryResult: DcqlPresentationResult) => {
     if (!dcqlQueryResult.canBeSatisfied) {
       throw new DcqlInvalidPresentationRecordError({
         message: 'Invalid Presentation record',
         cause: dcqlQueryResult,
-      });
+      })
     }
 
-    return dcqlQueryResult satisfies Output;
-  };
+    return dcqlQueryResult satisfies Output
+  }
 }
-export type DcqlPresentationResult = DcqlPresentationResult.Output;
+export type DcqlPresentationResult = DcqlPresentationResult.Output
