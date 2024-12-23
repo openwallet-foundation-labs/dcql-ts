@@ -86,7 +86,6 @@ jobs:
           EOF
 
           pnpm changeset version --snapshot alpha
-          pnpm style:fix
           pnpm build
           pnpm changeset publish --tag alpha
 
