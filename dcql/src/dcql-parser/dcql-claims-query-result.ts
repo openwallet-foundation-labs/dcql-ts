@@ -2,7 +2,7 @@ import * as v from 'valibot'
 import { DcqlInvalidClaimsQueryIdError, DcqlMissingClaimSetParseError } from '../dcql-error/e-dcql.js'
 import type { DcqlClaimsQuery } from '../dcql-query/m-dcql-claims-query.js'
 import type { DcqlCredentialQuery } from '../dcql-query/m-dcql-credential-query.js'
-import { vWithJT } from '../u-dcql'
+import { vWithJT } from '../u-dcql.js'
 import { vJson, vJsonRecord } from '../u-dcql.js'
 
 const getClaimParser = (input: {
