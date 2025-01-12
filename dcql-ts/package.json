@@ -1,5 +1,5 @@
 {
-  "name": "dcql",
+  "name": "dcql-ts",
   "description": "Digital Credentials Query Language (DCQL)",
   "author": "Martin Auer",
   "version": "0.2.19",
@@ -38,7 +38,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/openwallet-foundation-labs/dcql-ts",
-    "directory": "dcql"
+    "directory": "dcql-ts"
   },
   "keywords": [
     "Digital Credentials Query Language (DCQL)",

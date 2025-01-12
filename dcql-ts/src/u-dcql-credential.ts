@@ -1,6 +1,6 @@
 import * as v from 'valibot'
 import { vJsonRecord, vNonEmptyArray } from './u-dcql.js'
-import type { InferModelTypes } from './u-model'
+import type { InferModelTypes } from './u-model.js'
 import { Model } from './u-model.js'
 
 export namespace DcqlMdocCredential {
