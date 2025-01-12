@@ -13,17 +13,17 @@ DCQL enables Verifiers to request Verifiable Presentations that match specific q
 ## Installation
 
 ```bash
-npm install dcql
+npm install dcql-ts
 # or
-yarn add dcql
+yarn add dcql-ts
 # or
-pnpm add dcql
+pnpm add dcql-ts
 ```
 
 ## Quick Start
 
 ```typescript
-import { DcqlQuery, DcqlPresentationResult } from 'dcql';
+import { DcqlQuery, DcqlPresentationResult } from 'dcql-ts';
 
 // Create a DCQL query
 const query = {
