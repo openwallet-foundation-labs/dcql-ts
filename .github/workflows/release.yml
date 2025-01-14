@@ -1,4 +1,5 @@
-name: cd
+name: Release
+
 permissions:
   contents: write
   packages: write
@@ -6,15 +7,11 @@ permissions:
 
 env:
   FORCE_COLOR: 3
-  TURBO_TEAM: ${{ secrets.VERCEL_TEAM_ID }}
-  TURBO_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
 on:
-  workflow_run:
-    workflows: ['ci']
-    types: [completed]
-    branches: ['main']
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
