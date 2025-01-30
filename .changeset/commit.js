@@ -11,11 +11,8 @@ const getAddMessage = async (changeset) => {
   return `docs(changeset): ${changeset.summary}\n\n${getSignedOffBy()}\n`
 }
 
-const getVersionMessage = async (releasePlan) => {
-  const publishableReleases = releasePlan.releases.filter((release) => release.type !== 'none')
-  const releasedVersion = publishableReleases[0].newVersion
-
-  return `chore(release): version ${releasedVersion}\n\n${getSignedOffBy()}\n`
+const getVersionMessage = async () => {
+  return `chore(release): new verion\n\n${getSignedOffBy()}\n`
 }
 
 module.exports = {
