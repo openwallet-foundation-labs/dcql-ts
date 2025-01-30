@@ -1,6 +1,8 @@
-name: ci
+name: Continuous Integration
 
 on:
+  pull_request_review:
+
   pull_request:
     branches: ['*']
   push:
@@ -11,15 +13,12 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
-# You can leverage Vercel Remote Caching with Turbo to speed up your builds
-# @link https://turborepo.org/docs/core-concepts/remote-caching#remote-caching-on-vercel-builds
 env:
   FORCE_COLOR: 3
-  TURBO_TEAM: ${{ secrets.VERCEL_TEAM_ID }}
-  TURBO_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
 jobs:
   format-and-lint:
+    if: github.event_name != 'pull_request_review' ||  github.event.pull_request.head.ref == 'changeset-release/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -31,6 +30,7 @@ jobs:
         run: pnpm format-and-lint
 
   build:
+    if: github.event_name != 'pull_request_review' ||  github.event.pull_request.head.ref == 'changeset-release/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -42,6 +42,7 @@ jobs:
         run: pnpm build
 
   typecheck:
+    if: github.event_name != 'pull_request_review' ||  github.event.pull_request.head.ref == 'changeset-release/main'
     runs-on: ubuntu-latest
     needs: [build]
     steps:
@@ -54,13 +55,20 @@ jobs:
         run: pnpm typecheck
 
   test:
+    if: github.event_name != 'pull_request_review' ||  github.event.pull_request.head.ref == 'changeset-release/main'
     runs-on: ubuntu-latest
     needs: [build]
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20, 22]
     steps:
       - uses: actions/checkout@v4
 
       - name: Setup
         uses: ./.github/setup
+        with:
+          node-version: ${{ matrix.node-version }}
 
       - name: Test
         run: pnpm test
