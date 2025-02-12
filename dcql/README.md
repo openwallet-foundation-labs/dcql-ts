@@ -9,6 +9,7 @@ DCQL enables Verifiers to request Verifiable Presentations that match specific q
 - Match queries against Verifiable Credentials
 - Validate presentation results
 - Handle various credential formats including mso_mdoc and dc+sd-jwt and w3c vc's.
+- Create and parse DCQL queries from OID4VP [Draft 22/23](https://openid.net/specs/openid-4-verifiable-presentations-1_0-23.html#name-digital-credentials-query-l) and [Draft 24](https://openid.net/specs/openid-4-verifiable-presentations-1_0-24.html#name-digital-credentials-query-l).
 
 ## Installation
 
@@ -32,8 +33,8 @@ const query = {
     format: 'mso_mdoc',
     meta: { doctype_value: 'org.iso.7367.1.mVRC' },
     claims: [
-      { namespace: 'org.iso.7367.1', claim_name: 'vehicle_holder' },
-      { namespace: 'org.iso.18013.5.1', claim_name: 'first_name' },
+      { path: ['org.iso.7367.1', 'vehicle_holder'] },
+      { path: ['org.iso.18013.5.1', 'first_name'] },
     ],
   }]
 };
@@ -102,8 +103,8 @@ assert.deepStrictEqual(presentationQueryResult, {
       id: "my_credential",
       format: "mso_mdoc",
       claims: [
-        { namespace: "org.iso.7367.1", claim_name: "vehicle_holder" },
-        { namespace: "org.iso.18013.5.1", claim_name: "first_name" },
+        { path: ["org.iso.7367.1", "vehicle_holder"] },
+        { path: ["org.iso.18013.5.1", "first_name"] },
       ],
       meta: { doctype_value: "org.iso.7367.1.mVRC" },
     },

@@ -6,7 +6,7 @@ export const vNonEmptyArray = <T extends unknown[]>() => {
   return v.custom<[T[number], ...T]>((input) => (input as T).length > 0)
 }
 
-export const vIdString = v.pipe(v.string(), v.regex(idRegex))
+export const vIdString = v.pipe(v.string(), v.regex(idRegex), v.nonEmpty())
 
 export type Json = string | number | boolean | null | { [key: string]: Json } | Json[]
 

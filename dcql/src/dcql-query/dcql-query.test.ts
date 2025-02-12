@@ -14,6 +14,22 @@ const mdocMvrcQuery = {
       id: 'my_credential',
       format: 'mso_mdoc' as const,
       meta: { doctype_value: 'org.iso.7367.1.mVRC' },
+      claims: [{ path: ['org.iso.7367.1', 'vehicle_holder'] }, { path: ['org.iso.18013.5.1', 'first_name'] }],
+    },
+  ],
+} satisfies DcqlQuery
+
+/**
+ * The following is a non-normative example of a DCQL query that requests
+ * a Verifiable Credential in the format mso_mdoc with the claims vehicle_holder and first_name
+ * in the old syntax, leveraging `namespace` and `claim_name`
+ */
+const mdocNamespaceMvrcQuery = {
+  credentials: [
+    {
+      id: 'my_credential',
+      format: 'mso_mdoc' as const,
+      meta: { doctype_value: 'org.iso.7367.1.mVRC' },
       claims: [
         { namespace: 'org.iso.7367.1', claim_name: 'vehicle_holder' },
         { namespace: 'org.iso.18013.5.1', claim_name: 'first_name' },
@@ -82,8 +98,8 @@ const sdJwtVc = {
   },
 } satisfies DcqlSdJwtVcCredential
 
-void describe('dcql-query', () => {
-  void it('mvrc query fails with invalid mdoc', (_t) => {
+describe('dcql-query', () => {
+  it('mvrc query fails with invalid mdoc', (_t) => {
     const query = DcqlQuery.parse(mdocMvrcQuery)
     DcqlQuery.validate(query)
 
@@ -242,7 +258,7 @@ void describe('dcql-query', () => {
     })
   })
 
-  void it('mdocMvrc example with multiple credentials succeeds', (_t) => {
+  it('mdocMvrc example with multiple credentials succeeds', (_t) => {
     const query = DcqlQuery.parse(mdocMvrcQuery)
     DcqlQuery.validate(query)
 
@@ -290,7 +306,7 @@ void describe('dcql-query', () => {
     })
   })
 
-  void it('mdocMvrc example succeeds', (_t) => {
+  it('mdocMvrc example succeeds', (_t) => {
     const query = DcqlQuery.parse(mdocMvrcQuery)
     DcqlQuery.validate(query)
 
@@ -341,7 +357,58 @@ void describe('dcql-query', () => {
     })
   })
 
-  void it('sdJwtVc example with multiple credentials succeeds', (_t) => {
+  it('mdocMvrc example using namespaces succeeds', (_t) => {
+    const query = DcqlQuery.parse(mdocNamespaceMvrcQuery)
+    DcqlQuery.validate(query)
+
+    const credentials = [mdocMvrc]
+    const res = DcqlQuery.query(query, credentials)
+
+    assert(res.canBeSatisfied)
+
+    assert.deepStrictEqual(res.credential_matches, {
+      my_credential: {
+        success: true,
+        typed: true,
+        input_credential_index: 0,
+        claim_set_index: undefined,
+        output: {
+          credential_format: 'mso_mdoc' as const,
+          doctype: 'org.iso.7367.1.mVRC',
+          namespaces: {
+            'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
+            'org.iso.18013.5.1': { first_name: 'Martin Auer' },
+          },
+        },
+
+        all: res.credential_matches.my_credential?.all,
+      },
+    })
+
+    const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
+      { my_credential: res.credential_matches.my_credential.output },
+      { dcqlQuery: query }
+    )
+
+    assert.deepStrictEqual(presentationQueryResult.valid_matches, {
+      my_credential: {
+        success: true,
+        typed: true,
+        presentation_id: 'my_credential',
+        claim_set_index: undefined,
+        output: {
+          credential_format: 'mso_mdoc' as const,
+          doctype: 'org.iso.7367.1.mVRC',
+          namespaces: {
+            'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
+            'org.iso.18013.5.1': { first_name: 'Martin Auer' },
+          },
+        },
+      },
+    })
+  })
+
+  it('sdJwtVc example with multiple credentials succeeds', (_t) => {
     const query = DcqlQuery.parse(sdJwtVcExampleQuery)
     DcqlQuery.validate(query)
 

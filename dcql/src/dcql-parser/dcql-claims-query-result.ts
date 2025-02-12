@@ -1,6 +1,6 @@
 import * as v from 'valibot'
 import { DcqlInvalidClaimsQueryIdError, DcqlMissingClaimSetParseError } from '../dcql-error/e-dcql.js'
-import type { DcqlClaimsQuery } from '../dcql-query/m-dcql-claims-query.js'
+import { DcqlClaimsQuery } from '../dcql-query/m-dcql-claims-query.js'
 import type { DcqlCredentialQuery } from '../dcql-query/m-dcql-credential-query.js'
 import { vWithJT } from '../u-dcql.js'
 import { vJson, vJsonRecord } from '../u-dcql.js'
@@ -22,18 +22,28 @@ const getClaimParser = (input: {
 }
 
 export const getNamespacesParser = (claimsQueries: DcqlClaimsQuery.Mdoc[]) => {
-  const claimsForNamespace: Record<string, ReturnType<typeof getMdocClaimsQueriesForClaimSet>> = {}
+  const claimsForNamespace: Record<string, DcqlClaimsQuery.MdocPath[]> = {}
 
   for (const claimQuery of claimsQueries) {
-    if (claimsForNamespace[claimQuery.namespace]) {
-      claimsForNamespace[claimQuery.namespace]?.push({ ...claimQuery })
+    // Normalize the query to the latest path syntax
+    const mdocPathQuery: DcqlClaimsQuery.MdocPath = v.is(DcqlClaimsQuery.vMdocNamespace, claimQuery)
+      ? {
+          id: claimQuery.id,
+          path: [claimQuery.namespace, claimQuery.claim_name],
+          values: claimQuery.values,
+        }
+      : claimQuery
+
+    const namespace = mdocPathQuery.path[0]
+    if (claimsForNamespace[namespace]) {
+      claimsForNamespace[namespace]?.push({ ...mdocPathQuery })
     } else {
-      claimsForNamespace[claimQuery.namespace] = [{ ...claimQuery }]
+      claimsForNamespace[namespace] = [{ ...mdocPathQuery }]
     }
   }
 
   const parsersForNamespaces = Object.entries(claimsForNamespace).map(([namespace, claims]) => {
-    const claimParsers = Object.fromEntries(claims.map((claim) => [claim.claim_name, getClaimParser(claim)]))
+    const claimParsers = Object.fromEntries(claims.map((claim) => [claim.path[1], getClaimParser(claim)]))
     return [namespace, v.object(claimParsers)]
   })
 
@@ -105,6 +115,7 @@ export const getMdocClaimsQueriesForClaimSet = (
         message: `Claims-query with id '${credential_id}' not found.`,
       })
     }
+
     return query
   })
 }

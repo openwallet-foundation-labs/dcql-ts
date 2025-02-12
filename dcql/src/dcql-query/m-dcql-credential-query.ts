@@ -1,6 +1,6 @@
 import * as v from 'valibot'
 import { DcqlUndefinedClaimSetIdError } from '../dcql-error/e-dcql.js'
-import { idRegex, vNonEmptyArray } from '../u-dcql.js'
+import { idRegex, vIdString, vNonEmptyArray } from '../u-dcql.js'
 import { DcqlClaimsQuery } from './m-dcql-claims-query.js'
 
 /**
@@ -16,7 +16,7 @@ export namespace DcqlCredentialQuery {
       )
     ),
     claim_sets: v.pipe(
-      v.optional(v.pipe(v.array(v.array(v.pipe(v.string(), v.regex(idRegex)))), vNonEmptyArray())),
+      v.optional(v.pipe(v.array(v.pipe(v.array(vIdString), vNonEmptyArray())), vNonEmptyArray())),
       v.description(
         `OPTIONAL. A non-empty array containing arrays of identifiers for elements in 'claims' that specifies which combinations of 'claims' for the Credential are requested.`
       )
