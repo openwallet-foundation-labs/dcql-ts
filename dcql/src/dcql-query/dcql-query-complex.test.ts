@@ -39,13 +39,13 @@ const complexMdocQuery = {
       claims: [
         {
           id: 'resident_address',
-          namespace: 'org.iso.18013.5.1',
-          claim_name: 'resident_address',
+          path: ['org.iso.18013.5.1', 'resident_address'],
+          intent_to_retain: false,
         },
         {
           id: 'resident_country',
-          namespace: 'org.iso.18013.5.1',
-          claim_name: 'resident_country',
+          path: ['org.iso.18013.5.1', 'resident_country'],
+          intent_to_retain: true,
         },
       ],
     },
@@ -56,18 +56,15 @@ const complexMdocQuery = {
       claims: [
         {
           id: 'given_name',
-          namespace: 'org.iso.23220.1',
-          claim_name: 'given_name',
+          path: ['org.iso.23220.1', 'given_name'],
         },
         {
           id: 'family_name',
-          namespace: 'org.iso.23220.1',
-          claim_name: 'family_name',
+          path: ['org.iso.23220.1', 'family_name'],
         },
         {
           id: 'portrait',
-          namespace: 'org.iso.23220.1',
-          claim_name: 'portrait',
+          path: ['org.iso.23220.1', 'portrait'],
         },
       ],
     },
@@ -78,13 +75,11 @@ const complexMdocQuery = {
       claims: [
         {
           id: 'resident_address',
-          namespace: 'org.iso.23220.1',
-          claim_name: 'resident_address',
+          path: ['org.iso.23220.1', 'resident_address'],
         },
         {
           id: 'resident_country',
-          namespace: 'org.iso.23220.1',
-          claim_name: 'resident_country',
+          path: ['org.iso.23220.1', 'resident_country'],
         },
       ],
     },
@@ -2998,13 +2993,13 @@ describe('complex-mdoc-query', () => {
           claims: [
             {
               id: 'resident_address',
-              namespace: 'org.iso.18013.5.1',
-              claim_name: 'resident_address',
+              path: ['org.iso.18013.5.1', 'resident_address'],
+              intent_to_retain: false,
             },
             {
               id: 'resident_country',
-              namespace: 'org.iso.18013.5.1',
-              claim_name: 'resident_country',
+              path: ['org.iso.18013.5.1', 'resident_country'],
+              intent_to_retain: true,
             },
           ],
           meta: {
@@ -3017,18 +3012,15 @@ describe('complex-mdoc-query', () => {
           claims: [
             {
               id: 'given_name',
-              namespace: 'org.iso.23220.1',
-              claim_name: 'given_name',
+              path: ['org.iso.23220.1', 'given_name'],
             },
             {
               id: 'family_name',
-              namespace: 'org.iso.23220.1',
-              claim_name: 'family_name',
+              path: ['org.iso.23220.1', 'family_name'],
             },
             {
               id: 'portrait',
-              namespace: 'org.iso.23220.1',
-              claim_name: 'portrait',
+              path: ['org.iso.23220.1', 'portrait'],
             },
           ],
           meta: {
@@ -3041,13 +3033,11 @@ describe('complex-mdoc-query', () => {
           claims: [
             {
               id: 'resident_address',
-              namespace: 'org.iso.23220.1',
-              claim_name: 'resident_address',
+              path: ['org.iso.23220.1', 'resident_address'],
             },
             {
               id: 'resident_country',
-              namespace: 'org.iso.23220.1',
-              claim_name: 'resident_country',
+              path: ['org.iso.23220.1', 'resident_country'],
             },
           ],
           meta: {

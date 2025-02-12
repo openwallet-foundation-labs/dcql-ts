@@ -2,7 +2,7 @@ import * as v from 'valibot'
 import { DcqlCredentialQuery } from '../dcql-query/m-dcql-credential-query.js'
 import { CredentialSetQuery } from '../dcql-query/m-dcql-credential-set-query.js'
 import { DcqlCredential } from '../u-dcql-credential.js'
-import { idRegex, vNonEmptyArray } from '../u-dcql.js'
+import { vIdString, vNonEmptyArray } from '../u-dcql.js'
 
 export namespace DcqlQueryResult {
   export const vCredentialQueryResult = v.pipe(
@@ -22,7 +22,7 @@ export namespace DcqlQueryResult {
     ),
 
     credential_matches: v.record(
-      v.pipe(v.string(), v.regex(idRegex)),
+      v.pipe(vIdString),
       v.union([
         v.object({
           ...DcqlCredential.vParseSuccess.entries,
