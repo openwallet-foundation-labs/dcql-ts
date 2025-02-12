@@ -33,8 +33,13 @@ const query = {
     format: 'mso_mdoc',
     meta: { doctype_value: 'org.iso.7367.1.mVRC' },
     claims: [
-      { path: ['org.iso.7367.1', 'vehicle_holder'] },
-      { path: ['org.iso.18013.5.1', 'first_name'] },
+      { 
+        path: ['org.iso.7367.1', 'vehicle_holder'], 
+        intent_to_reatin: true 
+      },
+      { 
+        path: ['org.iso.18013.5.1', 'first_name'] 
+      },
     ],
   }]
 };

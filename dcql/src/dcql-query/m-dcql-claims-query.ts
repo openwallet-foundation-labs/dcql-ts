@@ -70,6 +70,13 @@ export namespace DcqlClaimsQuery {
   export const vMdocPath = v.object({
     ...vMdocBase.entries,
 
+    intent_to_retain: v.pipe(
+      v.optional(v.boolean()),
+      v.description(
+        'A boolean that is equivalent to `IntentToRetain` variable defined in Section 8.3.2.1.2.1 of [@ISO.18013-5].'
+      )
+    ),
+
     path: v.pipe(
       v.tuple([
         v.pipe(

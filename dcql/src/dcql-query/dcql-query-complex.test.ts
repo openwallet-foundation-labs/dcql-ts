@@ -40,10 +40,12 @@ const complexMdocQuery = {
         {
           id: 'resident_address',
           path: ['org.iso.18013.5.1', 'resident_address'],
+          intent_to_retain: false,
         },
         {
           id: 'resident_country',
           path: ['org.iso.18013.5.1', 'resident_country'],
+          intent_to_retain: true,
         },
       ],
     },
@@ -2992,10 +2994,12 @@ describe('complex-mdoc-query', () => {
             {
               id: 'resident_address',
               path: ['org.iso.18013.5.1', 'resident_address'],
+              intent_to_retain: false,
             },
             {
               id: 'resident_country',
               path: ['org.iso.18013.5.1', 'resident_country'],
+              intent_to_retain: true,
             },
           ],
           meta: {

@@ -14,7 +14,10 @@ const mdocMvrcQuery = {
       id: 'my_credential',
       format: 'mso_mdoc' as const,
       meta: { doctype_value: 'org.iso.7367.1.mVRC' },
-      claims: [{ path: ['org.iso.7367.1', 'vehicle_holder'] }, { path: ['org.iso.18013.5.1', 'first_name'] }],
+      claims: [
+        { path: ['org.iso.7367.1', 'vehicle_holder'], intent_to_retain: false },
+        { path: ['org.iso.18013.5.1', 'first_name'], intent_to_retain: true },
+      ],
     },
   ],
 } satisfies DcqlQuery
