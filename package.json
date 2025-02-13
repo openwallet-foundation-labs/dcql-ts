@@ -24,7 +24,8 @@
     "lint:ws:fix": "pnpm dlx sherif@latest -f",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
-    "release": "turbo run release && pnpm changeset publish"
+    "release": "turbo run release && pnpm changeset publish",
+    "changeset-version": "pnpm changeset version && pnpm style:fix"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
