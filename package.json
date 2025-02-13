@@ -25,7 +25,7 @@
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "release": "turbo run release && pnpm changeset publish",
-    "changeset-version": "pnpm changeset version && pnpm style:fix"
+    "changeset-version": "pnpm changeset version && pnpm format-and-lint:fix"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
