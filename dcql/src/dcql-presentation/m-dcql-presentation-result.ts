@@ -71,18 +71,20 @@ export namespace DcqlPresentationResult {
       })
     )
 
-    let invalidMatches: DcqlPresentationResult['invalid_matches'] = undefined
+    let invalidMatches: DcqlPresentationResult['invalid_matches'] = {}
     const validMatches: DcqlPresentationResult['valid_matches'] = {}
 
     for (const [queryId, presentationQueryResult] of Object.entries(presentationQueriesResults)) {
       for (const presentationQueryResultForClaimSet of presentationQueryResult) {
-        // biome-ignore lint/style/noNonNullAssertion: <explanation>
-        const result = presentationQueryResultForClaimSet[0]!
-        if (result.success) {
+        // NOTE: result can be undefined, but this is only the case if there was a valid claim
+        // set match previously and we skip other claim set matching. We don't add these to the parse
+        // result.
+        const result = presentationQueryResultForClaimSet[0]
+
+        if (result?.success) {
           const { issues, input_credential_index, ...rest } = result
           validMatches[queryId] = { ...rest, presentation_id: queryId }
-        } else {
-          if (!invalidMatches) invalidMatches = {}
+        } else if (result?.success === false) {
           const { input_credential_index, ...rest } = result
           invalidMatches[queryId] = {
             ...rest,
@@ -91,6 +93,11 @@ export namespace DcqlPresentationResult {
         }
       }
     }
+
+    // Only keep the invalid matches that do not have a valid match as well
+    invalidMatches = Object.fromEntries(
+      Object.entries(invalidMatches ?? {}).filter(([queryId, result]) => validMatches[queryId] === undefined)
+    )
 
     const credentialSetResults = dcqlQuery.credential_sets?.map((set) => {
       const matchingOptions = set.options.filter((option) =>
@@ -105,13 +112,13 @@ export namespace DcqlPresentationResult {
 
     const dqclQueryMatched = credentialSetResults
       ? credentialSetResults.every((set) => !set.required || set.matching_options)
-      : !invalidMatches
+      : Object.keys(invalidMatches).length === 0
 
     return {
       ...dcqlQuery,
       canBeSatisfied: dqclQueryMatched,
       valid_matches: validMatches,
-      invalid_matches: invalidMatches,
+      invalid_matches: Object.keys(invalidMatches).length === 0 ? undefined : {},
       credential_sets: credentialSetResults,
     }
   }
