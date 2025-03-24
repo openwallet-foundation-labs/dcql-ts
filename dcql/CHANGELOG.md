@@ -1,5 +1,11 @@
 # dcql
 
+## 0.2.21
+
+### Patch Changes
+
+- 67cd3b2: fix: handle the case where multiple claim sets would be present for a credential within a query
+
 ## 0.2.20
 
 ### Patch Changes
