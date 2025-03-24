@@ -15,9 +15,7 @@ export const runCredentialQuery = (
   const { credentials, presentation } = ctx
   const claimSets = credentialQuery.claim_sets ?? [undefined]
 
-  const credentialQueryResult: v.InferInput<typeof DcqlQueryResult.vCredentialQueryResult> = new Array(
-    claimSets.length
-  ).fill([])
+  const credentialQueryResult: v.InferInput<typeof DcqlQueryResult.vCredentialQueryResult> = []
 
   for (const [claimSetIndex, claim_set] of claimSets.entries()) {
     const credentialParser = getCredentialQueryParser(credentialQuery, {
@@ -25,22 +23,23 @@ export const runCredentialQuery = (
       presentation,
     })
 
+    const claimSetResult: (typeof credentialQueryResult)[number] = []
+
     for (const [credentialIndex, credential] of credentials.entries()) {
       if (claimSetIndex > 0) {
         // if one the credential was successfully parsed against a previous claimsset we don't need to further validate other claim sets
-        const previous = credentialQueryResult[claimSetIndex - 1]?.[credentialIndex]
+        const previous = credentialQueryResult[claimSetIndex - 1][credentialIndex]
 
         // if the previous credential was successfully parsed we don't need to further validate the current credential
         // we set all further parsing attempts to undefined
         if (previous?.success || !previous) {
-          // biome-ignore lint/style/noNonNullAssertion: <explanation>
-          credentialQueryResult[claimSetIndex]![credentialIndex] = undefined
+          claimSetResult[credentialIndex] = undefined
           continue
         }
       }
 
       const parseResult = v.safeParse(credentialParser, credential)
-      credentialQueryResult[claimSetIndex]?.push({
+      claimSetResult.push({
         ...parseResult,
         ...(parseResult.issues && {
           flattened: v.flatten<typeof credentialParser>(parseResult.issues),
@@ -49,6 +48,8 @@ export const runCredentialQuery = (
         claim_set_index: credentialQuery.claim_sets ? claimSetIndex : undefined,
       })
     }
+
+    credentialQueryResult.push(claimSetResult)
   }
 
   return credentialQueryResult as DcqlQueryResult.CredentialQueryResult
