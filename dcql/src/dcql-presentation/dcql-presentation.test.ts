@@ -7,48 +7,39 @@ describe('DCQL presentation with claim sets', () => {
     const dcqlQuery: DcqlQuery.Output = {
       credentials: [
         {
-          id: "c5d24076-71b1-4eb8-b3b2-1853a9f7e6b5",
-          format: "vc+sd-jwt",
-          claims: [
-            { path: ["given_name"] },
-            { path: ["family_name"] },
-          ],
+          id: 'c5d24076-71b1-4eb8-b3b2-1853a9f7e6b5',
+          format: 'vc+sd-jwt',
+          claims: [{ path: ['given_name'] }, { path: ['family_name'] }],
           meta: {
-            vct_values: ["PersonIdentificationData"],
+            vct_values: ['PersonIdentificationData'],
           },
         },
         {
-          id: "a50b7f9f-b5b1-4845-a7d3-3eb4830fdedc",
-          format: "vc+sd-jwt",
-          claims: [
-            { path: ["expiry_date"] },
-            { path: ["document_number"] },
-          ],
+          id: 'a50b7f9f-b5b1-4845-a7d3-3eb4830fdedc',
+          format: 'vc+sd-jwt',
+          claims: [{ path: ['expiry_date'] }, { path: ['document_number'] }],
           meta: {
-            vct_values: ["MDL"],
+            vct_values: ['MDL'],
           },
         },
       ],
-    };
+    }
 
     const dcqlPresentation = {
-      "c5d24076-71b1-4eb8-b3b2-1853a9f7e6b5": {
+      'c5d24076-71b1-4eb8-b3b2-1853a9f7e6b5': {
         claims: {
           given_name: { foo: {} },
           family_name: { bar: {} },
         },
-        credential_format: "vc+sd-jwt",
-        vct: "PersonIdentificationData",
+        credential_format: 'vc+sd-jwt',
+        vct: 'PersonIdentificationData',
       },
     } as const
 
-    const parsedQuery = DcqlQuery.parse(dcqlQuery);
-    DcqlQuery.validate(parsedQuery);
+    const parsedQuery = DcqlQuery.parse(dcqlQuery)
+    DcqlQuery.validate(parsedQuery)
 
-    const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
-      dcqlPresentation,
-      { dcqlQuery },
-    );
+    const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(dcqlPresentation, { dcqlQuery })
 
     expect(presentationQueryResult.canBeSatisfied).toEqual(false)
   })
