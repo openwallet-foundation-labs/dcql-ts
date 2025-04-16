@@ -1,5 +1,11 @@
 # dcql
 
+## 0.2.22
+
+### Patch Changes
+
+- bb9a3ce: fix: issue where canBeSatisfied would be true when the presentation was missing credentials and no credential_sets were used
+
 ## 0.2.21
 
 ### Patch Changes
