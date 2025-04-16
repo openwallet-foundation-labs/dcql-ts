@@ -96,7 +96,7 @@ export namespace DcqlPresentationResult {
 
     // Only keep the invalid matches that do not have a valid match as well
     invalidMatches = Object.fromEntries(
-      Object.entries(invalidMatches ?? {}).filter(([queryId, result]) => validMatches[queryId] === undefined)
+      Object.entries(invalidMatches ?? {}).filter(([queryId]) => validMatches[queryId] === undefined)
     )
 
     const credentialSetResults = dcqlQuery.credential_sets?.map((set) => {
@@ -112,7 +112,7 @@ export namespace DcqlPresentationResult {
 
     const dqclQueryMatched = credentialSetResults
       ? credentialSetResults.every((set) => !set.required || set.matching_options)
-      : Object.keys(invalidMatches).length === 0
+      : Object.keys(validMatches).length === ctx.dcqlQuery.credentials.length
 
     return {
       ...dcqlQuery,
