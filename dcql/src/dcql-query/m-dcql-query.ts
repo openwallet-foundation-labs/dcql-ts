@@ -17,14 +17,13 @@ import { CredentialSetQuery } from './m-dcql-credential-set-query.js'
 export namespace DcqlQuery {
   export const vModel = v.object({
     credentials: v.pipe(
-      v.array(DcqlCredentialQuery.vModel),
-      vNonEmptyArray(),
+      vNonEmptyArray(DcqlCredentialQuery.vModel),
       v.description(
         'REQUIRED. A non-empty array of Credential Queries that specify the requested Verifiable Credentials.'
       )
     ),
     credential_sets: v.pipe(
-      v.optional(v.pipe(v.array(CredentialSetQuery.vModel), vNonEmptyArray())),
+      v.optional(vNonEmptyArray(CredentialSetQuery.vModel)),
       v.description(
         'OPTIONAL. A non-empty array of credential set queries that specifies additional constraints on which of the requested Verifiable Credentials to return.'
       )

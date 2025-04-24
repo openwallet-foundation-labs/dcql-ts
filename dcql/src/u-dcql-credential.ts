@@ -63,7 +63,7 @@ export namespace DcqlCredential {
     success: v.literal(false),
     typed: v.boolean(),
     output: v.unknown(),
-    issues: v.pipe(v.array(v.unknown()), vNonEmptyArray()),
+    issues: vNonEmptyArray(v.unknown()),
     input_credential_index: v.number(),
     claim_set_index: v.union([v.number(), v.undefined()]),
   })

@@ -4,7 +4,7 @@ import { DcqlPresentationResult } from './m-dcql-presentation-result'
 
 describe('DCQL presentation with claim sets', () => {
   test('Correctly handles a presentation with one credential but the query requested two', () => {
-    const dcqlQuery: DcqlQuery.Output = {
+    const dcqlQuery: DcqlQuery.Input = {
       credentials: [
         {
           id: 'c5d24076-71b1-4eb8-b3b2-1853a9f7e6b5',
@@ -26,26 +26,30 @@ describe('DCQL presentation with claim sets', () => {
     }
 
     const dcqlPresentation = {
-      'c5d24076-71b1-4eb8-b3b2-1853a9f7e6b5': {
-        claims: {
-          given_name: { foo: {} },
-          family_name: { bar: {} },
+      'c5d24076-71b1-4eb8-b3b2-1853a9f7e6b5': [
+        {
+          claims: {
+            given_name: { foo: {} },
+            family_name: { bar: {} },
+          },
+          credential_format: 'vc+sd-jwt' as const,
+          vct: 'PersonIdentificationData',
         },
-        credential_format: 'vc+sd-jwt',
-        vct: 'PersonIdentificationData',
-      },
-    } as const
+      ],
+    }
 
     const parsedQuery = DcqlQuery.parse(dcqlQuery)
     DcqlQuery.validate(parsedQuery)
 
-    const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(dcqlPresentation, { dcqlQuery })
+    const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(dcqlPresentation, {
+      dcqlQuery: parsedQuery,
+    })
 
     expect(presentationQueryResult.canBeSatisfied).toEqual(false)
   })
 
   test('Correctly handles a presentation with multiple claim sets where the first claim set matches', () => {
-    const query: DcqlQuery.Output = {
+    const query: DcqlQuery.Input = {
       credentials: [
         {
           id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
@@ -62,14 +66,16 @@ describe('DCQL presentation with claim sets', () => {
     }
 
     const dcqlPresentation = {
-      '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
-        credential_format: 'vc+sd-jwt',
-        vct: 'PersonIdentificationData',
-        claims: {
-          tax_id_code: { baz: {} },
+      '8c791a1f-12b4-41fe-a892-236c2887fa8e': [
+        {
+          credential_format: 'vc+sd-jwt' as const,
+          vct: 'PersonIdentificationData',
+          claims: {
+            tax_id_code: { baz: {} },
+          },
         },
-      },
-    } as const
+      ],
+    }
 
     const parsedQuery = DcqlQuery.parse(query)
     DcqlQuery.validate(parsedQuery)
@@ -84,27 +90,30 @@ describe('DCQL presentation with claim sets', () => {
       credential_sets: undefined,
       invalid_matches: undefined,
       valid_matches: {
-        '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
-          claim_set_index: 0,
-          presentation_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
-          success: true,
-          typed: true,
-          output: {
-            claims: {
-              tax_id_code: {
-                baz: {},
+        '8c791a1f-12b4-41fe-a892-236c2887fa8e': [
+          {
+            claim_set_index: 0,
+            input_presentation_index: 0,
+            presentation_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
+            success: true,
+            typed: true,
+            output: {
+              claims: {
+                tax_id_code: {
+                  baz: {},
+                },
               },
+              credential_format: 'vc+sd-jwt',
+              vct: 'PersonIdentificationData',
             },
-            credential_format: 'vc+sd-jwt',
-            vct: 'PersonIdentificationData',
           },
-        },
+        ],
       },
     })
   })
 
   test('Correctly handles a presentation with multiple claim sets where the second claim set matches', () => {
-    const query: DcqlQuery.Output = {
+    const query: DcqlQuery.Input = {
       credentials: [
         {
           id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
@@ -121,15 +130,17 @@ describe('DCQL presentation with claim sets', () => {
     }
 
     const dcqlPresentation = {
-      '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
-        credential_format: 'vc+sd-jwt',
-        vct: 'PersonIdentificationData',
-        claims: {
-          given_name: { foo: {} },
-          family_name: { bar: {} },
+      '8c791a1f-12b4-41fe-a892-236c2887fa8e': [
+        {
+          credential_format: 'vc+sd-jwt' as const,
+          vct: 'PersonIdentificationData',
+          claims: {
+            given_name: { foo: {} },
+            family_name: { bar: {} },
+          },
         },
-      },
-    } as const
+      ],
+    }
 
     const parsedQuery = DcqlQuery.parse(query)
     DcqlQuery.validate(parsedQuery)
@@ -143,27 +154,30 @@ describe('DCQL presentation with claim sets', () => {
       credentials: parsedQuery.credentials,
       credential_sets: undefined,
       valid_matches: {
-        '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
-          claim_set_index: 1,
-          presentation_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
-          success: true,
-          typed: true,
-          output: {
-            claims: {
-              given_name: { foo: {} },
-              family_name: { bar: {} },
+        '8c791a1f-12b4-41fe-a892-236c2887fa8e': [
+          {
+            claim_set_index: 1,
+            input_presentation_index: 0,
+            presentation_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
+            success: true,
+            typed: true,
+            output: {
+              claims: {
+                given_name: { foo: {} },
+                family_name: { bar: {} },
+              },
+              credential_format: 'vc+sd-jwt',
+              vct: 'PersonIdentificationData',
             },
-            credential_format: 'vc+sd-jwt',
-            vct: 'PersonIdentificationData',
           },
-        },
+        ],
       },
       invalid_matches: undefined,
     })
   })
 
   test('Correctly handles a presentation with a credential set and multiple claim sets where the first credential set and second claim set matches', () => {
-    const query: DcqlQuery.Output = {
+    const query: DcqlQuery.Input = {
       credentials: [
         {
           id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
@@ -186,15 +200,17 @@ describe('DCQL presentation with claim sets', () => {
     }
 
     const dcqlPresentation = {
-      '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
-        credential_format: 'vc+sd-jwt',
-        vct: 'PersonIdentificationData',
-        claims: {
-          given_name: { foo: {} },
-          family_name: { bar: {} },
+      '8c791a1f-12b4-41fe-a892-236c2887fa8e': [
+        {
+          credential_format: 'vc+sd-jwt' as const,
+          vct: 'PersonIdentificationData',
+          claims: {
+            given_name: { foo: {} },
+            family_name: { bar: {} },
+          },
         },
-      },
-    } as const
+      ],
+    }
 
     const parsedQuery = DcqlQuery.parse(query)
     DcqlQuery.validate(parsedQuery)
@@ -214,22 +230,240 @@ describe('DCQL presentation with claim sets', () => {
         },
       ],
       valid_matches: {
-        '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
-          claim_set_index: 1,
-          presentation_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
-          success: true,
-          typed: true,
-          output: {
-            claims: {
-              given_name: { foo: {} },
-              family_name: { bar: {} },
+        '8c791a1f-12b4-41fe-a892-236c2887fa8e': [
+          {
+            claim_set_index: 1,
+            input_presentation_index: 0,
+            presentation_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
+            success: true,
+            typed: true,
+            output: {
+              claims: {
+                given_name: { foo: {} },
+                family_name: { bar: {} },
+              },
+              credential_format: 'vc+sd-jwt',
+              vct: 'PersonIdentificationData',
             },
-            credential_format: 'vc+sd-jwt',
-            vct: 'PersonIdentificationData',
           },
-        },
+        ],
       },
       invalid_matches: undefined,
+    })
+  })
+
+  test('Correctly handles a presentation with multiple credential sets where credentials from an optional credential set are missing', () => {
+    const query: DcqlQuery.Input = {
+      credentials: [
+        {
+          id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
+          format: 'vc+sd-jwt',
+          meta: { vct_values: ['PersonIdentificationData'] },
+          claims: [
+            { id: 'a', path: ['given_name'] },
+            { id: 'b', path: ['family_name'] },
+            { id: 'c', path: ['tax_id_code'] },
+          ],
+          claim_sets: [['c'], ['a', 'b']],
+        },
+        {
+          id: 'a46e92c0-847f-41f2-9218-2914e1d2388a',
+          format: 'vc+sd-jwt',
+          meta: { vct_values: ['SomeRandomVct'] },
+          claims: [{ id: 'a', path: ['given_name'] }],
+        },
+      ],
+      credential_sets: [
+        {
+          options: [['8c791a1f-12b4-41fe-a892-236c2887fa8e']],
+          required: true,
+        },
+        {
+          options: [['a46e92c0-847f-41f2-9218-2914e1d2388a']],
+          required: false,
+        },
+      ],
+    }
+
+    const dcqlPresentation = {
+      '8c791a1f-12b4-41fe-a892-236c2887fa8e': [
+        {
+          credential_format: 'vc+sd-jwt' as const,
+          vct: 'PersonIdentificationData',
+          claims: {
+            given_name: { foo: {} },
+            family_name: { bar: {} },
+          },
+        },
+      ],
+    }
+
+    const parsedQuery = DcqlQuery.parse(query)
+    DcqlQuery.validate(parsedQuery)
+
+    const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(dcqlPresentation, {
+      dcqlQuery: parsedQuery,
+    })
+
+    expect(presentationQueryResult).toEqual({
+      canBeSatisfied: true,
+      credentials: parsedQuery.credentials,
+      credential_sets: [
+        {
+          matching_options: [['8c791a1f-12b4-41fe-a892-236c2887fa8e']],
+          options: [['8c791a1f-12b4-41fe-a892-236c2887fa8e']],
+          required: true,
+        },
+        {
+          matching_options: undefined,
+          options: [['a46e92c0-847f-41f2-9218-2914e1d2388a']],
+          required: false,
+        },
+      ],
+      valid_matches: {
+        '8c791a1f-12b4-41fe-a892-236c2887fa8e': [
+          {
+            claim_set_index: 1,
+            input_presentation_index: 0,
+            presentation_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
+            success: true,
+            typed: true,
+            output: {
+              claims: {
+                given_name: { foo: {} },
+                family_name: { bar: {} },
+              },
+              credential_format: 'vc+sd-jwt',
+              vct: 'PersonIdentificationData',
+            },
+          },
+        ],
+      },
+      invalid_matches: undefined,
+    })
+  })
+
+  test('Correctly handles a presentation with multiple credential sets where credentials from an optional credential set are provided but do not match the query', () => {
+    const query: DcqlQuery.Input = {
+      credentials: [
+        {
+          id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
+          format: 'vc+sd-jwt',
+          meta: { vct_values: ['PersonIdentificationData'] },
+          claims: [
+            { id: 'a', path: ['given_name'] },
+            { id: 'b', path: ['family_name'] },
+            { id: 'c', path: ['tax_id_code'] },
+          ],
+          claim_sets: [['c'], ['a', 'b']],
+        },
+        {
+          id: 'a46e92c0-847f-41f2-9218-2914e1d2388a',
+          format: 'vc+sd-jwt',
+          meta: { vct_values: ['SomeRandomVct'] },
+          claims: [{ id: 'a', path: ['given_name'] }],
+        },
+      ],
+      credential_sets: [
+        {
+          options: [['8c791a1f-12b4-41fe-a892-236c2887fa8e']],
+          required: true,
+        },
+        {
+          options: [['a46e92c0-847f-41f2-9218-2914e1d2388a']],
+          required: false,
+        },
+      ],
+    }
+
+    const dcqlPresentation = {
+      '8c791a1f-12b4-41fe-a892-236c2887fa8e': [
+        {
+          credential_format: 'vc+sd-jwt' as const,
+          vct: 'PersonIdentificationData',
+          claims: {
+            given_name: { foo: {} },
+            family_name: { bar: {} },
+          },
+        },
+      ],
+      'a46e92c0-847f-41f2-9218-2914e1d2388a': [
+        {
+          credential_format: 'vc+sd-jwt' as const,
+          vct: 'PersonIdentificationData',
+          claims: {
+            given_name: { foo: {} },
+            family_name: { bar: {} },
+          },
+        },
+      ],
+    }
+
+    const parsedQuery = DcqlQuery.parse(query)
+    DcqlQuery.validate(parsedQuery)
+
+    const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(dcqlPresentation, {
+      dcqlQuery: parsedQuery,
+    })
+
+    expect(presentationQueryResult).toEqual({
+      canBeSatisfied: false,
+      credentials: parsedQuery.credentials,
+      credential_sets: [
+        {
+          matching_options: [['8c791a1f-12b4-41fe-a892-236c2887fa8e']],
+          options: [['8c791a1f-12b4-41fe-a892-236c2887fa8e']],
+          required: true,
+        },
+        {
+          matching_options: undefined,
+          options: [['a46e92c0-847f-41f2-9218-2914e1d2388a']],
+          required: false,
+        },
+      ],
+      valid_matches: {
+        '8c791a1f-12b4-41fe-a892-236c2887fa8e': [
+          {
+            claim_set_index: 1,
+            input_presentation_index: 0,
+            presentation_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
+            success: true,
+            typed: true,
+            output: {
+              claims: {
+                given_name: { foo: {} },
+                family_name: { bar: {} },
+              },
+              credential_format: 'vc+sd-jwt',
+              vct: 'PersonIdentificationData',
+            },
+          },
+        ],
+      },
+      invalid_matches: {
+        'a46e92c0-847f-41f2-9218-2914e1d2388a': [
+          {
+            claim_set_index: undefined,
+            input_presentation_index: 0,
+            presentation_id: 'a46e92c0-847f-41f2-9218-2914e1d2388a',
+            success: false,
+            typed: false,
+            flattened: {
+              nested: {
+                vct: ['Invalid type: Expected "SomeRandomVct" but received "PersonIdentificationData"'],
+              },
+            },
+            issues: expect.any(Array),
+            output: {
+              claims: {
+                given_name: { foo: {} },
+              },
+              credential_format: 'vc+sd-jwt',
+              vct: 'PersonIdentificationData',
+            },
+          },
+        ],
+      },
     })
   })
 })

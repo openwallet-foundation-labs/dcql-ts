@@ -15,8 +15,14 @@ export namespace DcqlCredentialQuery {
         `REQUIRED. A string identifying the Credential in the response and, if provided, the constraints in 'credential_sets'.`
       )
     ),
+    multiple: v.pipe(
+      v.optional(v.boolean(), false),
+      v.description(
+        'OPTIONAL. A non-empty array of objects as defined in Section 6.1.1 that specifies expected authorities or trust frameworks that certify Issuers, that the Verifier will accept. Every Credential returned by the Wallet SHOULD match at least one of the conditions present in the corresponding trusted_authorities array if present.'
+      )
+    ),
     claim_sets: v.pipe(
-      v.optional(v.pipe(v.array(v.pipe(v.array(vIdString), vNonEmptyArray())), vNonEmptyArray())),
+      v.optional(vNonEmptyArray(vNonEmptyArray(vIdString))),
       v.description(
         `OPTIONAL. A non-empty array containing arrays of identifiers for elements in 'claims' that specifies which combinations of 'claims' for the Credential are requested.`
       )
@@ -30,7 +36,7 @@ export namespace DcqlCredentialQuery {
       v.description('REQUIRED. A string that specifies the format of the requested Verifiable Credential.')
     ),
     claims: v.pipe(
-      v.optional(v.pipe(v.array(DcqlClaimsQuery.vMdoc), vNonEmptyArray())),
+      v.optional(vNonEmptyArray(DcqlClaimsQuery.vMdoc)),
       v.description('OPTIONAL. A non-empty array of objects as that specifies claims in the requested Credential.')
     ),
     meta: v.pipe(
@@ -58,7 +64,7 @@ export namespace DcqlCredentialQuery {
       v.description('REQUIRED. A string that specifies the format of the requested Verifiable Credential.')
     ),
     claims: v.pipe(
-      v.optional(v.pipe(v.array(DcqlClaimsQuery.vW3cSdJwtVc), vNonEmptyArray())),
+      v.optional(vNonEmptyArray(DcqlClaimsQuery.vW3cSdJwtVc)),
       v.description('OPTIONAL. A non-empty array of objects as that specifies claims in the requested Credential.')
     ),
     meta: v.pipe(
@@ -82,7 +88,7 @@ export namespace DcqlCredentialQuery {
   export const vW3cVc = v.object({
     ...vBase.entries,
     format: v.picklist(['jwt_vc_json', 'jwt_vc_json-ld']),
-    claims: v.optional(v.pipe(v.array(DcqlClaimsQuery.vW3cSdJwtVc), vNonEmptyArray())),
+    claims: v.optional(vNonEmptyArray(DcqlClaimsQuery.vW3cSdJwtVc)),
   })
   export type W3cVc = v.InferOutput<typeof vW3cVc>
 

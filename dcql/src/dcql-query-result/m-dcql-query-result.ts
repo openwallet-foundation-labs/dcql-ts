@@ -5,17 +5,15 @@ import { DcqlCredential } from '../u-dcql-credential.js'
 import { vIdString, vNonEmptyArray } from '../u-dcql.js'
 
 export namespace DcqlQueryResult {
-  export const vCredentialQueryResult = v.pipe(
-    v.array(v.array(v.union([v.undefined(), DcqlCredential.vParseSuccess, DcqlCredential.vParseFailure]))),
-    vNonEmptyArray()
+  export const vCredentialQueryResult = vNonEmptyArray(
+    v.array(v.union([v.undefined(), DcqlCredential.vParseSuccess, DcqlCredential.vParseFailure]))
   )
 
   export type CredentialQueryResult = v.InferOutput<typeof vCredentialQueryResult>
 
   export const vModel = v.object({
     credentials: v.pipe(
-      v.array(DcqlCredentialQuery.vModel),
-      vNonEmptyArray(),
+      vNonEmptyArray(DcqlCredentialQuery.vModel),
       v.description(
         'REQUIRED. A non-empty array of Credential Queries that specify the requested Verifiable Credentials.'
       )
@@ -26,26 +24,14 @@ export namespace DcqlQueryResult {
       v.union([
         v.object({
           ...DcqlCredential.vParseSuccess.entries,
-          all: v.pipe(
-            v.array(
-              v.pipe(
-                v.array(v.union([v.undefined(), DcqlCredential.vParseSuccess, DcqlCredential.vParseFailure])),
-                vNonEmptyArray()
-              )
-            ),
-            vNonEmptyArray()
+          all: vNonEmptyArray(
+            vNonEmptyArray(v.union([v.undefined(), DcqlCredential.vParseSuccess, DcqlCredential.vParseFailure]))
           ),
         }),
         v.object({
           success: DcqlCredential.vParseFailure.entries.success,
-          all: v.pipe(
-            v.array(
-              v.pipe(
-                v.array(v.union([v.undefined(), DcqlCredential.vParseSuccess, DcqlCredential.vParseFailure])),
-                vNonEmptyArray()
-              )
-            ),
-            vNonEmptyArray()
+          all: vNonEmptyArray(
+            vNonEmptyArray(v.union([v.undefined(), DcqlCredential.vParseSuccess, DcqlCredential.vParseFailure]))
           ),
         }),
       ])
@@ -53,13 +39,12 @@ export namespace DcqlQueryResult {
 
     credential_sets: v.optional(
       v.pipe(
-        v.array(
+        vNonEmptyArray(
           v.object({
             ...CredentialSetQuery.vModel.entries,
-            matching_options: v.union([v.undefined(), v.pipe(v.array(v.array(v.string())), vNonEmptyArray())]),
+            matching_options: v.union([v.undefined(), vNonEmptyArray(v.array(v.string()))]),
           })
         ),
-        vNonEmptyArray(),
         v.description(
           'OPTIONAL. A non-empty array of credential set queries that specifies additional constraints on which of the requested Verifiable Credentials to return.'
         )

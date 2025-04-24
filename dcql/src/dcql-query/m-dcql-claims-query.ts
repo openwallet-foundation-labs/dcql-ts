@@ -17,8 +17,7 @@ export namespace DcqlClaimsQuery {
       )
     ),
     path: v.pipe(
-      v.array(vPath),
-      vNonEmptyArray(),
+      vNonEmptyArray(vPath),
       v.description(
         'A non-empty array representing a claims path pointer that specifies the path to a claim within the Verifiable Credential.'
       )

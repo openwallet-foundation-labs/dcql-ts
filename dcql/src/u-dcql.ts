@@ -2,8 +2,13 @@ import * as v from 'valibot'
 import type { UnknownBaseSchema } from './u-model'
 export const idRegex = /^[a-zA-Z0-9_-]+$/
 
-export const vNonEmptyArray = <T extends unknown[]>() => {
-  return v.custom<[T[number], ...T]>((input) => (input as T).length > 0)
+export const vNonEmptyArray = <const TItem extends v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>>(
+  item: TItem
+) => {
+  return v.pipe(
+    v.array(item),
+    v.custom<[v.InferOutput<TItem>, ...v.InferOutput<TItem>[]]>((input) => (input as TItem[]).length > 0)
+  )
 }
 
 export const vIdString = v.pipe(v.string(), v.regex(idRegex), v.nonEmpty())

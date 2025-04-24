@@ -208,7 +208,7 @@ describe('complex-mdoc-query', () => {
     ])
 
     assert.deepStrictEqual(res, {
-      credentials: complexMdocQuery.credentials,
+      credentials: complexMdocQuery.credentials.map((c) => ({ ...c, multiple: false })),
       credential_sets: [
         {
           options: [['mdl-id'], ['photo_card-id']],
@@ -2952,10 +2952,10 @@ describe('complex-mdoc-query', () => {
 
     const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
       {
-        'mdl-id': res.credential_matches['mdl-id'].output,
-        'mdl-address': res.credential_matches['mdl-address'].output,
-        'photo_card-address': res.credential_matches['photo_card-address'].output,
-        'photo_card-id': res.credential_matches['photo_card-id'].output,
+        'mdl-id': [res.credential_matches['mdl-id'].output],
+        'mdl-address': [res.credential_matches['mdl-address'].output],
+        'photo_card-address': [res.credential_matches['photo_card-address'].output],
+        'photo_card-id': [res.credential_matches['photo_card-id'].output],
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       } as any,
       { dcqlQuery: query }
@@ -2986,6 +2986,7 @@ describe('complex-mdoc-query', () => {
           meta: {
             doctype_value: 'org.iso.18013.5.1.mDL',
           },
+          multiple: false,
         },
         {
           id: 'mdl-address',
@@ -3002,6 +3003,7 @@ describe('complex-mdoc-query', () => {
               intent_to_retain: true,
             },
           ],
+          multiple: false,
           meta: {
             doctype_value: 'org.iso.18013.5.1.mDL',
           },
@@ -3009,6 +3011,7 @@ describe('complex-mdoc-query', () => {
         {
           id: 'photo_card-id',
           format: 'mso_mdoc',
+          multiple: false,
           claims: [
             {
               id: 'given_name',
@@ -3030,6 +3033,7 @@ describe('complex-mdoc-query', () => {
         {
           id: 'photo_card-address',
           format: 'mso_mdoc',
+          multiple: false,
           claims: [
             {
               id: 'resident_address',
@@ -3061,72 +3065,84 @@ describe('complex-mdoc-query', () => {
       ],
       canBeSatisfied: true,
       valid_matches: {
-        'mdl-id': {
-          typed: true,
-          success: true,
-          output: {
-            credential_format: 'mso_mdoc',
-            doctype: 'org.iso.18013.5.1.mDL',
-            namespaces: {
-              'org.iso.18013.5.1': {
-                given_name: 'Martin',
-                family_name: 'Auer',
-                portrait: 'https://example.com/portrait',
+        'mdl-id': [
+          {
+            typed: true,
+            success: true,
+            output: {
+              credential_format: 'mso_mdoc',
+              doctype: 'org.iso.18013.5.1.mDL',
+              namespaces: {
+                'org.iso.18013.5.1': {
+                  given_name: 'Martin',
+                  family_name: 'Auer',
+                  portrait: 'https://example.com/portrait',
+                },
               },
             },
+            claim_set_index: undefined,
+            input_presentation_index: 0,
+            presentation_id: 'mdl-id',
           },
-          claim_set_index: undefined,
-          presentation_id: 'mdl-id',
-        },
-        'mdl-address': {
-          typed: true,
-          success: true,
-          output: {
-            credential_format: 'mso_mdoc',
-            doctype: 'org.iso.18013.5.1.mDL',
-            namespaces: {
-              'org.iso.18013.5.1': {
-                resident_address: 'Via Roma 1',
-                resident_country: 'Italy',
+        ],
+        'mdl-address': [
+          {
+            typed: true,
+            success: true,
+            output: {
+              credential_format: 'mso_mdoc',
+              doctype: 'org.iso.18013.5.1.mDL',
+              namespaces: {
+                'org.iso.18013.5.1': {
+                  resident_address: 'Via Roma 1',
+                  resident_country: 'Italy',
+                },
               },
             },
+            claim_set_index: undefined,
+            input_presentation_index: 0,
+            presentation_id: 'mdl-address',
           },
-          claim_set_index: undefined,
-          presentation_id: 'mdl-address',
-        },
-        'photo_card-address': {
-          typed: true,
-          success: true,
-          output: {
-            credential_format: 'mso_mdoc',
-            doctype: 'org.iso.23220.photoid.1',
-            namespaces: {
-              'org.iso.23220.1': {
-                resident_address: 'Via Roma 1',
-                resident_country: 'Italy',
+        ],
+        'photo_card-address': [
+          {
+            typed: true,
+            success: true,
+            output: {
+              credential_format: 'mso_mdoc',
+              doctype: 'org.iso.23220.photoid.1',
+              namespaces: {
+                'org.iso.23220.1': {
+                  resident_address: 'Via Roma 1',
+                  resident_country: 'Italy',
+                },
               },
             },
+            input_presentation_index: 0,
+            claim_set_index: undefined,
+            presentation_id: 'photo_card-address',
           },
-          claim_set_index: undefined,
-          presentation_id: 'photo_card-address',
-        },
-        'photo_card-id': {
-          typed: true,
-          success: true,
-          output: {
-            credential_format: 'mso_mdoc',
-            doctype: 'org.iso.23220.photoid.1',
-            namespaces: {
-              'org.iso.23220.1': {
-                given_name: 'Martin',
-                family_name: 'Auer',
-                portrait: 'https://example.com/portrait',
+        ],
+        'photo_card-id': [
+          {
+            typed: true,
+            success: true,
+            output: {
+              credential_format: 'mso_mdoc',
+              doctype: 'org.iso.23220.photoid.1',
+              namespaces: {
+                'org.iso.23220.1': {
+                  given_name: 'Martin',
+                  family_name: 'Auer',
+                  portrait: 'https://example.com/portrait',
+                },
               },
             },
+            input_presentation_index: 0,
+            claim_set_index: undefined,
+            presentation_id: 'photo_card-id',
           },
-          claim_set_index: undefined,
-          presentation_id: 'photo_card-id',
-        },
+        ],
       },
       invalid_matches: undefined,
     })

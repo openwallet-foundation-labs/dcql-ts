@@ -28,7 +28,7 @@ const mdocMvrcQuery = {
       ],
     },
   ],
-} satisfies DcqlQuery
+} satisfies DcqlQuery.Input
 
 const sdJwtVcExampleQuery = {
   credentials: [
@@ -41,7 +41,7 @@ const sdJwtVcExampleQuery = {
       claims: [{ path: ['last_name'] }, { path: ['first_name'] }, { path: ['address', 'street_address'] }],
     },
   ],
-} satisfies DcqlQuery
+} satisfies DcqlQuery.Input
 
 class ValueClass {
   constructor(private value: unknown) {}
@@ -117,25 +117,28 @@ describe('dcql-query-with-json-transform', () => {
     })
 
     const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
-      { my_credential: res.credential_matches.my_credential.output },
+      { my_credential: [res.credential_matches.my_credential.output] },
       { dcqlQuery: query }
     )
 
     assert.deepStrictEqual(presentationQueryResult.valid_matches, {
-      my_credential: {
-        success: true,
-        typed: true,
-        presentation_id: 'my_credential',
-        claim_set_index: undefined,
-        output: {
-          credential_format: 'mso_mdoc' as const,
-          doctype: 'org.iso.7367.1.mVRC',
-          namespaces: {
-            'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
-            'org.iso.18013.5.1': { first_name: new ValueClass('Martin Auer') },
+      my_credential: [
+        {
+          success: true,
+          typed: true,
+          presentation_id: 'my_credential',
+          claim_set_index: undefined,
+          input_presentation_index: 0,
+          output: {
+            credential_format: 'mso_mdoc' as const,
+            doctype: 'org.iso.7367.1.mVRC',
+            namespaces: {
+              'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
+              'org.iso.18013.5.1': { first_name: new ValueClass('Martin Auer') },
+            },
           },
         },
-      },
+      ],
     })
   })
 
@@ -170,28 +173,31 @@ describe('dcql-query-with-json-transform', () => {
 
     const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
       // @ts-expect-error ValueClass is not a valid type
-      { my_credential: res.credential_matches.my_credential.output },
+      { my_credential: [res.credential_matches.my_credential.output] },
       { dcqlQuery: query }
     )
 
     assert.deepStrictEqual(presentationQueryResult.valid_matches, {
-      my_credential: {
-        success: true,
-        typed: true,
-        presentation_id: 'my_credential',
-        claim_set_index: undefined,
-        output: {
-          credential_format: 'dc+sd-jwt' as const,
-          vct: 'https://credentials.example.com/identity_credential',
-          claims: {
-            first_name: 'Arthur',
-            last_name: 'Dent',
-            address: {
-              street_address: new ValueClass('42 Market Street'),
+      my_credential: [
+        {
+          success: true,
+          typed: true,
+          presentation_id: 'my_credential',
+          claim_set_index: undefined,
+          input_presentation_index: 0,
+          output: {
+            credential_format: 'dc+sd-jwt' as const,
+            vct: 'https://credentials.example.com/identity_credential',
+            claims: {
+              first_name: 'Arthur',
+              last_name: 'Dent',
+              address: {
+                street_address: new ValueClass('42 Market Street'),
+              },
             },
           },
         },
-      },
+      ],
     })
   })
 })
