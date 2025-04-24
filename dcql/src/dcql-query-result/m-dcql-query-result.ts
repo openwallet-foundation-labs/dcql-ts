@@ -66,7 +66,7 @@ export namespace DcqlQueryResult {
       )
     ),
 
-    canBeSatisfied: v.boolean(),
+    can_be_satisfied: v.boolean(),
   })
   export type Input = v.InferInput<typeof vModel>
   export type Output = v.InferOutput<typeof vModel>

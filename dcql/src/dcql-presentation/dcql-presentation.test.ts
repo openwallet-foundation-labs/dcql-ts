@@ -41,7 +41,7 @@ describe('DCQL presentation with claim sets', () => {
 
     const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(dcqlPresentation, { dcqlQuery })
 
-    expect(presentationQueryResult.canBeSatisfied).toEqual(false)
+    expect(presentationQueryResult.can_be_satisfied).toEqual(false)
   })
 
   test('Correctly handles a presentation with multiple claim sets where the first claim set matches', () => {
@@ -79,7 +79,7 @@ describe('DCQL presentation with claim sets', () => {
     })
 
     expect(presentationQueryResult).toEqual({
-      canBeSatisfied: true,
+      can_be_satisfied: true,
       credentials: parsedQuery.credentials,
       credential_sets: undefined,
       invalid_matches: undefined,
@@ -139,7 +139,7 @@ describe('DCQL presentation with claim sets', () => {
     })
 
     expect(presentationQueryResult).toEqual({
-      canBeSatisfied: true,
+      can_be_satisfied: true,
       credentials: parsedQuery.credentials,
       credential_sets: undefined,
       valid_matches: {
@@ -204,7 +204,7 @@ describe('DCQL presentation with claim sets', () => {
     })
 
     expect(presentationQueryResult).toEqual({
-      canBeSatisfied: true,
+      can_be_satisfied: true,
       credentials: parsedQuery.credentials,
       credential_sets: [
         {
