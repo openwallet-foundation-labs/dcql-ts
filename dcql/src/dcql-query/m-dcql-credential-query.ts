@@ -2,6 +2,7 @@ import * as v from 'valibot'
 import { DcqlUndefinedClaimSetIdError } from '../dcql-error/e-dcql.js'
 import { idRegex, vIdString, vNonEmptyArray } from '../u-dcql.js'
 import { DcqlClaimsQuery } from './m-dcql-claims-query.js'
+import { DcqlTrustedAuthoritiesQuery } from './m-dcql-trusted-authorities.js'
 
 /**
  * A Credential Query is an object representing a request for a presentation of one Credential.
@@ -19,6 +20,12 @@ export namespace DcqlCredentialQuery {
       v.optional(v.pipe(v.array(v.pipe(v.array(vIdString), vNonEmptyArray())), vNonEmptyArray())),
       v.description(
         `OPTIONAL. A non-empty array containing arrays of identifiers for elements in 'claims' that specifies which combinations of 'claims' for the Credential are requested.`
+      )
+    ),
+    trusted_authorities: v.pipe(
+      v.optional(v.pipe(v.array(DcqlTrustedAuthoritiesQuery.vModel), vNonEmptyArray())),
+      v.description(
+        'OPTIONAL. A non-empty array of objects as defined in Section 6.1.1 that specifies expected authorities or trust frameworks that certify Issuers, that the Verifier will accept. Every Credential returned by the Wallet SHOULD match at least one of the conditions present in the corresponding trusted_authorities array if present.'
       )
     ),
   })

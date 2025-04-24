@@ -1,11 +1,17 @@
 import * as v from 'valibot'
+import { DcqlCredentialTrustedAuthority } from './dcql-query/m-dcql-trusted-authorities.js'
 import { vJsonRecord, vNonEmptyArray } from './u-dcql.js'
 import type { InferModelTypes } from './u-model.js'
 import { Model } from './u-model.js'
 
+const vCredentialModelBase = v.object({
+  authority: v.optional(DcqlCredentialTrustedAuthority.vModel),
+})
+
 export namespace DcqlMdocCredential {
   export const vNamespaces = v.record(v.string(), v.record(v.string(), v.unknown()))
   export const vModel = v.object({
+    ...vCredentialModelBase.entries,
     credential_format: v.literal('mso_mdoc'),
     doctype: v.string(),
     namespaces: vNamespaces,
@@ -20,6 +26,7 @@ export type DcqlMdocCredential = DcqlMdocCredential.Model['Output']
 export namespace DcqlSdJwtVcCredential {
   export const vClaims = vJsonRecord
   export const vModel = v.object({
+    ...vCredentialModelBase.entries,
     credential_format: v.picklist(['vc+sd-jwt', 'dc+sd-jwt']),
     vct: v.string(),
     claims: vClaims,
@@ -33,6 +40,7 @@ export type DcqlSdJwtVcCredential = DcqlSdJwtVcCredential.Model['Output']
 export namespace DcqlW3cVcCredential {
   export const vClaims = vJsonRecord
   export const vModel = v.object({
+    ...vCredentialModelBase.entries,
     credential_format: v.picklist(['jwt_vc_json-ld', 'jwt_vc_json']),
     claims: vClaims,
   })
