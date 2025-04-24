@@ -20,7 +20,7 @@ const mdocMvrcQuery = {
       ],
     },
   ],
-} satisfies DcqlQuery
+} satisfies DcqlQuery.Input
 
 /**
  * The following is a non-normative example of a DCQL query that requests
@@ -39,7 +39,7 @@ const mdocNamespaceMvrcQuery = {
       ],
     },
   ],
-} satisfies DcqlQuery
+} satisfies DcqlQuery.Input
 
 const mdocMvrc = {
   credential_format: 'mso_mdoc',
@@ -74,9 +74,9 @@ const sdJwtVcExampleQuery = {
       claims: [{ path: ['last_name'] }, { path: ['first_name'] }, { path: ['address', 'street_address'] }],
     },
   ],
-} satisfies DcqlQuery
+} satisfies DcqlQuery.Input
 
-const sdJwtVc = {
+const exampleSdJwtVc = {
   credential_format: 'vc+sd-jwt',
   vct: 'https://credentials.example.com/identity_credential',
   claims: {
@@ -287,7 +287,12 @@ describe('dcql-query', () => {
     })
 
     const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
-      { my_credential: res.credential_matches.my_credential.output },
+      {
+        my_credential: {
+          ...res.credential_matches.my_credential.output,
+          includes_cryptographic_holder_binding: true,
+        },
+      },
       { dcqlQuery: query }
     )
 
@@ -298,6 +303,7 @@ describe('dcql-query', () => {
         presentation_id: 'my_credential',
         claim_set_index: undefined,
         output: {
+          includes_cryptographic_holder_binding: true,
           credential_format: 'mso_mdoc' as const,
           doctype: 'org.iso.7367.1.mVRC',
           namespaces: {
@@ -338,7 +344,12 @@ describe('dcql-query', () => {
     })
 
     const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
-      { my_credential: res.credential_matches.my_credential.output },
+      {
+        my_credential: {
+          ...res.credential_matches.my_credential.output,
+          includes_cryptographic_holder_binding: true,
+        },
+      },
       { dcqlQuery: query }
     )
 
@@ -349,6 +360,7 @@ describe('dcql-query', () => {
         presentation_id: 'my_credential',
         claim_set_index: undefined,
         output: {
+          includes_cryptographic_holder_binding: true,
           credential_format: 'mso_mdoc' as const,
           doctype: 'org.iso.7367.1.mVRC',
           namespaces: {
@@ -389,7 +401,12 @@ describe('dcql-query', () => {
     })
 
     const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
-      { my_credential: res.credential_matches.my_credential.output },
+      {
+        my_credential: {
+          ...res.credential_matches.my_credential.output,
+          includes_cryptographic_holder_binding: true,
+        },
+      },
       { dcqlQuery: query }
     )
 
@@ -402,6 +419,7 @@ describe('dcql-query', () => {
         output: {
           credential_format: 'mso_mdoc' as const,
           doctype: 'org.iso.7367.1.mVRC',
+          includes_cryptographic_holder_binding: true,
           namespaces: {
             'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
             'org.iso.18013.5.1': { first_name: 'Martin Auer' },
@@ -415,7 +433,7 @@ describe('dcql-query', () => {
     const query = DcqlQuery.parse(sdJwtVcExampleQuery)
     DcqlQuery.validate(query)
 
-    const res = DcqlQuery.query(query, [exampleMdoc, sdJwtVc])
+    const res = DcqlQuery.query(query, [exampleMdoc, exampleSdJwtVc])
 
     assert(res.canBeSatisfied)
     assert.deepStrictEqual(res.credential_matches, {
@@ -440,7 +458,12 @@ describe('dcql-query', () => {
     })
 
     const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
-      { my_credential: res.credential_matches.my_credential.output },
+      {
+        my_credential: {
+          ...res.credential_matches.my_credential.output,
+          includes_cryptographic_holder_binding: true,
+        },
+      },
       { dcqlQuery: query }
     )
 
@@ -451,6 +474,7 @@ describe('dcql-query', () => {
         presentation_id: 'my_credential',
         claim_set_index: undefined,
         output: {
+          includes_cryptographic_holder_binding: true,
           credential_format: 'vc+sd-jwt' as const,
           vct: 'https://credentials.example.com/identity_credential',
           claims: {
