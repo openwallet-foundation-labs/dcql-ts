@@ -6,6 +6,17 @@ import type { DcqlCredentialQuery } from '../dcql-query/m-dcql-credential-query.
 import { vIncludesAll, vWithJT } from '../u-dcql.js'
 import { vJson, vJsonRecord } from '../u-dcql.js'
 
+type ParserContext = { claimSet?: NonNullable<DcqlCredentialQuery['claim_sets']>[number]; presentation: boolean }
+
+const getIncludesCryptographicHolderBindingValue = (credentialQuery: DcqlCredentialQuery, ctx: ParserContext) =>
+  v.object({
+    includes_cryptographic_holder_binding: ctx.presentation
+      ? credentialQuery.require_cryptographic_holder_binding
+        ? v.literal(true, `Credential query '${credentialQuery.id}' requires cryptographic holder binding`)
+        : v.boolean()
+      : v.optional(v.undefined()),
+  })
+
 const getClaimParser = (input: {
   value?: string | number | boolean
   values?: (string | number | boolean)[]
@@ -136,10 +147,7 @@ export const getJsonClaimsQueriesForClaimSet = (
   })
 }
 
-const getMdocParser = (
-  credentialQuery: DcqlCredentialQuery.Mdoc,
-  ctx: { claimSet?: NonNullable<DcqlCredentialQuery['claim_sets']>[number] }
-) => {
+const getMdocParser = (credentialQuery: DcqlCredentialQuery.Mdoc, ctx: ParserContext) => {
   const { claimSet } = ctx
 
   const vDoctype = credentialQuery.meta?.doctype_value ? v.literal(credentialQuery.meta.doctype_value) : v.string()
@@ -155,6 +163,9 @@ const getMdocParser = (
     namespaces: claimSetQueries
       ? getNamespacesParser(claimSetQueries)
       : v.record(v.string(), v.record(v.string(), v.unknown())),
+
+    // For presentation we need to check for cryptographic holder binding
+    ...getIncludesCryptographicHolderBindingValue(credentialQuery, ctx).entries,
   })
 
   return credentialParser
@@ -162,12 +173,10 @@ const getMdocParser = (
 
 const getW3cVcSdJwtVcParser = (
   credentialQuery: DcqlCredentialQuery.SdJwtVc | DcqlCredentialQuery.W3cVc,
-  ctx: {
-    claimSet?: NonNullable<DcqlCredentialQuery['claim_sets']>[number]
-    presentation: boolean
-  }
+  ctx: ParserContext
 ) => {
   const { claimSet } = ctx
+
   const claimSetQueries =
     credentialQuery.claims && claimSet
       ? getJsonClaimsQueriesForClaimSet(credentialQuery.claims, claimSet)
@@ -178,6 +187,9 @@ const getW3cVcSdJwtVcParser = (
       credential_format: v.literal(credentialQuery.format),
       vct: credentialQuery.meta?.vct_values ? v.picklist(credentialQuery.meta.vct_values) : v.string(),
       claims: claimSetQueries ? getJsonClaimsParser(claimSetQueries, ctx) : vJsonRecord,
+
+      // For presentation we need to check for cryptographic holder binding
+      ...getIncludesCryptographicHolderBindingValue(credentialQuery, ctx).entries,
     })
   }
 
@@ -191,6 +203,9 @@ const getW3cVcSdJwtVcParser = (
             `Type must include at least all values from one of the following subsets: ${credentialQuery.meta.type_values.map((values) => `[${values.join(', ')}]`).join(' | ')}`
           )
         : v.array(v.string()),
+      
+      // For presentation we need to check for cryptographic holder binding
+      ...getIncludesCryptographicHolderBindingValue(credentialQuery, ctx).entries,
     })
   }
 

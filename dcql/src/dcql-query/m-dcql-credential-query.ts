@@ -15,6 +15,12 @@ export namespace DcqlCredentialQuery {
         `REQUIRED. A string identifying the Credential in the response and, if provided, the constraints in 'credential_sets'.`
       )
     ),
+    require_cryptographic_holder_binding: v.pipe(
+      v.optional(v.boolean(), true),
+      v.description(
+        'OPTIONAL. A boolean which indicates whether the Verifier requires a Cryptographic Holder Binding proof. The default value is true, i.e., a Verifiable Presentation with Cryptographic Holder Binding is required. If set to false, the Verifier accepts a Credential without Cryptographic Holder Binding proof.'
+      )
+    ),
     claim_sets: v.pipe(
       v.optional(v.pipe(v.array(v.pipe(v.array(vIdString), vNonEmptyArray())), vNonEmptyArray())),
       v.description(

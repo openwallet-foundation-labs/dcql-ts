@@ -4,7 +4,7 @@ import { DcqlPresentationResult } from './m-dcql-presentation-result'
 
 describe('DCQL presentation with claim sets', () => {
   test('Correctly handles a presentation with one credential but the query requested two', () => {
-    const dcqlQuery: DcqlQuery.Output = {
+    const dcqlQuery: DcqlQuery.Input = {
       credentials: [
         {
           id: 'c5d24076-71b1-4eb8-b3b2-1853a9f7e6b5',
@@ -31,6 +31,7 @@ describe('DCQL presentation with claim sets', () => {
           given_name: { foo: {} },
           family_name: { bar: {} },
         },
+        includes_cryptographic_holder_binding: true,
         credential_format: 'vc+sd-jwt',
         vct: 'PersonIdentificationData',
       },
@@ -39,13 +40,15 @@ describe('DCQL presentation with claim sets', () => {
     const parsedQuery = DcqlQuery.parse(dcqlQuery)
     DcqlQuery.validate(parsedQuery)
 
-    const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(dcqlPresentation, { dcqlQuery })
+    const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(dcqlPresentation, {
+      dcqlQuery: parsedQuery,
+    })
 
     expect(presentationQueryResult.canBeSatisfied).toEqual(false)
   })
 
   test('Correctly handles a presentation with multiple claim sets where the first claim set matches', () => {
-    const query: DcqlQuery.Output = {
+    const query: DcqlQuery.Input = {
       credentials: [
         {
           id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
@@ -65,6 +68,7 @@ describe('DCQL presentation with claim sets', () => {
       '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
         credential_format: 'vc+sd-jwt',
         vct: 'PersonIdentificationData',
+        includes_cryptographic_holder_binding: true,
         claims: {
           tax_id_code: { baz: {} },
         },
@@ -97,6 +101,7 @@ describe('DCQL presentation with claim sets', () => {
             },
             credential_format: 'vc+sd-jwt',
             vct: 'PersonIdentificationData',
+            includes_cryptographic_holder_binding: true,
           },
         },
       },
@@ -104,7 +109,7 @@ describe('DCQL presentation with claim sets', () => {
   })
 
   test('Correctly handles a presentation with multiple claim sets where the second claim set matches', () => {
-    const query: DcqlQuery.Output = {
+    const query: DcqlQuery.Input = {
       credentials: [
         {
           id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
@@ -124,6 +129,7 @@ describe('DCQL presentation with claim sets', () => {
       '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
         credential_format: 'vc+sd-jwt',
         vct: 'PersonIdentificationData',
+        includes_cryptographic_holder_binding: true,
         claims: {
           given_name: { foo: {} },
           family_name: { bar: {} },
@@ -154,6 +160,7 @@ describe('DCQL presentation with claim sets', () => {
               family_name: { bar: {} },
             },
             credential_format: 'vc+sd-jwt',
+            includes_cryptographic_holder_binding: true,
             vct: 'PersonIdentificationData',
           },
         },
@@ -163,7 +170,7 @@ describe('DCQL presentation with claim sets', () => {
   })
 
   test('Correctly handles a presentation with a credential set and multiple claim sets where the first credential set and second claim set matches', () => {
-    const query: DcqlQuery.Output = {
+    const query: DcqlQuery.Input = {
       credentials: [
         {
           id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
@@ -189,6 +196,7 @@ describe('DCQL presentation with claim sets', () => {
       '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
         credential_format: 'vc+sd-jwt',
         vct: 'PersonIdentificationData',
+        includes_cryptographic_holder_binding: true,
         claims: {
           given_name: { foo: {} },
           family_name: { bar: {} },
@@ -225,11 +233,117 @@ describe('DCQL presentation with claim sets', () => {
               family_name: { bar: {} },
             },
             credential_format: 'vc+sd-jwt',
+            includes_cryptographic_holder_binding: true,
             vct: 'PersonIdentificationData',
           },
         },
       },
       invalid_matches: undefined,
+    })
+  })
+
+  test('Correctly handles a presentation without cryptographic binding but required in query', () => {
+    const query: DcqlQuery.Input = {
+      credentials: [
+        {
+          id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
+          format: 'vc+sd-jwt',
+          meta: { vct_values: ['PersonIdentificationData'] },
+          claims: [{ path: ['given_name'] }],
+        },
+        {
+          id: '5ff30b81-fd6b-4133-97c9-0c4520789e84',
+          format: 'mso_mdoc',
+          meta: { doctype_value: 'PersonIdentificationData' },
+          claims: [{ path: ['namespace', 'given_name'] }],
+          require_cryptographic_holder_binding: true,
+        },
+      ],
+    }
+
+    const dcqlPresentation = {
+      '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
+        credential_format: 'vc+sd-jwt',
+        vct: 'PersonIdentificationData',
+        includes_cryptographic_holder_binding: false,
+        claims: {
+          given_name: { foo: {} },
+          family_name: { bar: {} },
+        },
+      },
+      '5ff30b81-fd6b-4133-97c9-0c4520789e84': {
+        credential_format: 'mso_mdoc',
+        doctype: 'PersonIdentificationData',
+        includes_cryptographic_holder_binding: false,
+        namespaces: {
+          namespace: {
+            given_name: 'foo',
+            family_name: 'bar',
+          },
+        },
+      },
+    } as const
+
+    const parsedQuery = DcqlQuery.parse(query)
+    DcqlQuery.validate(parsedQuery)
+
+    const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(dcqlPresentation, {
+      dcqlQuery: parsedQuery,
+    })
+
+    expect(presentationQueryResult).toEqual({
+      canBeSatisfied: false,
+      credentials: parsedQuery.credentials,
+      credential_sets: undefined,
+      invalid_matches: {
+        '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
+          claim_set_index: undefined,
+          presentation_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
+          success: false,
+          typed: false,
+          flattened: {
+            nested: {
+              includes_cryptographic_holder_binding: [
+                "Credential query '8c791a1f-12b4-41fe-a892-236c2887fa8e' requires cryptographic holder binding",
+              ],
+            },
+          },
+          issues: expect.any(Array),
+          output: {
+            claims: {
+              given_name: { foo: {} },
+            },
+            includes_cryptographic_holder_binding: false,
+            credential_format: 'vc+sd-jwt',
+            vct: 'PersonIdentificationData',
+          },
+        },
+        '5ff30b81-fd6b-4133-97c9-0c4520789e84': {
+          claim_set_index: undefined,
+          presentation_id: '5ff30b81-fd6b-4133-97c9-0c4520789e84',
+          success: false,
+          typed: false,
+          flattened: {
+            nested: {
+              includes_cryptographic_holder_binding: [
+                "Credential query '5ff30b81-fd6b-4133-97c9-0c4520789e84' requires cryptographic holder binding",
+              ],
+            },
+          },
+          issues: expect.any(Array),
+          output: {
+            credential_format: 'mso_mdoc',
+            doctype: 'PersonIdentificationData',
+            includes_cryptographic_holder_binding: false,
+            namespaces: {
+              namespace: {
+                given_name: 'foo',
+              },
+            },
+          },
+        },
+      },
+      valid_matches: {},
     })
   })
 })

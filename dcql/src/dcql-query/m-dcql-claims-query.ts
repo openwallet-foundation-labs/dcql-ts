@@ -2,7 +2,7 @@ import * as v from 'valibot'
 import { vIdString, vNonEmptyArray } from '../u-dcql.js'
 
 /**
- * Specifies claims withing a requested Credential.
+ * Specifies claims within a requested Credential.
  */
 export namespace DcqlClaimsQuery {
   export const vValue = v.union([v.string(), v.pipe(v.number(), v.integer()), v.boolean()])
