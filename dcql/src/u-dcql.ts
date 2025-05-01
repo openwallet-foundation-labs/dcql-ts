@@ -6,6 +6,18 @@ export const vNonEmptyArray = <T extends unknown[]>() => {
   return v.custom<[T[number], ...T]>((input) => (input as T).length > 0)
 }
 
+export const vIncludesAll = <T extends unknown[]>(subset: T) => {
+  return v.custom<T>(
+    (value) => {
+      if (!Array.isArray(value)) return false
+
+      // Check if all elements from the subset are in the value array
+      return subset.every((item) => value.includes(item))
+    },
+    `Value must include all of: ${subset.join(', ')}`
+  )
+}
+
 export const vIdString = v.pipe(v.string(), v.regex(idRegex), v.nonEmpty())
 
 export type Json = string | number | boolean | null | { [key: string]: Json } | Json[]
