@@ -183,7 +183,7 @@ describe('complex-mdoc-query', () => {
     DcqlQuery.validate(query)
 
     const res = DcqlQuery.query(query, [])
-    assert(!res.canBeSatisfied)
+    assert(!res.can_be_satisfied)
   })
 
   it('fails with credentials that do not satisfy a required claim_set', (_t) => {
@@ -191,7 +191,7 @@ describe('complex-mdoc-query', () => {
     DcqlQuery.validate(query)
 
     const res = DcqlQuery.query(query, [mdocMdlAddress, mdocPhotoCardAddress])
-    assert(!res.canBeSatisfied)
+    assert(!res.can_be_satisfied)
   })
 
   it('succeeds if all credentials are present', (_t) => {
@@ -223,7 +223,7 @@ describe('complex-mdoc-query', () => {
           matching_options: [['mdl-address'], ['photo_card-address']],
         },
       ],
-      canBeSatisfied: true,
+      can_be_satisfied: true,
       credential_matches: {
         'mdl-id': {
           typed: true,
@@ -3059,7 +3059,7 @@ describe('complex-mdoc-query', () => {
           matching_options: [['mdl-address'], ['photo_card-address']],
         },
       ],
-      canBeSatisfied: true,
+      can_be_satisfied: true,
       valid_matches: {
         'mdl-id': {
           typed: true,

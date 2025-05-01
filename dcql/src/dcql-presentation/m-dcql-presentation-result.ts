@@ -116,7 +116,7 @@ export namespace DcqlPresentationResult {
 
     return {
       ...dcqlQuery,
-      canBeSatisfied: dqclQueryMatched,
+      can_be_satisfied: dqclQueryMatched,
       valid_matches: validMatches,
       invalid_matches: Object.keys(invalidMatches).length === 0 ? undefined : {},
       credential_sets: credentialSetResults,
@@ -124,7 +124,7 @@ export namespace DcqlPresentationResult {
   }
 
   export const validate = (dcqlQueryResult: DcqlPresentationResult) => {
-    if (!dcqlQueryResult.canBeSatisfied) {
+    if (!dcqlQueryResult.can_be_satisfied) {
       throw new DcqlInvalidPresentationRecordError({
         message: 'Invalid Presentation record',
         cause: dcqlQueryResult,
