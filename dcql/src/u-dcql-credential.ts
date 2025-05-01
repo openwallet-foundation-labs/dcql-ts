@@ -33,8 +33,9 @@ export type DcqlSdJwtVcCredential = DcqlSdJwtVcCredential.Model['Output']
 export namespace DcqlW3cVcCredential {
   export const vClaims = vJsonRecord
   export const vModel = v.object({
-    credential_format: v.picklist(['jwt_vc_json-ld', 'jwt_vc_json']),
+    credential_format: v.picklist(['ldp_vc', 'jwt_vc_json']),
     claims: vClaims,
+    type: v.array(v.string()),
   })
 
   export const model = new Model({ vModel })

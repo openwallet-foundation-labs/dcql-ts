@@ -1,8 +1,9 @@
 import * as v from 'valibot'
+import { DcqlError } from '../dcql-error/e-base.js'
 import { DcqlInvalidClaimsQueryIdError, DcqlMissingClaimSetParseError } from '../dcql-error/e-dcql.js'
 import { DcqlClaimsQuery } from '../dcql-query/m-dcql-claims-query.js'
 import type { DcqlCredentialQuery } from '../dcql-query/m-dcql-credential-query.js'
-import { vWithJT } from '../u-dcql.js'
+import { vIncludesAll, vWithJT } from '../u-dcql.js'
 import { vJson, vJsonRecord } from '../u-dcql.js'
 
 type ParserContext = { claimSet?: NonNullable<DcqlCredentialQuery['claim_sets']>[number]; presentation: boolean }
@@ -191,15 +192,27 @@ const getW3cVcSdJwtVcParser = (
       ...getIncludesCryptographicHolderBindingValue(credentialQuery, ctx).entries,
     })
   }
-  const credentialParser = v.object({
-    credential_format: v.picklist(['jwt_vc_json', 'jwt_vc_json-ld']),
-    claims: claimSetQueries ? getJsonClaimsParser(claimSetQueries, ctx) : vJsonRecord,
 
-    // For presentation we need to check for cryptographic holder binding
-    ...getIncludesCryptographicHolderBindingValue(credentialQuery, ctx).entries,
+  if (credentialQuery.format === 'jwt_vc_json' || credentialQuery.format === 'ldp_vc') {
+    return v.object({
+      credential_format: v.literal(credentialQuery.format),
+      claims: claimSetQueries ? getJsonClaimsParser(claimSetQueries, ctx) : vJsonRecord,
+      type: credentialQuery.meta?.type_values
+        ? v.union(
+            credentialQuery.meta.type_values.map((values) => vIncludesAll(values)),
+            `Type must include at least all values from one of the following subsets: ${credentialQuery.meta.type_values.map((values) => `[${values.join(', ')}]`).join(' | ')}`
+          )
+        : v.array(v.string()),
+      
+      // For presentation we need to check for cryptographic holder binding
+      ...getIncludesCryptographicHolderBindingValue(credentialQuery, ctx).entries,
+    })
+  }
+
+  throw new DcqlError({
+    code: 'NOT_IMPLEMENTED',
+    message: `Usupported format '${credentialQuery.format}'`,
   })
-
-  return credentialParser
 }
 
 export const getCredentialQueryParser = (
