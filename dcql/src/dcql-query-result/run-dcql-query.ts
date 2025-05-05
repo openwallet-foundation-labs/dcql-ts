@@ -15,6 +15,18 @@ export const runDcqlQuery = (
     dcqlQuery.credentials.map((credentialQuery) => [credentialQuery.id, runCredentialQuery(credentialQuery, ctx)])
   )
 
+  // For each credential entry in the DCQL query we match against all credentials
+  //  - returns an object with:
+  //    - credential_id (query)
+  //    - can_be_satisfied
+  //    - credentials: [{
+  //         input_credential_index: 0
+  //         claim_sets: [{
+  //
+  //         }]
+  //       }]
+  //  -
+
   const credentialMatches = Object.fromEntries(
     Object.entries(credentialQueriesResults).map(([key, credentialQueryResult]) => {
       // Find the best match for each credential query
