@@ -1,7 +1,7 @@
 import assert from 'node:assert'
-import { describe, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { DcqlPresentationResult } from '../dcql-presentation/m-dcql-presentation-result.js'
-import type { DcqlMdocCredential, DcqlSdJwtVcCredential } from '../u-dcql-credential.js'
+import type { DcqlMdocCredential, DcqlSdJwtVcCredential, DcqlW3cVcCredential } from '../u-dcql-credential.js'
 import { DcqlQuery } from './m-dcql-query.js'
 
 /**
@@ -100,6 +100,58 @@ const sdJwtVc = {
     nationalities: ['British', 'Betelgeusian'],
   },
 } satisfies DcqlSdJwtVcCredential
+
+/**
+ * The following is a non-normative example of a DCQL query that requests
+ * a Verifiable Credential in the format mso_mdoc with the claims vehicle_holder and first_name:
+ */
+const w3cLdpVcQuery = {
+  credentials: [
+    {
+      id: 'my_credential',
+      format: 'ldp_vc' as const,
+      meta: {
+        type_values: [
+          ['https://example.org/examples#AlumniCredential', 'https://example.org/examples#BachelorDegree'],
+          [
+            'https://www.w3.org/2018/credentials#VerifiableCredential',
+            'https://example.org/examples#UniversityDegreeCredential',
+          ],
+        ],
+      },
+      claims: [{ path: ['last_name'] }, { path: ['first_name'] }, { path: ['address', 'street_address'] }],
+    },
+  ],
+} satisfies DcqlQuery
+
+const w3cLdpVc = {
+  credential_format: 'ldp_vc',
+  type: [
+    'https://www.w3.org/2018/credentials#VerifiableCredential',
+    'https://example.org/examples#AlumniCredential',
+    'https://example.org/examples#BachelorDegree',
+  ],
+  claims: {
+    first_name: 'Arthur',
+    last_name: 'Dent',
+    address: {
+      street_address: '42 Market Street',
+      locality: 'Milliways',
+      postal_code: '12345',
+    },
+    degrees: [
+      {
+        type: 'Bachelor of Science',
+        university: 'University of Betelgeuse',
+      },
+      {
+        type: 'Master of Science',
+        university: 'University of Betelgeuse',
+      },
+    ],
+    nationalities: ['British', 'Betelgeusian'],
+  },
+} satisfies DcqlW3cVcCredential
 
 describe('dcql-query', () => {
   it('mvrc query fails with invalid mdoc', (_t) => {
@@ -356,6 +408,126 @@ describe('dcql-query', () => {
             'org.iso.18013.5.1': { first_name: 'Martin Auer' },
           },
         },
+      },
+    })
+  })
+
+  it('w3cLdpVc example succeeds', (_t) => {
+    const query = DcqlQuery.parse(w3cLdpVcQuery)
+    DcqlQuery.validate(query)
+
+    const credentials = [w3cLdpVc]
+    const res = DcqlQuery.query(query, credentials)
+
+    assert(res.canBeSatisfied)
+    assert.deepStrictEqual(res.credential_matches, {
+      my_credential: {
+        success: true,
+        typed: true,
+        input_credential_index: 0,
+        claim_set_index: undefined,
+        output: {
+          credential_format: 'ldp_vc' as const,
+          type: [
+            'https://www.w3.org/2018/credentials#VerifiableCredential',
+            'https://example.org/examples#AlumniCredential',
+            'https://example.org/examples#BachelorDegree',
+          ],
+          claims: {
+            first_name: 'Arthur',
+            last_name: 'Dent',
+            address: {
+              street_address: '42 Market Street',
+            },
+          },
+        },
+
+        all: res.credential_matches.my_credential?.all,
+      },
+    })
+
+    const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
+      { my_credential: res.credential_matches.my_credential.output },
+      { dcqlQuery: query }
+    )
+
+    assert.deepStrictEqual(presentationQueryResult.valid_matches, {
+      my_credential: {
+        success: true,
+        typed: true,
+        presentation_id: 'my_credential',
+        claim_set_index: undefined,
+        output: {
+          credential_format: 'ldp_vc' as const,
+          type: [
+            'https://www.w3.org/2018/credentials#VerifiableCredential',
+            'https://example.org/examples#AlumniCredential',
+            'https://example.org/examples#BachelorDegree',
+          ],
+          claims: {
+            first_name: 'Arthur',
+            last_name: 'Dent',
+            address: {
+              street_address: '42 Market Street',
+            },
+          },
+        },
+      },
+    })
+  })
+
+  it('w3cLdpVc query fails with invalid type values', (_t) => {
+    const query = DcqlQuery.parse(w3cLdpVcQuery)
+    DcqlQuery.validate(query)
+
+    const credentials = [
+      {
+        ...w3cLdpVc,
+        // Override type
+        type: [
+          'https://www.w3.org/2018/credentials#VerifiableCredential',
+          'https://example.org/examples#AlumniCredential',
+        ],
+      },
+    ]
+    const res = DcqlQuery.query(query, credentials)
+
+    assert(!res.canBeSatisfied)
+    expect(res.credential_matches).toStrictEqual({
+      my_credential: {
+        all: [
+          [
+            {
+              claim_set_index: undefined,
+              flattened: {
+                nested: {
+                  type: [
+                    'Type must include at least all values from one of the following subsets: [https://example.org/examples#AlumniCredential, https://example.org/examples#BachelorDegree] | [https://www.w3.org/2018/credentials#VerifiableCredential, https://example.org/examples#UniversityDegreeCredential]',
+                  ],
+                },
+              },
+              input_credential_index: 0,
+              issues: expect.any(Array),
+              output: {
+                claims: {
+                  address: {
+                    street_address: '42 Market Street',
+                  },
+                  first_name: 'Arthur',
+                  last_name: 'Dent',
+                },
+                credential_format: 'ldp_vc',
+                type: [
+                  'https://www.w3.org/2018/credentials#VerifiableCredential',
+                  'https://example.org/examples#AlumniCredential',
+                ],
+              },
+              success: false,
+              typed: false,
+            },
+          ],
+        ],
+        success: false,
       },
     })
   })

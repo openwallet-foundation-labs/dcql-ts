@@ -88,8 +88,24 @@ export namespace DcqlCredentialQuery {
 
   export const vW3cVc = v.object({
     ...vBase.entries,
-    format: v.picklist(['jwt_vc_json', 'jwt_vc_json-ld']),
+    format: v.picklist(['jwt_vc_json', 'ldp_vc']),
     claims: v.optional(v.pipe(v.array(DcqlClaimsQuery.vW3cSdJwtVc), vNonEmptyArray())),
+    meta: v.pipe(
+      v.pipe(
+        v.object({
+          type_values: v.pipe(
+            v.array(v.pipe(v.array(v.string()), vNonEmptyArray())),
+            vNonEmptyArray(),
+            v.description(
+              'REQUIRED. An array of string arrays that specifies the fully expanded types (IRIs) after the @context was applied that the Verifier accepts to be presented in the Presentation. Each of the top-level arrays specifies one alternative to match the type values of the Verifiable Credential against. Each inner array specifies a set of fully expanded types that MUST be present in the type property of the Verifiable Credential, regardless of order or the presence of additional types.'
+            )
+          ),
+        })
+      ),
+      v.description(
+        'REQUIRED. An object defining additional properties requested by the Verifier that apply to the metadata and validity data of the Credential.'
+      )
+    ),
   })
   export type W3cVc = v.InferOutput<typeof vW3cVc>
 
