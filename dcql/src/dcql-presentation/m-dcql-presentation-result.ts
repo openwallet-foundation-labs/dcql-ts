@@ -118,7 +118,7 @@ export namespace DcqlPresentationResult {
       ...dcqlQuery,
       canBeSatisfied: dqclQueryMatched,
       valid_matches: validMatches,
-      invalid_matches: Object.keys(invalidMatches).length === 0 ? undefined : {},
+      invalid_matches: Object.keys(invalidMatches).length === 0 ? undefined : invalidMatches,
       credential_sets: credentialSetResults,
     }
   }

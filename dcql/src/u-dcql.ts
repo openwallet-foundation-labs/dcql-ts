@@ -19,6 +19,7 @@ export const vIncludesAll = <T extends unknown[]>(subset: T) => {
 }
 
 export const vIdString = v.pipe(v.string(), v.regex(idRegex), v.nonEmpty())
+export const vBase64url = v.regex(/^(?:[\w-]{4})*(?:[\w-]{2}(?:==)?|[\w-]{3}=?)?$/iu, 'must be base64url')
 
 export type Json = string | number | boolean | null | { [key: string]: Json } | Json[]
 
