@@ -459,7 +459,12 @@ describe('dcql-query', () => {
     })
 
     const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
-      { my_credential: res.credential_matches.my_credential.output },
+      {
+        my_credential: {
+          ...res.credential_matches.my_credential.output,
+          includes_cryptographic_holder_binding: true,
+        },
+      },
       { dcqlQuery: query }
     )
 
@@ -470,6 +475,7 @@ describe('dcql-query', () => {
         presentation_id: 'my_credential',
         claim_set_index: undefined,
         output: {
+          includes_cryptographic_holder_binding: true,
           credential_format: 'ldp_vc' as const,
           type: [
             'https://www.w3.org/2018/credentials#VerifiableCredential',

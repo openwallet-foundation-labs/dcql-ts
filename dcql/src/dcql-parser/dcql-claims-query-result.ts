@@ -203,7 +203,7 @@ const getW3cVcSdJwtVcParser = (
             `Type must include at least all values from one of the following subsets: ${credentialQuery.meta.type_values.map((values) => `[${values.join(', ')}]`).join(' | ')}`
           )
         : v.array(v.string()),
-      
+
       // For presentation we need to check for cryptographic holder binding
       ...getIncludesCryptographicHolderBindingValue(credentialQuery, ctx).entries,
     })
