@@ -19,7 +19,4 @@ runs:
         cache-dependency-path: '**/pnpm-lock.yaml'
 
     - shell: bash
-      run: pnpm add -g turbo
-
-    - shell: bash
       run: pnpm install

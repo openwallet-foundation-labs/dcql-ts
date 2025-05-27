@@ -1,9 +1,24 @@
 import * as v from 'valibot'
+import { DcqlError } from '../dcql-error/e-base.js'
 import { DcqlInvalidClaimsQueryIdError, DcqlMissingClaimSetParseError } from '../dcql-error/e-dcql.js'
 import { DcqlClaimsQuery } from '../dcql-query/m-dcql-claims-query.js'
 import type { DcqlCredentialQuery } from '../dcql-query/m-dcql-credential-query.js'
-import { vWithJT } from '../u-dcql.js'
+import { DcqlCredentialTrustedAuthority } from '../dcql-query/m-dcql-trusted-authorities.js'
+import { vIncludesAll, vWithJT } from '../u-dcql.js'
 import { vJson, vJsonRecord } from '../u-dcql.js'
+
+const getTrustedAuthorityValue = (credentialQuery: DcqlCredentialQuery) =>
+  v.object({
+    authority: credentialQuery.trusted_authorities
+      ? v.variant(
+          'type',
+          credentialQuery.trusted_authorities.map((t) =>
+            v.object({ type: v.literal(t.type), value: v.union(t.values.map((value) => v.literal(value))) })
+          ),
+          `Credential query '${credentialQuery.id}' requires the credential to be issued by a trusted authority of type ${credentialQuery.trusted_authorities.map((t) => t.type).join(' | ')}, but none of the type or values match.`
+        )
+      : v.optional(DcqlCredentialTrustedAuthority.vModel),
+  })
 
 const getClaimParser = (input: {
   value?: string | number | boolean
@@ -154,6 +169,8 @@ const getMdocParser = (
     namespaces: claimSetQueries
       ? getNamespacesParser(claimSetQueries)
       : v.record(v.string(), v.record(v.string(), v.unknown())),
+
+    ...getTrustedAuthorityValue(credentialQuery).entries,
   })
 
   return credentialParser
@@ -177,14 +194,36 @@ const getW3cVcSdJwtVcParser = (
       credential_format: v.literal(credentialQuery.format),
       vct: credentialQuery.meta?.vct_values ? v.picklist(credentialQuery.meta.vct_values) : v.string(),
       claims: claimSetQueries ? getJsonClaimsParser(claimSetQueries, ctx) : vJsonRecord,
+
+      // TODO: we should split up the:
+      // - vct
+      // - claim value
+      // - trusted authorities
+      // into separate validations so we can make the match result richer with specifically
+      // which steps failed, also we should look at showing exactly which claim paths failed.
+      ...getTrustedAuthorityValue(credentialQuery).entries,
     })
   }
-  const credentialParser = v.object({
-    credential_format: v.picklist(['jwt_vc_json', 'jwt_vc_json-ld']),
-    claims: claimSetQueries ? getJsonClaimsParser(claimSetQueries, ctx) : vJsonRecord,
-  })
 
-  return credentialParser
+  if (credentialQuery.format === 'jwt_vc_json' || credentialQuery.format === 'ldp_vc') {
+    return v.object({
+      credential_format: v.literal(credentialQuery.format),
+      claims: claimSetQueries ? getJsonClaimsParser(claimSetQueries, ctx) : vJsonRecord,
+      type: credentialQuery.meta?.type_values
+        ? v.union(
+            credentialQuery.meta.type_values.map((values) => vIncludesAll(values)),
+            `Type must include at least all values from one of the following subsets: ${credentialQuery.meta.type_values.map((values) => `[${values.join(', ')}]`).join(' | ')}`
+          )
+        : v.array(v.string()),
+
+      ...getTrustedAuthorityValue(credentialQuery).entries,
+    })
+  }
+
+  throw new DcqlError({
+    code: 'NOT_IMPLEMENTED',
+    message: `Usupported format '${credentialQuery.format}'`,
+  })
 }
 
 export const getCredentialQueryParser = (

@@ -41,9 +41,6 @@ yarn-error.log*
 dist/
 .cache
 
-# turbo
-.turbo
-
 # playwright
 test-results/
 playwright-report/

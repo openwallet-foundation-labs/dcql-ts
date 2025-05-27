@@ -27,7 +27,7 @@ jobs:
         uses: ./.github/setup
 
       - name: Format and Lint
-        run: pnpm format-and-lint
+        run: pnpm style
 
   build:
     if: github.event_name != 'pull_request_review' ||  github.event.pull_request.head.ref == 'changeset-release/main'
@@ -52,7 +52,7 @@ jobs:
         uses: ./.github/setup
 
       - name: Typecheck
-        run: pnpm typecheck
+        run: pnpm types:check
 
   test:
     if: github.event_name != 'pull_request_review' ||  github.event.pull_request.head.ref == 'changeset-release/main'

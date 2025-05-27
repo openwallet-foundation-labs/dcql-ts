@@ -2,6 +2,7 @@ import * as v from 'valibot'
 import { DcqlUndefinedClaimSetIdError } from '../dcql-error/e-dcql.js'
 import { idRegex, vIdString, vNonEmptyArray } from '../u-dcql.js'
 import { DcqlClaimsQuery } from './m-dcql-claims-query.js'
+import { DcqlTrustedAuthoritiesQuery } from './m-dcql-trusted-authorities.js'
 
 /**
  * A Credential Query is an object representing a request for a presentation of one Credential.
@@ -25,6 +26,12 @@ export namespace DcqlCredentialQuery {
       v.optional(vNonEmptyArray(vNonEmptyArray(vIdString))),
       v.description(
         `OPTIONAL. A non-empty array containing arrays of identifiers for elements in 'claims' that specifies which combinations of 'claims' for the Credential are requested.`
+      )
+    ),
+    trusted_authorities: v.pipe(
+      v.optional(vNonEmptyArray(DcqlTrustedAuthoritiesQuery.vModel)),
+      v.description(
+        'OPTIONAL. A non-empty array of objects as defined in Section 6.1.1 that specifies expected authorities or trust frameworks that certify Issuers, that the Verifier will accept. Every Credential returned by the Wallet SHOULD match at least one of the conditions present in the corresponding trusted_authorities array if present.'
       )
     ),
   })
@@ -87,8 +94,23 @@ export namespace DcqlCredentialQuery {
 
   export const vW3cVc = v.object({
     ...vBase.entries,
-    format: v.picklist(['jwt_vc_json', 'jwt_vc_json-ld']),
+    format: v.picklist(['jwt_vc_json', 'ldp_vc']),
     claims: v.optional(vNonEmptyArray(DcqlClaimsQuery.vW3cSdJwtVc)),
+    meta: v.pipe(
+      v.pipe(
+        v.object({
+          type_values: v.pipe(
+            vNonEmptyArray(vNonEmptyArray(v.string())),
+            v.description(
+              'REQUIRED. An array of string arrays that specifies the fully expanded types (IRIs) after the @context was applied that the Verifier accepts to be presented in the Presentation. Each of the top-level arrays specifies one alternative to match the type values of the Verifiable Credential against. Each inner array specifies a set of fully expanded types that MUST be present in the type property of the Verifiable Credential, regardless of order or the presence of additional types.'
+            )
+          ),
+        })
+      ),
+      v.description(
+        'REQUIRED. An object defining additional properties requested by the Verifier that apply to the metadata and validity data of the Credential.'
+      )
+    ),
   })
   export type W3cVc = v.InferOutput<typeof vW3cVc>
 

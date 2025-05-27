@@ -14,23 +14,17 @@
   },
   "packageManager": "pnpm@9.12.1+sha512.e5a7e52a4183a02d5931057f7a0dbff9d5e9ce3161e33fa68ae392125b79282a8a8a470a51dfc8a0ed86221442eb2fb57019b0990ed24fab519bf0e1bc5ccfc4",
   "scripts": {
-    "build": "turbo run build",
-    "clean": "turbo run clean && pnpm clean:root",
-    "clean:root": "git clean -xdf node_modules && rm -rf .turbo",
-    "dev": "turbo watch dev --continue",
-    "format-and-lint": "biome check",
-    "format-and-lint:fix": "biome check --write --unsafe",
-    "lint:ws": "pnpm dlx sherif@latest",
-    "lint:ws:fix": "pnpm dlx sherif@latest -f",
-    "typecheck": "turbo run typecheck",
-    "test": "turbo run test",
-    "release": "turbo run release && pnpm changeset publish",
-    "changeset-version": "pnpm changeset version && pnpm format-and-lint:fix"
+    "build": "pnpm -r build",
+    "types:check": "pnpm -r types:check",
+    "style": "biome check --unsafe",
+    "style:fix": "pnpm style --write",
+    "test": "vitest",
+    "release": "pnpm build && pnpm changeset publish --no-git-tag",
+    "changeset-version": "pnpm changeset version && pnpm style:fix"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@changesets/cli": "^2.27.7",
-    "@turbo/gen": "^2.1.3",
-    "turbo": "^2.1.3"
+    "vitest": "^2.1.5"
   }
 }

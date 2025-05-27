@@ -11,7 +11,20 @@ export const vNonEmptyArray = <const TItem extends v.BaseSchema<unknown, unknown
   )
 }
 
+export const vIncludesAll = <T extends unknown[]>(subset: T) => {
+  return v.custom<T>(
+    (value) => {
+      if (!Array.isArray(value)) return false
+
+      // Check if all elements from the subset are in the value array
+      return subset.every((item) => value.includes(item))
+    },
+    `Value must include all of: ${subset.join(', ')}`
+  )
+}
+
 export const vIdString = v.pipe(v.string(), v.regex(idRegex), v.nonEmpty())
+export const vBase64url = v.regex(/^(?:[\w-]{4})*(?:[\w-]{2}(?:==)?|[\w-]{3}=?)?$/iu, 'must be base64url')
 
 export type Json = string | number | boolean | null | { [key: string]: Json } | Json[]
 
