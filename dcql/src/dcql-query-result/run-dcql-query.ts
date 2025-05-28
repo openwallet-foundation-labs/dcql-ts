@@ -60,7 +60,7 @@ export const runDcqlQuery = (
 
   return {
     ...dcqlQuery,
-    canBeSatisfied: dqclQueryMatched,
+    can_be_satisfied: dqclQueryMatched,
     credential_matches: credentialMatches as DcqlQueryResult['credential_matches'],
     credential_sets: credentialSetResults,
   }

@@ -161,7 +161,7 @@ describe('dcql-query', () => {
     const credentials = [exampleMdoc]
     const res = DcqlQuery.query(query, credentials)
 
-    assert(!res.canBeSatisfied)
+    assert(!res.can_be_satisfied)
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: false,
@@ -319,7 +319,7 @@ describe('dcql-query', () => {
 
     const res = DcqlQuery.query(query, [exampleMdoc, mdocMvrc])
 
-    assert(res.canBeSatisfied)
+    assert(res.can_be_satisfied)
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
@@ -368,7 +368,7 @@ describe('dcql-query', () => {
     const credentials = [mdocMvrc]
     const res = DcqlQuery.query(query, credentials)
 
-    assert(res.canBeSatisfied)
+    assert(res.can_be_satisfied)
 
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
@@ -539,7 +539,7 @@ describe('dcql-query', () => {
     const credentials = [mdocMvrc]
     const res = DcqlQuery.query(query, credentials)
 
-    assert(res.canBeSatisfied)
+    assert(res.can_be_satisfied)
 
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
@@ -589,7 +589,7 @@ describe('dcql-query', () => {
 
     const res = DcqlQuery.query(query, [exampleMdoc, sdJwtVc])
 
-    assert(res.canBeSatisfied)
+    assert(res.can_be_satisfied)
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
