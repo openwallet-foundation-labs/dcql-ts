@@ -100,7 +100,6 @@ describe('dcql-query-with-json-transform', () => {
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
-        typed: true,
         input_credential_index: 0,
         claim_set_index: undefined,
         output: {
@@ -125,7 +124,6 @@ describe('dcql-query-with-json-transform', () => {
       my_credential: [
         {
           success: true,
-          typed: true,
           presentation_id: 'my_credential',
           claim_set_index: undefined,
           input_presentation_index: 0,
@@ -153,7 +151,6 @@ describe('dcql-query-with-json-transform', () => {
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
-        typed: true,
         input_credential_index: 1,
         claim_set_index: undefined,
         output: {
@@ -181,7 +178,6 @@ describe('dcql-query-with-json-transform', () => {
       my_credential: [
         {
           success: true,
-          typed: true,
           presentation_id: 'my_credential',
           claim_set_index: undefined,
           input_presentation_index: 0,

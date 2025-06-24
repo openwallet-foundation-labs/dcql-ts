@@ -104,5 +104,7 @@ export namespace DcqlClaimsQuery {
   export const vModel = v.union([vMdoc, vW3cSdJwtVc])
   export type Input = v.InferInput<typeof vModel>
   export type Out = v.InferOutput<typeof vModel>
+
+  export type ClaimValue = v.InferOutput<typeof vValue>
 }
 export type DcqlClaimsQuery = DcqlClaimsQuery.Out

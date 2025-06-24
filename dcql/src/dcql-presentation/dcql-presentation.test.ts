@@ -96,7 +96,6 @@ describe('DCQL presentation with claim sets', () => {
             input_presentation_index: 0,
             presentation_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
             success: true,
-            typed: true,
             output: {
               claims: {
                 tax_id_code: {
@@ -160,7 +159,6 @@ describe('DCQL presentation with claim sets', () => {
             input_presentation_index: 0,
             presentation_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
             success: true,
-            typed: true,
             output: {
               claims: {
                 given_name: { foo: {} },
@@ -236,7 +234,6 @@ describe('DCQL presentation with claim sets', () => {
             input_presentation_index: 0,
             presentation_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
             success: true,
-            typed: true,
             output: {
               claims: {
                 given_name: { foo: {} },
@@ -327,7 +324,6 @@ describe('DCQL presentation with claim sets', () => {
             input_presentation_index: 0,
             presentation_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
             success: true,
-            typed: true,
             output: {
               claims: {
                 given_name: { foo: {} },
@@ -428,7 +424,6 @@ describe('DCQL presentation with claim sets', () => {
             input_presentation_index: 0,
             presentation_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
             success: true,
-            typed: true,
             output: {
               claims: {
                 given_name: { foo: {} },
@@ -447,7 +442,6 @@ describe('DCQL presentation with claim sets', () => {
             input_presentation_index: 0,
             presentation_id: 'a46e92c0-847f-41f2-9218-2914e1d2388a',
             success: false,
-            typed: false,
             flattened: {
               nested: {
                 vct: ['Invalid type: Expected "SomeRandomVct" but received "PersonIdentificationData"'],

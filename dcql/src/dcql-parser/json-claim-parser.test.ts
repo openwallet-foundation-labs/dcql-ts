@@ -1,6 +1,6 @@
 import * as v from 'valibot'
 import { describe, expect, it } from 'vitest'
-import { getJsonClaimsParser } from './dcql-claims-query-result.js'
+import { getJsonClaimParser } from './dcql-claims-query-result.js'
 
 const claimsPathPointerExample = {
   name: 'Arthur Dent',
@@ -22,20 +22,28 @@ const claimsPathPointerExample = {
   nationalities: ['British', 'Betelgeusian'],
 }
 
-describe('claims-path', () => {
+describe('Json Claim Parser', () => {
   it('name', (_t) => {
-    const parser = getJsonClaimsParser([{ path: ['name'] }], {
-      presentation: false,
-    })
+    const parser = getJsonClaimParser(
+      { path: ['name'] },
+      {
+        index: 0,
+        presentation: false,
+      }
+    )
     const res = v.parse(parser, claimsPathPointerExample)
 
     expect(res).toEqual({ name: 'Arthur Dent' })
   })
 
   it('address', (_t) => {
-    const parser = getJsonClaimsParser([{ path: ['address'] }], {
-      presentation: false,
-    })
+    const parser = getJsonClaimParser(
+      { path: ['address'] },
+      {
+        presentation: false,
+        index: 0,
+      }
+    )
     const res = v.parse(parser, claimsPathPointerExample)
 
     expect(res).toEqual({
@@ -48,7 +56,7 @@ describe('claims-path', () => {
   })
 
   it('address street address', (_t) => {
-    const parser = getJsonClaimsParser([{ path: ['address', 'street_address'] }], { presentation: false })
+    const parser = getJsonClaimParser({ path: ['address', 'street_address'] }, { presentation: false, index: 0 })
     const res = v.parse(parser, claimsPathPointerExample)
 
     expect(res).toEqual({
@@ -59,9 +67,13 @@ describe('claims-path', () => {
   })
 
   it('nationalities', (_t) => {
-    const parser = getJsonClaimsParser([{ path: ['nationalities', 1] }], {
-      presentation: false,
-    })
+    const parser = getJsonClaimParser(
+      { path: ['nationalities', 1] },
+      {
+        presentation: false,
+        index: 0,
+      }
+    )
     const res = v.parse(parser, claimsPathPointerExample)
 
     expect(res).toEqual({
@@ -70,9 +82,13 @@ describe('claims-path', () => {
   })
 
   it('all degree types', (_t) => {
-    const parser = getJsonClaimsParser([{ path: ['degrees', null, 'type'] }], {
-      presentation: false,
-    })
+    const parser = getJsonClaimParser(
+      { path: ['degrees', null, 'type'] },
+      {
+        presentation: false,
+        index: 0,
+      }
+    )
     const res = v.parse(parser, claimsPathPointerExample)
 
     expect(res).toEqual({

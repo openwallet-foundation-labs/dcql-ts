@@ -226,7 +226,6 @@ describe('complex-mdoc-query', () => {
       canBeSatisfied: true,
       credential_matches: {
         'mdl-id': {
-          typed: true,
           success: true,
           output: {
             credential_format: 'mso_mdoc',
@@ -244,7 +243,6 @@ describe('complex-mdoc-query', () => {
           all: [
             [
               {
-                typed: true,
                 success: true,
                 output: {
                   credential_format: 'mso_mdoc',
@@ -262,7 +260,6 @@ describe('complex-mdoc-query', () => {
                 claim_set_index: undefined,
               },
               {
-                typed: false,
                 success: false,
                 output: {
                   credential_format: 'mso_mdoc',
@@ -488,7 +485,6 @@ describe('complex-mdoc-query', () => {
                 claim_set_index: undefined,
               },
               {
-                typed: false,
                 success: false,
                 output: {
                   credential_format: 'mso_mdoc',
@@ -590,7 +586,6 @@ describe('complex-mdoc-query', () => {
                 claim_set_index: undefined,
               },
               {
-                typed: false,
                 success: false,
                 output: {
                   credential_format: 'mso_mdoc',
@@ -692,7 +687,6 @@ describe('complex-mdoc-query', () => {
                 claim_set_index: undefined,
               },
               {
-                typed: false,
                 success: false,
                 output: {
                   credential_format: 'mso_mdoc',
@@ -786,7 +780,6 @@ describe('complex-mdoc-query', () => {
                 claim_set_index: undefined,
               },
               {
-                typed: false,
                 success: false,
                 output: {
                   credential_format: 'vc+sd-jwt',
@@ -942,7 +935,6 @@ describe('complex-mdoc-query', () => {
           ],
         },
         'mdl-address': {
-          typed: true,
           success: true,
           output: {
             credential_format: 'mso_mdoc',
@@ -959,7 +951,6 @@ describe('complex-mdoc-query', () => {
           all: [
             [
               {
-                typed: false,
                 success: false,
                 output: {
                   credential_format: 'mso_mdoc',
@@ -1116,7 +1107,6 @@ describe('complex-mdoc-query', () => {
                 claim_set_index: undefined,
               },
               {
-                typed: true,
                 success: true,
                 output: {
                   credential_format: 'mso_mdoc',
@@ -1133,7 +1123,6 @@ describe('complex-mdoc-query', () => {
                 claim_set_index: undefined,
               },
               {
-                typed: false,
                 success: false,
                 output: {
                   credential_format: 'mso_mdoc',
@@ -1235,7 +1224,6 @@ describe('complex-mdoc-query', () => {
                 claim_set_index: undefined,
               },
               {
-                typed: false,
                 success: false,
                 output: {
                   credential_format: 'mso_mdoc',
@@ -1337,7 +1325,6 @@ describe('complex-mdoc-query', () => {
                 claim_set_index: undefined,
               },
               {
-                typed: false,
                 success: false,
                 output: {
                   credential_format: 'mso_mdoc',
@@ -1431,7 +1418,6 @@ describe('complex-mdoc-query', () => {
                 claim_set_index: undefined,
               },
               {
-                typed: false,
                 success: false,
                 output: {
                   credential_format: 'vc+sd-jwt',
@@ -1587,7 +1573,6 @@ describe('complex-mdoc-query', () => {
           ],
         },
         'photo_card-id': {
-          typed: true,
           success: true,
           output: {
             credential_format: 'mso_mdoc',
@@ -1605,7 +1590,6 @@ describe('complex-mdoc-query', () => {
           all: [
             [
               {
-                typed: false,
                 success: false,
                 output: {
                   credential_format: 'mso_mdoc',
@@ -1707,7 +1691,6 @@ describe('complex-mdoc-query', () => {
                 claim_set_index: undefined,
               },
               {
-                typed: false,
                 success: false,
                 output: {
                   credential_format: 'mso_mdoc',
@@ -1809,7 +1792,6 @@ describe('complex-mdoc-query', () => {
                 claim_set_index: undefined,
               },
               {
-                typed: true,
                 success: true,
                 output: {
                   credential_format: 'mso_mdoc',
@@ -1827,7 +1809,6 @@ describe('complex-mdoc-query', () => {
                 claim_set_index: undefined,
               },
               {
-                typed: false,
                 success: false,
                 output: {
                   credential_format: 'mso_mdoc',
@@ -2053,7 +2034,6 @@ describe('complex-mdoc-query', () => {
                 claim_set_index: undefined,
               },
               {
-                typed: false,
                 success: false,
                 output: {
                   credential_format: 'mso_mdoc',
@@ -2147,7 +2127,6 @@ describe('complex-mdoc-query', () => {
                 claim_set_index: undefined,
               },
               {
-                typed: false,
                 success: false,
                 output: {
                   credential_format: 'vc+sd-jwt',
@@ -2303,7 +2282,6 @@ describe('complex-mdoc-query', () => {
           ],
         },
         'photo_card-address': {
-          typed: true,
           success: true,
           output: {
             credential_format: 'mso_mdoc',
@@ -2320,7 +2298,6 @@ describe('complex-mdoc-query', () => {
           all: [
             [
               {
-                typed: false,
                 success: false,
                 output: {
                   credential_format: 'mso_mdoc',
@@ -2422,7 +2399,6 @@ describe('complex-mdoc-query', () => {
                 claim_set_index: undefined,
               },
               {
-                typed: false,
                 success: false,
                 output: {
                   credential_format: 'mso_mdoc',
@@ -2524,7 +2500,6 @@ describe('complex-mdoc-query', () => {
                 claim_set_index: undefined,
               },
               {
-                typed: false,
                 success: false,
                 output: {
                   credential_format: 'mso_mdoc',
@@ -2681,7 +2656,6 @@ describe('complex-mdoc-query', () => {
                 claim_set_index: undefined,
               },
               {
-                typed: true,
                 success: true,
                 output: {
                   credential_format: 'mso_mdoc',
@@ -2698,7 +2672,6 @@ describe('complex-mdoc-query', () => {
                 claim_set_index: undefined,
               },
               {
-                typed: false,
                 success: false,
                 output: {
                   credential_format: 'mso_mdoc',
@@ -2792,7 +2765,6 @@ describe('complex-mdoc-query', () => {
                 claim_set_index: undefined,
               },
               {
-                typed: false,
                 success: false,
                 output: {
                   credential_format: 'vc+sd-jwt',
@@ -3067,7 +3039,6 @@ describe('complex-mdoc-query', () => {
       valid_matches: {
         'mdl-id': [
           {
-            typed: true,
             success: true,
             output: {
               credential_format: 'mso_mdoc',
@@ -3087,7 +3058,6 @@ describe('complex-mdoc-query', () => {
         ],
         'mdl-address': [
           {
-            typed: true,
             success: true,
             output: {
               credential_format: 'mso_mdoc',
@@ -3106,7 +3076,6 @@ describe('complex-mdoc-query', () => {
         ],
         'photo_card-address': [
           {
-            typed: true,
             success: true,
             output: {
               credential_format: 'mso_mdoc',
@@ -3125,7 +3094,6 @@ describe('complex-mdoc-query', () => {
         ],
         'photo_card-id': [
           {
-            typed: true,
             success: true,
             output: {
               credential_format: 'mso_mdoc',

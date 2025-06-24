@@ -182,7 +182,6 @@ describe('dcql-query', () => {
         all: [
           [
             {
-              typed: false,
               success: false,
               output: {
                 credential_format: 'mso_mdoc',
@@ -337,7 +336,6 @@ describe('dcql-query', () => {
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
-        typed: true,
         input_credential_index: 1,
         claim_set_index: undefined,
         output: {
@@ -361,7 +359,6 @@ describe('dcql-query', () => {
       my_credential: [
         {
           success: true,
-          typed: true,
           presentation_id: 'my_credential',
           claim_set_index: undefined,
           input_presentation_index: 0,
@@ -390,7 +387,6 @@ describe('dcql-query', () => {
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
-        typed: true,
         input_credential_index: 0,
         claim_set_index: undefined,
         output: {
@@ -415,7 +411,6 @@ describe('dcql-query', () => {
       my_credential: [
         {
           success: true,
-          typed: true,
           presentation_id: 'my_credential',
           input_presentation_index: 0,
           claim_set_index: undefined,
@@ -443,7 +438,6 @@ describe('dcql-query', () => {
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
-        typed: true,
         input_credential_index: 0,
         claim_set_index: undefined,
         output: {
@@ -474,7 +468,6 @@ describe('dcql-query', () => {
     assert.deepStrictEqual(presentationQueryResult.valid_matches, {
       my_credential: {
         success: true,
-        typed: true,
         presentation_id: 'my_credential',
         claim_set_index: undefined,
         output: {
@@ -543,7 +536,6 @@ describe('dcql-query', () => {
                 ],
               },
               success: false,
-              typed: false,
             },
           ],
         ],
@@ -564,7 +556,6 @@ describe('dcql-query', () => {
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
-        typed: true,
         input_credential_index: 0,
         claim_set_index: undefined,
         output: {
@@ -589,7 +580,6 @@ describe('dcql-query', () => {
       my_credential: [
         {
           success: true,
-          typed: true,
           presentation_id: 'my_credential',
           claim_set_index: undefined,
           input_presentation_index: 0,
@@ -616,7 +606,6 @@ describe('dcql-query', () => {
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
-        typed: true,
         input_credential_index: 1,
         claim_set_index: undefined,
         output: {
@@ -643,7 +632,6 @@ describe('dcql-query', () => {
       my_credential: [
         {
           success: true,
-          typed: true,
           presentation_id: 'my_credential',
           input_presentation_index: 0,
           claim_set_index: undefined,
@@ -674,7 +662,6 @@ describe('dcql-query', () => {
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
-        typed: true,
         input_credential_index: 0,
         claim_set_index: undefined,
         output: {
@@ -704,7 +691,6 @@ describe('dcql-query', () => {
       my_credential: [
         {
           success: true,
-          typed: true,
           presentation_id: 'my_credential',
           claim_set_index: undefined,
           input_presentation_index: 0,
@@ -722,7 +708,6 @@ describe('dcql-query', () => {
         },
         {
           success: true,
-          typed: true,
           presentation_id: 'my_credential',
           claim_set_index: undefined,
           input_presentation_index: 1,
@@ -753,7 +738,6 @@ describe('dcql-query', () => {
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
-        typed: true,
         input_credential_index: 0,
         claim_set_index: undefined,
         output: {
@@ -783,7 +767,6 @@ describe('dcql-query', () => {
       my_credential: [
         {
           success: false,
-          typed: false,
           presentation_id: 'my_credential',
           claim_set_index: undefined,
           input_presentation_index: 1,
@@ -812,7 +795,6 @@ describe('dcql-query', () => {
       my_credential: [
         {
           success: true,
-          typed: true,
           presentation_id: 'my_credential',
           claim_set_index: undefined,
           input_presentation_index: 0,

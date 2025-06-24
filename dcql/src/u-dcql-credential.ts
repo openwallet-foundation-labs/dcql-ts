@@ -1,6 +1,6 @@
 import * as v from 'valibot'
 import { DcqlCredentialTrustedAuthority } from './dcql-query/m-dcql-trusted-authorities.js'
-import { vJsonRecord, vNonEmptyArray } from './u-dcql.js'
+import { vJsonRecord } from './u-dcql.js'
 import type { InferModelTypes } from './u-model.js'
 import { Model } from './u-model.js'
 
@@ -59,23 +59,6 @@ export namespace DcqlCredential {
     DcqlW3cVcCredential.vModel,
   ])
 
-  export const vParseSuccess = v.object({
-    success: v.literal(true),
-    typed: v.literal(true),
-    issues: v.optional(v.undefined()),
-    input_credential_index: v.number(),
-    claim_set_index: v.union([v.number(), v.undefined()]),
-    output: DcqlCredential.vModel,
-  })
-
-  export const vParseFailure = v.object({
-    success: v.literal(false),
-    typed: v.boolean(),
-    output: v.unknown(),
-    issues: vNonEmptyArray(v.unknown()),
-    input_credential_index: v.number(),
-    claim_set_index: v.union([v.number(), v.undefined()]),
-  })
   export const model = new Model({ vModel })
   export type Model = InferModelTypes<typeof model>
 }

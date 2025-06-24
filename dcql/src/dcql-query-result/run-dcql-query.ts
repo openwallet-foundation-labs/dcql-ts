@@ -1,4 +1,3 @@
-import type * as v from 'valibot'
 import { runCredentialQuery } from '../dcql-parser/dcql-credential-query-result.js'
 import type { DcqlQuery } from '../dcql-query/m-dcql-query.js'
 import type { DcqlCredential } from '../u-dcql-credential.js'
@@ -15,49 +14,9 @@ export const runDcqlQuery = (
     dcqlQuery.credentials.map((credentialQuery) => [credentialQuery.id, runCredentialQuery(credentialQuery, ctx)])
   )
 
-  // For each credential entry in the DCQL query we match against all credentials
-  //  - returns an object with:
-  //    - credential_id (query)
-  //    - can_be_satisfied
-  //    - credentials: [{
-  //         input_credential_index: 0
-  //         claim_sets: [{
-  //
-  //         }]
-  //       }]
-  //  -
-
-  const credentialMatches = Object.fromEntries(
-    Object.entries(credentialQueriesResults).map(([key, credentialQueryResult]) => {
-      // Find the best match for each credential query
-      let bestMatch: v.InferOutput<typeof DcqlCredential.vParseSuccess> | undefined = undefined
-
-      for (const credentialParseResult of credentialQueryResult) {
-        const bestMatchForCredential = credentialParseResult.find((result) => result?.success === true)
-
-        if (!bestMatch && bestMatchForCredential) {
-          const { issues, ...matchWithoutIssues } = bestMatchForCredential
-          bestMatch = matchWithoutIssues
-          continue
-        }
-
-        // biome-ignore lint/style/noNonNullAssertion: <explanation>
-        if (bestMatchForCredential && bestMatchForCredential.claim_set_index! < bestMatch?.claim_set_index!) {
-          const { issues, ...matchWithoutIssues } = bestMatchForCredential
-          bestMatch = matchWithoutIssues
-        }
-      }
-
-      return [
-        key,
-        bestMatch ? { ...bestMatch, all: credentialQueryResult } : { success: false, all: credentialQueryResult },
-      ]
-    })
-  ) satisfies DcqlQueryResult.CredentialMatchRecord
-
   const credentialSetResults = dcqlQuery.credential_sets?.map((set) => {
     const matchingOptions = set.options.filter((option) =>
-      option.every((credentialQueryId) => credentialMatches[credentialQueryId]?.success)
+      option.every((credentialQueryId) => credentialQueriesResults[credentialQueryId].success)
     )
 
     return {
@@ -68,12 +27,13 @@ export const runDcqlQuery = (
 
   const dqclQueryMatched = credentialSetResults
     ? credentialSetResults.every((set) => !set.required || set.matching_options)
-    : Object.values(credentialMatches).every((query) => query.success)
+    : // If not credential_sets are used, we require that at least every credential has a match
+      dcqlQuery.credentials.every(({ id }) => credentialQueriesResults[id].success === true)
 
   return {
     ...dcqlQuery,
     canBeSatisfied: dqclQueryMatched,
-    credential_matches: credentialMatches as DcqlQueryResult['credential_matches'],
+    credential_matches: credentialQueriesResults,
     credential_sets: credentialSetResults,
   }
 }
