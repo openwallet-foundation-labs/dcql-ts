@@ -8,8 +8,7 @@ import { vIdString, vNonEmptyArray } from '../u-dcql.js'
 export namespace CredentialSetQuery {
   export const vModel = v.object({
     options: v.pipe(
-      v.array(v.array(vIdString)),
-      vNonEmptyArray(),
+      vNonEmptyArray(v.array(vIdString)),
       v.description(
         'REQUIRED. A non-empty array, where each value in the array is a list of Credential Query identifiers representing one set of Credentials that satisfies the use case.'
       )

@@ -1,6 +1,15 @@
 import * as v from 'valibot'
 import { vBase64url, vNonEmptyArray } from '../u-dcql.js'
 
+export const getTrustedAuthorityParser = (trustedAuthority: DcqlTrustedAuthoritiesQuery) =>
+  v.object(
+    {
+      type: v.literal(trustedAuthority.type),
+      value: v.union(trustedAuthority.values.map((value) => v.literal(value))),
+    },
+    `The credential query requires the credential to be issued by a trusted authority of type ${trustedAuthority.type}, but the type or values do not match.`
+  )
+
 const vAuthorityKeyIdentifier = v.object({
   type: v.literal('aki'),
   value: v.pipe(
@@ -58,8 +67,7 @@ export namespace DcqlTrustedAuthoritiesQuery {
         )
       ),
       values: v.pipe(
-        v.array(authority.entries.value),
-        vNonEmptyArray(),
+        vNonEmptyArray(authority.entries.value),
         v.description(
           'REQUIRED. An array of strings, where each string (value) contains information specific to the used Trusted Authorities Query type that allows to identify an issuer, trust framework, or a federation that an issuer belongs to.'
         )

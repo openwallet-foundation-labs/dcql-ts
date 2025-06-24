@@ -20,7 +20,7 @@ const mdocMvrcQuery = {
       ],
     },
   ],
-} satisfies DcqlQuery
+} satisfies DcqlQuery.Input
 
 /**
  * The following is a non-normative example of a DCQL query that requests
@@ -39,7 +39,7 @@ const mdocNamespaceMvrcQuery = {
       ],
     },
   ],
-} satisfies DcqlQuery
+} satisfies DcqlQuery.Input
 
 const mdocMvrc = {
   credential_format: 'mso_mdoc',
@@ -74,9 +74,23 @@ const sdJwtVcExampleQuery = {
       claims: [{ path: ['last_name'] }, { path: ['first_name'] }, { path: ['address', 'street_address'] }],
     },
   ],
-} satisfies DcqlQuery
+} satisfies DcqlQuery.Input
 
-const sdJwtVc = {
+const sdJwtVcMultipleExampleQuery = {
+  credentials: [
+    {
+      id: 'my_credential',
+      format: 'vc+sd-jwt',
+      multiple: true,
+      meta: {
+        vct_values: ['https://credentials.example.com/identity_credential'],
+      },
+      claims: [{ path: ['last_name'] }, { path: ['first_name'] }, { path: ['address', 'street_address'] }],
+    },
+  ],
+} satisfies DcqlQuery.Input
+
+const exampleSdJwtVc = {
   credential_format: 'vc+sd-jwt',
   vct: 'https://credentials.example.com/identity_credential',
   claims: {
@@ -168,7 +182,6 @@ describe('dcql-query', () => {
         all: [
           [
             {
-              typed: false,
               success: false,
               output: {
                 credential_format: 'mso_mdoc',
@@ -323,7 +336,6 @@ describe('dcql-query', () => {
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
-        typed: true,
         input_credential_index: 1,
         claim_set_index: undefined,
         output: {
@@ -339,25 +351,27 @@ describe('dcql-query', () => {
     })
 
     const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
-      { my_credential: res.credential_matches.my_credential.output },
+      { my_credential: [res.credential_matches.my_credential.output] },
       { dcqlQuery: query }
     )
 
     assert.deepStrictEqual(presentationQueryResult.valid_matches, {
-      my_credential: {
-        success: true,
-        typed: true,
-        presentation_id: 'my_credential',
-        claim_set_index: undefined,
-        output: {
-          credential_format: 'mso_mdoc' as const,
-          doctype: 'org.iso.7367.1.mVRC',
-          namespaces: {
-            'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
-            'org.iso.18013.5.1': { first_name: 'Martin Auer' },
+      my_credential: [
+        {
+          success: true,
+          presentation_id: 'my_credential',
+          claim_set_index: undefined,
+          input_presentation_index: 0,
+          output: {
+            credential_format: 'mso_mdoc' as const,
+            doctype: 'org.iso.7367.1.mVRC',
+            namespaces: {
+              'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
+              'org.iso.18013.5.1': { first_name: 'Martin Auer' },
+            },
           },
         },
-      },
+      ],
     })
   })
 
@@ -373,7 +387,6 @@ describe('dcql-query', () => {
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
-        typed: true,
         input_credential_index: 0,
         claim_set_index: undefined,
         output: {
@@ -390,25 +403,27 @@ describe('dcql-query', () => {
     })
 
     const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
-      { my_credential: res.credential_matches.my_credential.output },
+      { my_credential: [res.credential_matches.my_credential.output] },
       { dcqlQuery: query }
     )
 
     assert.deepStrictEqual(presentationQueryResult.valid_matches, {
-      my_credential: {
-        success: true,
-        typed: true,
-        presentation_id: 'my_credential',
-        claim_set_index: undefined,
-        output: {
-          credential_format: 'mso_mdoc' as const,
-          doctype: 'org.iso.7367.1.mVRC',
-          namespaces: {
-            'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
-            'org.iso.18013.5.1': { first_name: 'Martin Auer' },
+      my_credential: [
+        {
+          success: true,
+          presentation_id: 'my_credential',
+          input_presentation_index: 0,
+          claim_set_index: undefined,
+          output: {
+            credential_format: 'mso_mdoc' as const,
+            doctype: 'org.iso.7367.1.mVRC',
+            namespaces: {
+              'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
+              'org.iso.18013.5.1': { first_name: 'Martin Auer' },
+            },
           },
         },
-      },
+      ],
     })
   })
 
@@ -423,7 +438,6 @@ describe('dcql-query', () => {
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
-        typed: true,
         input_credential_index: 0,
         claim_set_index: undefined,
         output: {
@@ -454,7 +468,6 @@ describe('dcql-query', () => {
     assert.deepStrictEqual(presentationQueryResult.valid_matches, {
       my_credential: {
         success: true,
-        typed: true,
         presentation_id: 'my_credential',
         claim_set_index: undefined,
         output: {
@@ -523,7 +536,6 @@ describe('dcql-query', () => {
                 ],
               },
               success: false,
-              typed: false,
             },
           ],
         ],
@@ -544,7 +556,6 @@ describe('dcql-query', () => {
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
-        typed: true,
         input_credential_index: 0,
         claim_set_index: undefined,
         output: {
@@ -561,25 +572,27 @@ describe('dcql-query', () => {
     })
 
     const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
-      { my_credential: res.credential_matches.my_credential.output },
+      { my_credential: [res.credential_matches.my_credential.output] },
       { dcqlQuery: query }
     )
 
     assert.deepStrictEqual(presentationQueryResult.valid_matches, {
-      my_credential: {
-        success: true,
-        typed: true,
-        presentation_id: 'my_credential',
-        claim_set_index: undefined,
-        output: {
-          credential_format: 'mso_mdoc' as const,
-          doctype: 'org.iso.7367.1.mVRC',
-          namespaces: {
-            'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
-            'org.iso.18013.5.1': { first_name: 'Martin Auer' },
+      my_credential: [
+        {
+          success: true,
+          presentation_id: 'my_credential',
+          claim_set_index: undefined,
+          input_presentation_index: 0,
+          output: {
+            credential_format: 'mso_mdoc' as const,
+            doctype: 'org.iso.7367.1.mVRC',
+            namespaces: {
+              'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
+              'org.iso.18013.5.1': { first_name: 'Martin Auer' },
+            },
           },
         },
-      },
+      ],
     })
   })
 
@@ -587,13 +600,12 @@ describe('dcql-query', () => {
     const query = DcqlQuery.parse(sdJwtVcExampleQuery)
     DcqlQuery.validate(query)
 
-    const res = DcqlQuery.query(query, [exampleMdoc, sdJwtVc])
+    const res = DcqlQuery.query(query, [exampleMdoc, exampleSdJwtVc])
 
     assert(res.canBeSatisfied)
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
-        typed: true,
         input_credential_index: 1,
         claim_set_index: undefined,
         output: {
@@ -612,15 +624,45 @@ describe('dcql-query', () => {
     })
 
     const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
-      { my_credential: res.credential_matches.my_credential.output },
+      { my_credential: [res.credential_matches.my_credential.output] },
       { dcqlQuery: query }
     )
 
     assert.deepStrictEqual(presentationQueryResult.valid_matches, {
+      my_credential: [
+        {
+          success: true,
+          presentation_id: 'my_credential',
+          input_presentation_index: 0,
+          claim_set_index: undefined,
+          output: {
+            credential_format: 'vc+sd-jwt' as const,
+            vct: 'https://credentials.example.com/identity_credential',
+            claims: {
+              first_name: 'Arthur',
+              last_name: 'Dent',
+              address: {
+                street_address: '42 Market Street',
+              },
+            },
+          },
+        },
+      ],
+    })
+  })
+
+  it("sdJwtVc with 'multiple' set to true succeeds", (_t) => {
+    const query = DcqlQuery.parse(sdJwtVcMultipleExampleQuery)
+    DcqlQuery.validate(query)
+
+    // We add the same credential twice
+    const res = DcqlQuery.query(query, [exampleSdJwtVc, exampleSdJwtVc])
+
+    assert(res.canBeSatisfied)
+    assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
-        typed: true,
-        presentation_id: 'my_credential',
+        input_credential_index: 0,
         claim_set_index: undefined,
         output: {
           credential_format: 'vc+sd-jwt' as const,
@@ -633,7 +675,142 @@ describe('dcql-query', () => {
             },
           },
         },
+        all: res.credential_matches.my_credential?.all,
       },
+    })
+
+    const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
+      {
+        my_credential: [res.credential_matches.my_credential.output, res.credential_matches.my_credential.output],
+      },
+      { dcqlQuery: query }
+    )
+
+    expect(presentationQueryResult.canBeSatisfied).toBe(true)
+    assert.deepStrictEqual(presentationQueryResult.valid_matches, {
+      my_credential: [
+        {
+          success: true,
+          presentation_id: 'my_credential',
+          claim_set_index: undefined,
+          input_presentation_index: 0,
+          output: {
+            credential_format: 'vc+sd-jwt' as const,
+            vct: 'https://credentials.example.com/identity_credential',
+            claims: {
+              first_name: 'Arthur',
+              last_name: 'Dent',
+              address: {
+                street_address: '42 Market Street',
+              },
+            },
+          },
+        },
+        {
+          success: true,
+          presentation_id: 'my_credential',
+          claim_set_index: undefined,
+          input_presentation_index: 1,
+          output: {
+            credential_format: 'vc+sd-jwt' as const,
+            vct: 'https://credentials.example.com/identity_credential',
+            claims: {
+              first_name: 'Arthur',
+              last_name: 'Dent',
+              address: {
+                street_address: '42 Market Street',
+              },
+            },
+          },
+        },
+      ],
+    })
+  })
+
+  it("sdJwtVc with 'multiple' set to true but only one credential in the presentation matches", (_t) => {
+    const query = DcqlQuery.parse(sdJwtVcMultipleExampleQuery)
+    DcqlQuery.validate(query)
+
+    // We add the same credential twice
+    const res = DcqlQuery.query(query, [exampleSdJwtVc, exampleSdJwtVc])
+
+    assert(res.canBeSatisfied)
+    assert.deepStrictEqual(res.credential_matches, {
+      my_credential: {
+        success: true,
+        input_credential_index: 0,
+        claim_set_index: undefined,
+        output: {
+          credential_format: 'vc+sd-jwt' as const,
+          vct: 'https://credentials.example.com/identity_credential',
+          claims: {
+            first_name: 'Arthur',
+            last_name: 'Dent',
+            address: {
+              street_address: '42 Market Street',
+            },
+          },
+        },
+        all: res.credential_matches.my_credential?.all,
+      },
+    })
+
+    const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
+      {
+        my_credential: [res.credential_matches.my_credential.output, exampleMdoc],
+      },
+      { dcqlQuery: query }
+    )
+
+    expect(presentationQueryResult.canBeSatisfied).toBe(false)
+    expect(presentationQueryResult.invalid_matches).toStrictEqual({
+      my_credential: [
+        {
+          success: false,
+          presentation_id: 'my_credential',
+          claim_set_index: undefined,
+          input_presentation_index: 1,
+          issues: expect.any(Array),
+          flattened: {
+            nested: {
+              claims: [
+                'Invalid type: Expected Object but received undefined',
+                'Invalid type: Expected Object but received undefined',
+                'Invalid type: Expected Object but received undefined',
+              ],
+              credential_format: ['Invalid type: Expected "vc+sd-jwt" but received "mso_mdoc"'],
+              vct: [
+                'Invalid type: Expected "https://credentials.example.com/identity_credential" but received undefined',
+              ],
+            },
+          },
+          output: {
+            credential_format: 'mso_mdoc',
+          },
+        },
+      ],
+    })
+
+    assert.deepStrictEqual(presentationQueryResult.valid_matches, {
+      my_credential: [
+        {
+          success: true,
+          presentation_id: 'my_credential',
+          claim_set_index: undefined,
+          input_presentation_index: 0,
+          output: {
+            credential_format: 'vc+sd-jwt' as const,
+            vct: 'https://credentials.example.com/identity_credential',
+            claims: {
+              first_name: 'Arthur',
+              last_name: 'Dent',
+              address: {
+                street_address: '42 Market Street',
+              },
+            },
+          },
+        },
+      ],
     })
   })
 })
