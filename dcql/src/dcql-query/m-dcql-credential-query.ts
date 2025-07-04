@@ -16,14 +16,20 @@ export namespace DcqlCredentialQuery {
         `REQUIRED. A string identifying the Credential in the response and, if provided, the constraints in 'credential_sets'.`
       )
     ),
+    multiple: v.pipe(
+      v.optional(v.boolean(), false),
+      v.description(
+        'OPTIONAL. A boolean which indicates whether multiple Credentials can be returned for this Credential Query. If omitted, the default value is false.'
+      )
+    ),
     claim_sets: v.pipe(
-      v.optional(v.pipe(v.array(v.pipe(v.array(vIdString), vNonEmptyArray())), vNonEmptyArray())),
+      v.optional(vNonEmptyArray(vNonEmptyArray(vIdString))),
       v.description(
         `OPTIONAL. A non-empty array containing arrays of identifiers for elements in 'claims' that specifies which combinations of 'claims' for the Credential are requested.`
       )
     ),
     trusted_authorities: v.pipe(
-      v.optional(v.pipe(v.array(DcqlTrustedAuthoritiesQuery.vModel), vNonEmptyArray())),
+      v.optional(vNonEmptyArray(DcqlTrustedAuthoritiesQuery.vModel)),
       v.description(
         'OPTIONAL. A non-empty array of objects as defined in Section 6.1.1 that specifies expected authorities or trust frameworks that certify Issuers, that the Verifier will accept. Every Credential returned by the Wallet SHOULD match at least one of the conditions present in the corresponding trusted_authorities array if present.'
       )
@@ -37,7 +43,7 @@ export namespace DcqlCredentialQuery {
       v.description('REQUIRED. A string that specifies the format of the requested Verifiable Credential.')
     ),
     claims: v.pipe(
-      v.optional(v.pipe(v.array(DcqlClaimsQuery.vMdoc), vNonEmptyArray())),
+      v.optional(vNonEmptyArray(DcqlClaimsQuery.vMdoc)),
       v.description('OPTIONAL. A non-empty array of objects as that specifies claims in the requested Credential.')
     ),
     meta: v.pipe(
@@ -65,7 +71,7 @@ export namespace DcqlCredentialQuery {
       v.description('REQUIRED. A string that specifies the format of the requested Verifiable Credential.')
     ),
     claims: v.pipe(
-      v.optional(v.pipe(v.array(DcqlClaimsQuery.vW3cSdJwtVc), vNonEmptyArray())),
+      v.optional(vNonEmptyArray(DcqlClaimsQuery.vW3cSdJwtVc)),
       v.description('OPTIONAL. A non-empty array of objects as that specifies claims in the requested Credential.')
     ),
     meta: v.pipe(
@@ -89,13 +95,12 @@ export namespace DcqlCredentialQuery {
   export const vW3cVc = v.object({
     ...vBase.entries,
     format: v.picklist(['jwt_vc_json', 'ldp_vc']),
-    claims: v.optional(v.pipe(v.array(DcqlClaimsQuery.vW3cSdJwtVc), vNonEmptyArray())),
+    claims: v.optional(vNonEmptyArray(DcqlClaimsQuery.vW3cSdJwtVc)),
     meta: v.pipe(
       v.pipe(
         v.object({
           type_values: v.pipe(
-            v.array(v.pipe(v.array(v.string()), vNonEmptyArray())),
-            vNonEmptyArray(),
+            vNonEmptyArray(vNonEmptyArray(v.string())),
             v.description(
               'REQUIRED. An array of string arrays that specifies the fully expanded types (IRIs) after the @context was applied that the Verifier accepts to be presented in the Presentation. Each of the top-level arrays specifies one alternative to match the type values of the Verifiable Credential against. Each inner array specifies a set of fully expanded types that MUST be present in the type property of the Verifiable Credential, regardless of order or the presence of additional types.'
             )

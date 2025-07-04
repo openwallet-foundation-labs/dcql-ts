@@ -17,8 +17,7 @@ export namespace DcqlClaimsQuery {
       )
     ),
     path: v.pipe(
-      v.array(vPath),
-      vNonEmptyArray(),
+      vNonEmptyArray(vPath),
       v.description(
         'A non-empty array representing a claims path pointer that specifies the path to a claim within the Verifiable Credential.'
       )
@@ -105,5 +104,7 @@ export namespace DcqlClaimsQuery {
   export const vModel = v.union([vMdoc, vW3cSdJwtVc])
   export type Input = v.InferInput<typeof vModel>
   export type Out = v.InferOutput<typeof vModel>
+
+  export type ClaimValue = v.InferOutput<typeof vValue>
 }
 export type DcqlClaimsQuery = DcqlClaimsQuery.Out

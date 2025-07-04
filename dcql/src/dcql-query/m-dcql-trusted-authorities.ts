@@ -1,6 +1,29 @@
 import * as v from 'valibot'
 import { vBase64url, vNonEmptyArray } from '../u-dcql.js'
 
+export const getTrustedAuthorityParser = (trustedAuthority: DcqlTrustedAuthoritiesQuery) =>
+  v.object(
+    {
+      type: v.literal(
+        trustedAuthority.type,
+        (i) =>
+          `Expected trusted authority type to be '${trustedAuthority.type}' but received ${typeof i.input === 'string' ? `'${i.input}'` : i.input}`
+      ),
+      value: v.union(
+        trustedAuthority.values.map((value) =>
+          v.literal(
+            value,
+            (i) =>
+              `Expected trusted authority value to be '${value}' but received ${typeof i.input === 'string' ? `'${i.input}'` : i.input}`
+          )
+        ),
+        (i) =>
+          `Expected trusted authority value to be '${trustedAuthority.values.join("' | '")}' but received ${typeof i.input === 'string' ? `'${i.input}'` : i.input}`
+      ),
+    },
+    `Expected trusted authority object with type '${trustedAuthority.type}' to be defined, but received undefined`
+  )
+
 const vAuthorityKeyIdentifier = v.object({
   type: v.literal('aki'),
   value: v.pipe(
@@ -58,8 +81,7 @@ export namespace DcqlTrustedAuthoritiesQuery {
         )
       ),
       values: v.pipe(
-        v.array(authority.entries.value),
-        vNonEmptyArray(),
+        vNonEmptyArray(authority.entries.value),
         v.description(
           'REQUIRED. An array of strings, where each string (value) contains information specific to the used Trusted Authorities Query type that allows to identify an issuer, trust framework, or a federation that an issuer belongs to.'
         )
