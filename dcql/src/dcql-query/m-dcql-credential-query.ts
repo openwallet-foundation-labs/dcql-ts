@@ -19,7 +19,7 @@ export namespace DcqlCredentialQuery {
     multiple: v.pipe(
       v.optional(v.boolean(), false),
       v.description(
-        'OPTIONAL. A non-empty array of objects as defined in Section 6.1.1 that specifies expected authorities or trust frameworks that certify Issuers, that the Verifier will accept. Every Credential returned by the Wallet SHOULD match at least one of the conditions present in the corresponding trusted_authorities array if present.'
+        'OPTIONAL. A boolean which indicates whether multiple Credentials can be returned for this Credential Query. If omitted, the default value is false.'
       )
     ),
     claim_sets: v.pipe(

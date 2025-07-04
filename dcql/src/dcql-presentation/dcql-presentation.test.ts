@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest'
+import { assert, describe, expect, test } from 'vitest'
 import { DcqlQuery } from '../dcql-query'
 import { DcqlPresentationResult } from './m-dcql-presentation-result'
 
@@ -48,6 +48,45 @@ describe('DCQL presentation with claim sets', () => {
     expect(presentationQueryResult.canBeSatisfied).toEqual(false)
   })
 
+  test('Correctly handles an SD-JWT VC presentation where a specific array index was requested, but presentation should not require the exact index due to possible array reordering with selective disclosure', () => {
+    const dcqlQuery: DcqlQuery.Input = {
+      credentials: [
+        {
+          id: 'c5d24076-71b1-4eb8-b3b2-1853a9f7e6b5',
+          format: 'vc+sd-jwt',
+          claims: [{ path: ['nationalities', 1], values: ['NL'] }],
+        },
+      ],
+    }
+
+    const dcqlPresentation = {
+      'c5d24076-71b1-4eb8-b3b2-1853a9f7e6b5': [
+        {
+          claims: {
+            // Only NL disclosed, so it's now at index 0 instead of the requested 1
+            nationalities: ['NL'],
+          },
+          credential_format: 'vc+sd-jwt' as const,
+          vct: 'PersonIdentificationData',
+        },
+      ],
+    }
+
+    const parsedQuery = DcqlQuery.parse(dcqlQuery)
+    DcqlQuery.validate(parsedQuery)
+
+    // For credential query it is not allowed, since the array index MUST match exactly
+    const credentialQueryResult = DcqlQuery.query(parsedQuery, dcqlPresentation['c5d24076-71b1-4eb8-b3b2-1853a9f7e6b5'])
+    assert(!credentialQueryResult.canBeSatisfied)
+
+    const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(dcqlPresentation, {
+      dcqlQuery: parsedQuery,
+    })
+
+    // For presentations we allow the array ordering to be different
+    assert(presentationQueryResult.canBeSatisfied)
+  })
+
   test('Correctly handles a presentation with multiple claim sets where the first claim set matches', () => {
     const query: DcqlQuery.Input = {
       credentials: [
@@ -86,29 +125,89 @@ describe('DCQL presentation with claim sets', () => {
 
     expect(presentationQueryResult).toEqual({
       canBeSatisfied: true,
-      credentials: parsedQuery.credentials,
-      credential_sets: undefined,
-      invalid_matches: undefined,
-      valid_matches: {
-        '8c791a1f-12b4-41fe-a892-236c2887fa8e': [
-          {
-            claim_set_index: 0,
-            input_presentation_index: 0,
-            presentation_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
-            success: true,
-            typed: true,
-            output: {
-              claims: {
-                tax_id_code: {
-                  baz: {},
+      credential_matches: {
+        '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
+          success: true,
+          credential_query_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
+          failed_credentials: [],
+          valid_credentials: [
+            {
+              success: true,
+              input_credential_index: 0,
+              trusted_authorities: {
+                success: true,
+              },
+              meta: {
+                success: true,
+                output: {
+                  credential_format: 'vc+sd-jwt',
+                  vct: 'PersonIdentificationData',
                 },
               },
-              credential_format: 'vc+sd-jwt',
-              vct: 'PersonIdentificationData',
+              claims: {
+                success: true,
+                failed_claim_sets: [
+                  {
+                    claim_set_index: 1,
+                    success: false,
+                    issues: {
+                      given_name: ["Expected claim 'given_name' to be defined"],
+                      family_name: ["Expected claim 'family_name' to be defined"],
+                    },
+                    failed_claim_indexes: [0, 1],
+                    valid_claim_indexes: [2],
+                  },
+                ],
+                valid_claim_sets: [
+                  {
+                    claim_set_index: 0,
+                    success: true,
+                    output: {
+                      tax_id_code: {
+                        baz: {},
+                      },
+                    },
+                    valid_claim_indexes: [2],
+                  },
+                ],
+                valid_claims: [
+                  {
+                    success: true,
+                    claim_index: 2,
+                    claim_id: 'c',
+                    output: {
+                      tax_id_code: {
+                        baz: {},
+                      },
+                    },
+                  },
+                ],
+                failed_claims: [
+                  {
+                    success: false,
+                    issues: {
+                      given_name: ["Expected claim 'given_name' to be defined"],
+                    },
+                    claim_index: 0,
+                    claim_id: 'a',
+                    output: {},
+                  },
+                  {
+                    success: false,
+                    issues: {
+                      family_name: ["Expected claim 'family_name' to be defined"],
+                    },
+                    claim_index: 1,
+                    claim_id: 'b',
+                    output: {},
+                  },
+                ],
+              },
             },
-          },
-        ],
+          ],
+        },
       },
+      credential_sets: undefined,
     })
   })
 
@@ -151,28 +250,91 @@ describe('DCQL presentation with claim sets', () => {
 
     expect(presentationQueryResult).toEqual({
       canBeSatisfied: true,
-      credentials: parsedQuery.credentials,
-      credential_sets: undefined,
-      valid_matches: {
-        '8c791a1f-12b4-41fe-a892-236c2887fa8e': [
-          {
-            claim_set_index: 1,
-            input_presentation_index: 0,
-            presentation_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
-            success: true,
-            typed: true,
-            output: {
-              claims: {
-                given_name: { foo: {} },
-                family_name: { bar: {} },
+      credential_matches: {
+        '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
+          success: true,
+          credential_query_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
+          failed_credentials: [],
+          valid_credentials: [
+            {
+              success: true,
+              input_credential_index: 0,
+              trusted_authorities: {
+                success: true,
               },
-              credential_format: 'vc+sd-jwt',
-              vct: 'PersonIdentificationData',
+              meta: {
+                success: true,
+                output: {
+                  credential_format: 'vc+sd-jwt',
+                  vct: 'PersonIdentificationData',
+                },
+              },
+              claims: {
+                success: true,
+                failed_claim_sets: [
+                  {
+                    success: false,
+                    issues: {
+                      tax_id_code: ["Expected claim 'tax_id_code' to be defined"],
+                    },
+                    claim_set_index: 0,
+                    failed_claim_indexes: [2],
+                    valid_claim_indexes: [0, 1],
+                  },
+                ],
+                valid_claim_sets: [
+                  {
+                    success: true,
+                    claim_set_index: 1,
+                    output: {
+                      given_name: {
+                        foo: {},
+                      },
+                      family_name: {
+                        bar: {},
+                      },
+                    },
+                    valid_claim_indexes: [0, 1],
+                  },
+                ],
+                valid_claims: [
+                  {
+                    success: true,
+                    claim_index: 0,
+                    claim_id: 'a',
+                    output: {
+                      given_name: {
+                        foo: {},
+                      },
+                    },
+                  },
+                  {
+                    success: true,
+                    claim_index: 1,
+                    claim_id: 'b',
+                    output: {
+                      family_name: {
+                        bar: {},
+                      },
+                    },
+                  },
+                ],
+                failed_claims: [
+                  {
+                    success: false,
+                    issues: {
+                      tax_id_code: ["Expected claim 'tax_id_code' to be defined"],
+                    },
+                    claim_index: 2,
+                    claim_id: 'c',
+                    output: {},
+                  },
+                ],
+              },
             },
-          },
-        ],
+          ],
+        },
       },
-      invalid_matches: undefined,
     })
   })
 
@@ -221,34 +383,98 @@ describe('DCQL presentation with claim sets', () => {
 
     expect(presentationQueryResult).toEqual({
       canBeSatisfied: true,
-      credentials: parsedQuery.credentials,
       credential_sets: [
         {
-          matching_options: [['8c791a1f-12b4-41fe-a892-236c2887fa8e']],
           options: [['8c791a1f-12b4-41fe-a892-236c2887fa8e']],
           required: true,
+          matching_options: [['8c791a1f-12b4-41fe-a892-236c2887fa8e']],
         },
       ],
-      valid_matches: {
-        '8c791a1f-12b4-41fe-a892-236c2887fa8e': [
-          {
-            claim_set_index: 1,
-            input_presentation_index: 0,
-            presentation_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
-            success: true,
-            typed: true,
-            output: {
-              claims: {
-                given_name: { foo: {} },
-                family_name: { bar: {} },
+      credential_matches: {
+        '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
+          success: true,
+          credential_query_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
+          failed_credentials: [],
+          valid_credentials: [
+            {
+              success: true,
+              input_credential_index: 0,
+              trusted_authorities: {
+                success: true,
               },
-              credential_format: 'vc+sd-jwt',
-              vct: 'PersonIdentificationData',
+              meta: {
+                success: true,
+                output: {
+                  credential_format: 'vc+sd-jwt',
+                  vct: 'PersonIdentificationData',
+                },
+              },
+              claims: {
+                success: true,
+                failed_claim_sets: [
+                  {
+                    success: false,
+                    issues: {
+                      tax_id_code: ["Expected claim 'tax_id_code' to be defined"],
+                    },
+                    claim_set_index: 0,
+                    failed_claim_indexes: [2],
+                    valid_claim_indexes: [0, 1],
+                  },
+                ],
+                valid_claim_sets: [
+                  {
+                    success: true,
+                    claim_set_index: 1,
+                    output: {
+                      given_name: {
+                        foo: {},
+                      },
+                      family_name: {
+                        bar: {},
+                      },
+                    },
+                    valid_claim_indexes: [0, 1],
+                  },
+                ],
+                valid_claims: [
+                  {
+                    success: true,
+                    claim_index: 0,
+                    claim_id: 'a',
+                    output: {
+                      given_name: {
+                        foo: {},
+                      },
+                    },
+                  },
+                  {
+                    success: true,
+                    claim_index: 1,
+                    claim_id: 'b',
+                    output: {
+                      family_name: {
+                        bar: {},
+                      },
+                    },
+                  },
+                ],
+                failed_claims: [
+                  {
+                    success: false,
+                    issues: {
+                      tax_id_code: ["Expected claim 'tax_id_code' to be defined"],
+                    },
+                    claim_index: 2,
+                    claim_id: 'c',
+                    output: {},
+                  },
+                ],
+              },
             },
-          },
-        ],
+          ],
+        },
       },
-      invalid_matches: undefined,
     })
   })
 
@@ -307,39 +533,102 @@ describe('DCQL presentation with claim sets', () => {
 
     expect(presentationQueryResult).toEqual({
       canBeSatisfied: true,
-      credentials: parsedQuery.credentials,
       credential_sets: [
         {
-          matching_options: [['8c791a1f-12b4-41fe-a892-236c2887fa8e']],
           options: [['8c791a1f-12b4-41fe-a892-236c2887fa8e']],
           required: true,
+          matching_options: [['8c791a1f-12b4-41fe-a892-236c2887fa8e']],
         },
         {
-          matching_options: undefined,
           options: [['a46e92c0-847f-41f2-9218-2914e1d2388a']],
           required: false,
         },
       ],
-      valid_matches: {
-        '8c791a1f-12b4-41fe-a892-236c2887fa8e': [
-          {
-            claim_set_index: 1,
-            input_presentation_index: 0,
-            presentation_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
-            success: true,
-            typed: true,
-            output: {
-              claims: {
-                given_name: { foo: {} },
-                family_name: { bar: {} },
+      credential_matches: {
+        '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
+          success: true,
+          credential_query_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
+          failed_credentials: [],
+          valid_credentials: [
+            {
+              success: true,
+              input_credential_index: 0,
+              trusted_authorities: {
+                success: true,
               },
-              credential_format: 'vc+sd-jwt',
-              vct: 'PersonIdentificationData',
+              meta: {
+                success: true,
+                output: {
+                  credential_format: 'vc+sd-jwt',
+                  vct: 'PersonIdentificationData',
+                },
+              },
+              claims: {
+                success: true,
+                failed_claim_sets: [
+                  {
+                    success: false,
+                    issues: {
+                      tax_id_code: ["Expected claim 'tax_id_code' to be defined"],
+                    },
+                    claim_set_index: 0,
+                    failed_claim_indexes: [2],
+                    valid_claim_indexes: [0, 1],
+                  },
+                ],
+                valid_claim_sets: [
+                  {
+                    success: true,
+                    claim_set_index: 1,
+                    output: {
+                      given_name: {
+                        foo: {},
+                      },
+                      family_name: {
+                        bar: {},
+                      },
+                    },
+                    valid_claim_indexes: [0, 1],
+                  },
+                ],
+                valid_claims: [
+                  {
+                    success: true,
+                    claim_index: 0,
+                    claim_id: 'a',
+                    output: {
+                      given_name: {
+                        foo: {},
+                      },
+                    },
+                  },
+                  {
+                    success: true,
+                    claim_index: 1,
+                    claim_id: 'b',
+                    output: {
+                      family_name: {
+                        bar: {},
+                      },
+                    },
+                  },
+                ],
+                failed_claims: [
+                  {
+                    success: false,
+                    issues: {
+                      tax_id_code: ["Expected claim 'tax_id_code' to be defined"],
+                    },
+                    claim_index: 2,
+                    claim_id: 'c',
+                    output: {},
+                  },
+                ],
+              },
             },
-          },
-        ],
+          ],
+        },
       },
-      invalid_matches: undefined,
     })
   })
 
@@ -408,61 +697,152 @@ describe('DCQL presentation with claim sets', () => {
 
     expect(presentationQueryResult).toEqual({
       canBeSatisfied: false,
-      credentials: parsedQuery.credentials,
       credential_sets: [
         {
-          matching_options: [['8c791a1f-12b4-41fe-a892-236c2887fa8e']],
           options: [['8c791a1f-12b4-41fe-a892-236c2887fa8e']],
           required: true,
+          matching_options: [['8c791a1f-12b4-41fe-a892-236c2887fa8e']],
         },
         {
-          matching_options: undefined,
           options: [['a46e92c0-847f-41f2-9218-2914e1d2388a']],
           required: false,
         },
       ],
-      valid_matches: {
-        '8c791a1f-12b4-41fe-a892-236c2887fa8e': [
-          {
-            claim_set_index: 1,
-            input_presentation_index: 0,
-            presentation_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
-            success: true,
-            typed: true,
-            output: {
+      credential_matches: {
+        '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
+          success: true,
+          credential_query_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
+          failed_credentials: [],
+          valid_credentials: [
+            {
+              success: true,
+              input_credential_index: 0,
+              trusted_authorities: {
+                success: true,
+              },
+              meta: {
+                success: true,
+                output: {
+                  credential_format: 'vc+sd-jwt',
+                  vct: 'PersonIdentificationData',
+                },
+              },
               claims: {
-                given_name: { foo: {} },
-                family_name: { bar: {} },
+                success: true,
+                failed_claim_sets: [
+                  {
+                    success: false,
+                    issues: {
+                      tax_id_code: ["Expected claim 'tax_id_code' to be defined"],
+                    },
+                    claim_set_index: 0,
+                    failed_claim_indexes: [2],
+                    valid_claim_indexes: [0, 1],
+                  },
+                ],
+                valid_claim_sets: [
+                  {
+                    success: true,
+                    claim_set_index: 1,
+                    output: {
+                      given_name: {
+                        foo: {},
+                      },
+                      family_name: {
+                        bar: {},
+                      },
+                    },
+                    valid_claim_indexes: [0, 1],
+                  },
+                ],
+                valid_claims: [
+                  {
+                    success: true,
+                    claim_index: 0,
+                    claim_id: 'a',
+                    output: {
+                      given_name: {
+                        foo: {},
+                      },
+                    },
+                  },
+                  {
+                    success: true,
+                    claim_index: 1,
+                    claim_id: 'b',
+                    output: {
+                      family_name: {
+                        bar: {},
+                      },
+                    },
+                  },
+                ],
+                failed_claims: [
+                  {
+                    success: false,
+                    issues: {
+                      tax_id_code: ["Expected claim 'tax_id_code' to be defined"],
+                    },
+                    claim_index: 2,
+                    claim_id: 'c',
+                    output: {},
+                  },
+                ],
               },
-              credential_format: 'vc+sd-jwt',
-              vct: 'PersonIdentificationData',
             },
-          },
-        ],
-      },
-      invalid_matches: {
-        'a46e92c0-847f-41f2-9218-2914e1d2388a': [
-          {
-            claim_set_index: undefined,
-            input_presentation_index: 0,
-            presentation_id: 'a46e92c0-847f-41f2-9218-2914e1d2388a',
-            success: false,
-            typed: false,
-            flattened: {
-              nested: {
-                vct: ['Invalid type: Expected "SomeRandomVct" but received "PersonIdentificationData"'],
+          ],
+        },
+        'a46e92c0-847f-41f2-9218-2914e1d2388a': {
+          success: false,
+          credential_query_id: 'a46e92c0-847f-41f2-9218-2914e1d2388a',
+          failed_credentials: [
+            {
+              success: false,
+              input_credential_index: 0,
+              trusted_authorities: {
+                success: true,
               },
-            },
-            issues: expect.any(Array),
-            output: {
+              meta: {
+                success: false,
+                issues: {
+                  vct: ["Expected vct to be 'SomeRandomVct' but received 'PersonIdentificationData'"],
+                },
+                output: {
+                  credential_format: 'vc+sd-jwt',
+                  vct: 'PersonIdentificationData',
+                },
+              },
               claims: {
-                given_name: { foo: {} },
+                success: true,
+                failed_claim_sets: [],
+                valid_claim_sets: [
+                  {
+                    success: true,
+                    output: {
+                      given_name: {
+                        foo: {},
+                      },
+                    },
+                    valid_claim_indexes: [0],
+                  },
+                ],
+                valid_claims: [
+                  {
+                    success: true,
+                    claim_index: 0,
+                    claim_id: 'a',
+                    output: {
+                      given_name: {
+                        foo: {},
+                      },
+                    },
+                  },
+                ],
+                failed_claims: [],
               },
-              credential_format: 'vc+sd-jwt',
-              vct: 'PersonIdentificationData',
             },
-          },
-        ],
+          ],
+        },
       },
     })
   })

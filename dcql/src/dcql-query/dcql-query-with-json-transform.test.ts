@@ -38,7 +38,12 @@ const sdJwtVcExampleQuery = {
       meta: {
         vct_values: ['https://credentials.example.com/identity_credential'],
       },
-      claims: [{ path: ['last_name'] }, { path: ['first_name'] }, { path: ['address', 'street_address'] }],
+      claims: [
+        { path: ['last_name'] },
+        { path: ['first_name'] },
+        { path: ['address', 'street_address'] },
+        { path: ['org.iso.7367.1', 'vehicle_holder'], values: ['Timo Glastra'] },
+      ],
     },
   ],
 } satisfies DcqlQuery.Input
@@ -74,6 +79,9 @@ const sdJwtVcWithJT = {
       locality: 'Milliways',
       postal_code: '12345',
     },
+    'org.iso.7367.1': {
+      vehicle_holder: 'Timo Glastra',
+    },
     degrees: [
       {
         type: 'Bachelor of Science',
@@ -88,8 +96,8 @@ const sdJwtVcWithJT = {
   },
 } satisfies DcqlSdJwtVcCredential
 
-describe('dcql-query-with-json-transform', () => {
-  it('mdocMvrc example succeeds (with-json-transform)', (_t) => {
+describe('DCQL Query With Json Transform', () => {
+  it('mdocMvrc example succeeds', (_t) => {
     const query = DcqlQuery.parse(mdocMvrcQuery)
     DcqlQuery.validate(query)
 
@@ -100,45 +108,146 @@ describe('dcql-query-with-json-transform', () => {
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
-        typed: true,
-        input_credential_index: 0,
-        claim_set_index: undefined,
-        output: {
-          credential_format: 'mso_mdoc' as const,
-          doctype: 'org.iso.7367.1.mVRC',
-          namespaces: {
-            'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
-            'org.iso.18013.5.1': { first_name: new ValueClass('Martin Auer') },
+        credential_query_id: 'my_credential',
+        failed_credentials: [],
+        valid_credentials: [
+          {
+            success: true,
+            input_credential_index: 0,
+            trusted_authorities: {
+              success: true,
+            },
+            meta: {
+              success: true,
+              output: {
+                credential_format: 'mso_mdoc',
+                doctype: 'org.iso.7367.1.mVRC',
+              },
+            },
+            claims: {
+              success: true,
+              failed_claim_sets: [],
+              valid_claim_sets: [
+                {
+                  claim_set_index: undefined,
+                  success: true,
+                  output: {
+                    'org.iso.7367.1': {
+                      vehicle_holder: 'Martin Auer',
+                    },
+                    'org.iso.18013.5.1': {
+                      first_name: new ValueClass('Martin Auer'),
+                    },
+                  },
+                  valid_claim_indexes: [0, 1],
+                },
+              ],
+              valid_claims: [
+                {
+                  success: true,
+                  claim_id: undefined,
+                  claim_index: 0,
+                  output: {
+                    'org.iso.7367.1': {
+                      vehicle_holder: 'Martin Auer',
+                    },
+                  },
+                },
+                {
+                  success: true,
+                  claim_id: undefined,
+                  claim_index: 1,
+                  output: {
+                    'org.iso.18013.5.1': {
+                      first_name: new ValueClass('Martin Auer'),
+                    },
+                  },
+                },
+              ],
+              failed_claims: [],
+            },
           },
-        },
-
-        all: res.credential_matches.my_credential?.all,
+        ],
       },
-    })
+    } as const)
 
+    const validCredential = res.credential_matches.my_credential.valid_credentials[0]
     const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
-      { my_credential: [res.credential_matches.my_credential.output] },
+      {
+        my_credential: [
+          {
+            ...validCredential.meta.output,
+            namespaces: validCredential.claims.valid_claim_sets[0].output,
+          },
+        ],
+      },
       { dcqlQuery: query }
     )
 
-    assert.deepStrictEqual(presentationQueryResult.valid_matches, {
-      my_credential: [
-        {
-          success: true,
-          typed: true,
-          presentation_id: 'my_credential',
-          claim_set_index: undefined,
-          input_presentation_index: 0,
-          output: {
-            credential_format: 'mso_mdoc' as const,
-            doctype: 'org.iso.7367.1.mVRC',
-            namespaces: {
-              'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
-              'org.iso.18013.5.1': { first_name: new ValueClass('Martin Auer') },
+    assert.deepStrictEqual(presentationQueryResult.credential_matches, {
+      my_credential: {
+        success: true,
+        credential_query_id: 'my_credential',
+        failed_credentials: [],
+        valid_credentials: [
+          {
+            success: true,
+            input_credential_index: 0,
+            trusted_authorities: {
+              success: true,
+            },
+            meta: {
+              success: true,
+              output: {
+                credential_format: 'mso_mdoc',
+                doctype: 'org.iso.7367.1.mVRC',
+              },
+            },
+            claims: {
+              success: true,
+              failed_claim_sets: [],
+              valid_claim_sets: [
+                {
+                  claim_set_index: undefined,
+                  success: true,
+                  output: {
+                    'org.iso.7367.1': {
+                      vehicle_holder: 'Martin Auer',
+                    },
+                    'org.iso.18013.5.1': {
+                      first_name: new ValueClass('Martin Auer'),
+                    },
+                  },
+                  valid_claim_indexes: [0, 1],
+                },
+              ],
+              valid_claims: [
+                {
+                  success: true,
+                  claim_index: 0,
+                  claim_id: undefined,
+                  output: {
+                    'org.iso.7367.1': {
+                      vehicle_holder: 'Martin Auer',
+                    },
+                  },
+                },
+                {
+                  success: true,
+                  claim_index: 1,
+                  claim_id: undefined,
+                  output: {
+                    'org.iso.18013.5.1': {
+                      first_name: new ValueClass('Martin Auer'),
+                    },
+                  },
+                },
+              ],
+              failed_claims: [],
             },
           },
-        },
-      ],
+        ],
+      },
     })
   })
 
@@ -153,51 +262,268 @@ describe('dcql-query-with-json-transform', () => {
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
-        typed: true,
-        input_credential_index: 1,
-        claim_set_index: undefined,
-        output: {
-          credential_format: 'dc+sd-jwt' as const,
-          vct: 'https://credentials.example.com/identity_credential',
-          claims: {
-            first_name: 'Arthur',
-            last_name: 'Dent',
-            address: {
-              street_address: new ValueClass('42 Market Street'),
+        credential_query_id: 'my_credential',
+        failed_credentials: [
+          {
+            success: false,
+            input_credential_index: 0,
+            trusted_authorities: {
+              success: true,
+            },
+            meta: {
+              success: false,
+              issues: {
+                credential_format: ["Expected credential format to be 'dc+sd-jwt' but received 'mso_mdoc'"],
+                vct: [
+                  "Expected vct to be 'https://credentials.example.com/identity_credential' but received 'undefined'",
+                ],
+              },
+              output: {
+                credential_format: 'mso_mdoc',
+              },
+            },
+            claims: {
+              success: false,
+              failed_claim_sets: [
+                {
+                  claim_set_index: undefined,
+                  success: false,
+                  issues: {
+                    last_name: ["Expected claim 'last_name' to be defined"],
+                    first_name: ["Expected claim 'first_name' to be defined"],
+                    address: ["Expected claim 'address'.'street_address' to be defined"],
+                    'org.iso.7367.1.vehicle_holder': [
+                      "Expected claim 'org.iso.7367.1'.'vehicle_holder' to be 'Timo Glastra' but received 'Martin Auer'",
+                    ],
+                  },
+                  failed_claim_indexes: [0, 1, 2, 3],
+                  valid_claim_indexes: [],
+                },
+              ],
+              failed_claims: [
+                {
+                  claim_id: undefined,
+                  success: false,
+                  issues: {
+                    last_name: ["Expected claim 'last_name' to be defined"],
+                  },
+                  claim_index: 0,
+                  output: {},
+                },
+                {
+                  claim_id: undefined,
+                  success: false,
+                  issues: {
+                    first_name: ["Expected claim 'first_name' to be defined"],
+                  },
+                  claim_index: 1,
+                  output: {},
+                },
+                {
+                  claim_id: undefined,
+                  success: false,
+                  issues: {
+                    address: ["Expected claim 'address'.'street_address' to be defined"],
+                  },
+                  claim_index: 2,
+                  output: {},
+                },
+                {
+                  claim_id: undefined,
+                  success: false,
+                  issues: {
+                    'org.iso.7367.1.vehicle_holder': [
+                      "Expected claim 'org.iso.7367.1'.'vehicle_holder' to be 'Timo Glastra' but received 'Martin Auer'",
+                    ],
+                  },
+                  claim_index: 3,
+                  output: {
+                    'org.iso.7367.1': {
+                      vehicle_holder: 'Martin Auer',
+                    },
+                  },
+                },
+              ],
+              valid_claims: [],
             },
           },
-        },
-        all: res.credential_matches.my_credential?.all,
+        ],
+        valid_credentials: [
+          {
+            success: true,
+            input_credential_index: 1,
+            trusted_authorities: {
+              success: true,
+            },
+            meta: {
+              success: true,
+              output: {
+                credential_format: 'dc+sd-jwt',
+                vct: 'https://credentials.example.com/identity_credential',
+              },
+            },
+            claims: {
+              success: true,
+              failed_claim_sets: [],
+              valid_claim_sets: [
+                {
+                  claim_set_index: undefined,
+                  success: true,
+                  output: {
+                    last_name: 'Dent',
+                    first_name: 'Arthur',
+                    address: {
+                      street_address: new ValueClass('42 Market Street'),
+                    },
+                    'org.iso.7367.1': {
+                      vehicle_holder: 'Timo Glastra',
+                    },
+                  },
+                  valid_claim_indexes: [0, 1, 2, 3],
+                },
+              ],
+              valid_claims: [
+                {
+                  claim_id: undefined,
+                  success: true,
+                  claim_index: 0,
+                  output: {
+                    last_name: 'Dent',
+                  },
+                },
+                {
+                  claim_id: undefined,
+                  success: true,
+                  claim_index: 1,
+                  output: {
+                    first_name: 'Arthur',
+                  },
+                },
+                {
+                  claim_id: undefined,
+                  success: true,
+                  claim_index: 2,
+                  output: {
+                    address: {
+                      street_address: new ValueClass('42 Market Street'),
+                    },
+                  },
+                },
+                {
+                  claim_id: undefined,
+                  success: true,
+                  claim_index: 3,
+                  output: {
+                    'org.iso.7367.1': {
+                      vehicle_holder: 'Timo Glastra',
+                    },
+                  },
+                },
+              ],
+              failed_claims: [],
+            },
+          },
+        ],
       },
-    })
+    } as const)
 
+    const validCredential = res.credential_matches.my_credential.valid_credentials[0]
     const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
-      // @ts-expect-error ValueClass is not a valid type
-      { my_credential: [res.credential_matches.my_credential.output] },
+      {
+        my_credential: [
+          {
+            ...validCredential.meta.output,
+
+            // @ts-expect-error ValueClass is not an allowed type
+            claims: validCredential.claims.valid_claim_sets[0].output,
+          },
+        ],
+      },
       { dcqlQuery: query }
     )
 
-    assert.deepStrictEqual(presentationQueryResult.valid_matches, {
-      my_credential: [
-        {
-          success: true,
-          typed: true,
-          presentation_id: 'my_credential',
-          claim_set_index: undefined,
-          input_presentation_index: 0,
-          output: {
-            credential_format: 'dc+sd-jwt' as const,
-            vct: 'https://credentials.example.com/identity_credential',
-            claims: {
-              first_name: 'Arthur',
-              last_name: 'Dent',
-              address: {
-                street_address: new ValueClass('42 Market Street'),
+    assert.deepStrictEqual(presentationQueryResult.credential_matches, {
+      my_credential: {
+        success: true,
+        credential_query_id: 'my_credential',
+        failed_credentials: [],
+        valid_credentials: [
+          {
+            success: true,
+            input_credential_index: 0,
+            trusted_authorities: {
+              success: true,
+            },
+            meta: {
+              success: true,
+              output: {
+                credential_format: 'dc+sd-jwt',
+                vct: 'https://credentials.example.com/identity_credential',
               },
             },
+            claims: {
+              success: true,
+              failed_claim_sets: [],
+              valid_claim_sets: [
+                {
+                  success: true,
+                  claim_set_index: undefined,
+                  output: {
+                    last_name: 'Dent',
+                    first_name: 'Arthur',
+                    address: {
+                      street_address: new ValueClass('42 Market Street'),
+                    },
+                    'org.iso.7367.1': {
+                      vehicle_holder: 'Timo Glastra',
+                    },
+                  },
+                  valid_claim_indexes: [0, 1, 2, 3],
+                },
+              ],
+              valid_claims: [
+                {
+                  success: true,
+                  claim_id: undefined,
+                  claim_index: 0,
+                  output: {
+                    last_name: 'Dent',
+                  },
+                },
+                {
+                  success: true,
+                  claim_id: undefined,
+                  claim_index: 1,
+                  output: {
+                    first_name: 'Arthur',
+                  },
+                },
+                {
+                  success: true,
+                  claim_id: undefined,
+                  claim_index: 2,
+                  output: {
+                    address: {
+                      street_address: new ValueClass('42 Market Street'),
+                    },
+                  },
+                },
+                {
+                  success: true,
+                  claim_id: undefined,
+                  claim_index: 3,
+                  output: {
+                    'org.iso.7367.1': {
+                      vehicle_holder: 'Timo Glastra',
+                    },
+                  },
+                },
+              ],
+              failed_claims: [],
+            },
           },
-        },
-      ],
+        ],
+      },
     })
   })
 })

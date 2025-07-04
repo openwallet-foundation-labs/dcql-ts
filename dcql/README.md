@@ -117,7 +117,6 @@ assert.deepStrictEqual(presentationQueryResult, {
   canBeSatisfied: true,
   valid_matches: {
     my_credential: {
-      typed: true,
       success: true,
       output: {
         credential_format: "mso_mdoc",
