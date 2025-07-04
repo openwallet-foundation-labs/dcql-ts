@@ -114,7 +114,7 @@ describe('dcql-query trusted authorities', () => {
     const credentials = [mdocMvrc]
     const res = DcqlQuery.query(query, credentials)
 
-    assert(res.canBeSatisfied)
+    assert(res.can_be_satisfied)
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
@@ -228,7 +228,7 @@ describe('dcql-query trusted authorities', () => {
     const credentials = [{ ...mdocMvrc, authority: openidFederationAuthority }]
     const res = DcqlQuery.query(query, credentials)
 
-    assert(!res.canBeSatisfied)
+    assert(!res.can_be_satisfied)
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: false,
@@ -288,7 +288,7 @@ describe('dcql-query trusted authorities', () => {
       { dcqlQuery: query }
     )
 
-    assert(!presentationQueryResult.canBeSatisfied)
+    assert(!presentationQueryResult.can_be_satisfied)
     assert.deepStrictEqual(presentationQueryResult.credential_matches, {
       my_credential: {
         success: false,
@@ -351,7 +351,7 @@ describe('dcql-query trusted authorities', () => {
     const credentials = [{ ...mdocMvrc, authority: undefined }]
     const res = DcqlQuery.query(query, credentials)
 
-    assert(!res.canBeSatisfied)
+    assert(!res.can_be_satisfied)
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: false,
@@ -405,7 +405,7 @@ describe('dcql-query trusted authorities', () => {
       { dcqlQuery: query }
     )
 
-    assert(!presentationQueryResult.canBeSatisfied)
+    assert(!presentationQueryResult.can_be_satisfied)
     assert.deepStrictEqual(presentationQueryResult.credential_matches, {
       my_credential: {
         success: false,
@@ -461,7 +461,7 @@ describe('dcql-query trusted authorities', () => {
 
     const res = DcqlQuery.query(query, [sdJwtVc])
 
-    assert(res.canBeSatisfied)
+    assert(res.can_be_satisfied)
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,

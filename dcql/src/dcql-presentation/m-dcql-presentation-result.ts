@@ -84,16 +84,16 @@ export namespace DcqlPresentationResult {
           ))
 
     return {
-      // NOTE: canBeSatisfied is maybe not the best term, because we return false if it can be
+      // NOTE: can_be_satisfied is maybe not the best term, because we return false if it can be
       // satisfied, but one of the provided presentations did not match
-      canBeSatisfied: dqclQueryMatched,
+      can_be_satisfied: dqclQueryMatched,
       credential_sets: credentialSetResults,
       credential_matches: Object.fromEntries(queriesResults.map((result) => [result.credential_query_id, result])),
     }
   }
 
   export const validate = (dcqlQueryResult: DcqlPresentationResult) => {
-    if (!dcqlQueryResult.canBeSatisfied) {
+    if (!dcqlQueryResult.can_be_satisfied) {
       throw new DcqlInvalidPresentationRecordError({
         message: 'Invalid Presentation record',
         cause: dcqlQueryResult,

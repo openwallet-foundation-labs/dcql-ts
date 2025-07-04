@@ -70,7 +70,7 @@ The query result provides detailed information about the match:
 const queryResult = DcqlQuery.query(query, credentials);
 
 // Check if query can be satisfied
-console.log(queryResult.canBeSatisfied);
+console.log(queryResult.can_be_satisfied);
 
 // Access matched credentials
 console.log(queryResult.credential_matches);
@@ -114,7 +114,7 @@ assert.deepStrictEqual(presentationQueryResult, {
       meta: { doctype_value: "org.iso.7367.1.mVRC" },
     },
   ],
-  canBeSatisfied: true,
+  can_be_satisfied: true,
   valid_matches: {
     my_credential: {
       success: true,

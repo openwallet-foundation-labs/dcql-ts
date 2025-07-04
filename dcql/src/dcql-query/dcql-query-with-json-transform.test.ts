@@ -104,7 +104,7 @@ describe('DCQL Query With Json Transform', () => {
     const credentials = [mdocWithJT]
     const res = DcqlQuery.query(query, credentials)
 
-    assert(res.canBeSatisfied)
+    assert(res.can_be_satisfied)
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
@@ -258,7 +258,7 @@ describe('DCQL Query With Json Transform', () => {
     // @ts-expect-error ValueClass is not a valid type
     const res = DcqlQuery.query(query, [mdocWithJT, sdJwtVcWithJT])
 
-    assert(res.canBeSatisfied)
+    assert(res.can_be_satisfied)
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,

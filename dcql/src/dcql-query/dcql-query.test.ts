@@ -199,7 +199,7 @@ describe('dcql-query', () => {
     const credentials = [exampleMdoc]
     const res = DcqlQuery.query(query, credentials)
 
-    assert(!res.canBeSatisfied)
+    assert(!res.can_be_satisfied)
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: false,
@@ -297,7 +297,7 @@ describe('dcql-query', () => {
 
     const res = DcqlQuery.query(query, [exampleMdoc, mdocMvrc])
 
-    assert(res.canBeSatisfied)
+    assert(res.can_be_satisfied)
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
@@ -387,7 +387,7 @@ describe('dcql-query', () => {
       { dcqlQuery: query }
     )
 
-    assert(presentationQueryResult.canBeSatisfied)
+    assert(presentationQueryResult.can_be_satisfied)
     assert.deepStrictEqual(presentationQueryResult.credential_matches, {
       my_credential: {
         success: true,
@@ -471,7 +471,7 @@ describe('dcql-query', () => {
     const credentials = [exampleW3cLdpVc]
     const res = DcqlQuery.query(query, credentials)
 
-    assert(res.canBeSatisfied)
+    assert(res.can_be_satisfied)
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
@@ -564,7 +564,7 @@ describe('dcql-query', () => {
     ]
     const res = DcqlQuery.query(query, credentials)
 
-    assert(!res.canBeSatisfied)
+    assert(!res.can_be_satisfied)
     expect(res.credential_matches).toStrictEqual({
       my_credential: {
         success: false,
@@ -652,7 +652,7 @@ describe('dcql-query', () => {
     const credentials = [mdocMvrc]
     const res = DcqlQuery.query(query, credentials)
 
-    assert(res.canBeSatisfied)
+    assert(res.can_be_satisfied)
     expect(res.credential_matches.my_credential.valid_credentials?.length).toEqual(1)
   })
 
@@ -662,7 +662,7 @@ describe('dcql-query', () => {
 
     const res = DcqlQuery.query(query, [exampleMdoc, exampleSdJwtVc])
 
-    assert(res.canBeSatisfied)
+    assert(res.can_be_satisfied)
     expect(res.credential_matches.my_credential.valid_credentials?.length).toEqual(1)
     expect(res.credential_matches.my_credential.failed_credentials.length).toEqual(1)
   })
@@ -674,7 +674,7 @@ describe('dcql-query', () => {
     // We add the same credential twice
     const res = DcqlQuery.query(query, [exampleSdJwtVc, exampleSdJwtVc])
 
-    assert(res.canBeSatisfied)
+    assert(res.can_be_satisfied)
 
     const match = {
       success: true,
@@ -755,7 +755,7 @@ describe('dcql-query', () => {
       { dcqlQuery: query }
     )
 
-    expect(presentationQueryResult.canBeSatisfied).toBe(true)
+    expect(presentationQueryResult.can_be_satisfied).toBe(true)
     expect(presentationQueryResult.credential_matches.my_credential.valid_credentials?.length).toEqual(2)
   })
 
@@ -766,7 +766,7 @@ describe('dcql-query', () => {
     // We add the same credential twice
     const res = DcqlQuery.query(query, [exampleSdJwtVc, exampleSdJwtVc])
 
-    assert(res.canBeSatisfied)
+    assert(res.can_be_satisfied)
 
     const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
       {
@@ -774,6 +774,6 @@ describe('dcql-query', () => {
       },
       { dcqlQuery: query }
     )
-    expect(presentationQueryResult.canBeSatisfied).toBe(false)
+    expect(presentationQueryResult.can_be_satisfied).toBe(false)
   })
 })

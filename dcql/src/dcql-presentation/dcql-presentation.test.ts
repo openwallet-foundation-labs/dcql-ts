@@ -45,7 +45,7 @@ describe('DCQL presentation with claim sets', () => {
       dcqlQuery: parsedQuery,
     })
 
-    expect(presentationQueryResult.canBeSatisfied).toEqual(false)
+    expect(presentationQueryResult.can_be_satisfied).toEqual(false)
   })
 
   test('Correctly handles an SD-JWT VC presentation where a specific array index was requested, but presentation should not require the exact index due to possible array reordering with selective disclosure', () => {
@@ -77,14 +77,14 @@ describe('DCQL presentation with claim sets', () => {
 
     // For credential query it is not allowed, since the array index MUST match exactly
     const credentialQueryResult = DcqlQuery.query(parsedQuery, dcqlPresentation['c5d24076-71b1-4eb8-b3b2-1853a9f7e6b5'])
-    assert(!credentialQueryResult.canBeSatisfied)
+    assert(!credentialQueryResult.can_be_satisfied)
 
     const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(dcqlPresentation, {
       dcqlQuery: parsedQuery,
     })
 
     // For presentations we allow the array ordering to be different
-    assert(presentationQueryResult.canBeSatisfied)
+    assert(presentationQueryResult.can_be_satisfied)
   })
 
   test('Correctly handles a presentation with multiple claim sets where the first claim set matches', () => {
@@ -124,7 +124,7 @@ describe('DCQL presentation with claim sets', () => {
     })
 
     expect(presentationQueryResult).toEqual({
-      canBeSatisfied: true,
+      can_be_satisfied: true,
       credential_matches: {
         '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
           success: true,
@@ -249,7 +249,7 @@ describe('DCQL presentation with claim sets', () => {
     })
 
     expect(presentationQueryResult).toEqual({
-      canBeSatisfied: true,
+      can_be_satisfied: true,
       credential_matches: {
         '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
           success: true,
@@ -382,7 +382,7 @@ describe('DCQL presentation with claim sets', () => {
     })
 
     expect(presentationQueryResult).toEqual({
-      canBeSatisfied: true,
+      can_be_satisfied: true,
       credential_sets: [
         {
           options: [['8c791a1f-12b4-41fe-a892-236c2887fa8e']],
@@ -532,7 +532,7 @@ describe('DCQL presentation with claim sets', () => {
     })
 
     expect(presentationQueryResult).toEqual({
-      canBeSatisfied: true,
+      can_be_satisfied: true,
       credential_sets: [
         {
           options: [['8c791a1f-12b4-41fe-a892-236c2887fa8e']],
@@ -696,7 +696,7 @@ describe('DCQL presentation with claim sets', () => {
     })
 
     expect(presentationQueryResult).toEqual({
-      canBeSatisfied: false,
+      can_be_satisfied: false,
       credential_sets: [
         {
           options: [['8c791a1f-12b4-41fe-a892-236c2887fa8e']],
