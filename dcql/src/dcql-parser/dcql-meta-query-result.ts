@@ -5,6 +5,17 @@ import type { DcqlCredentialQuery } from '../dcql-query/m-dcql-credential-query.
 import type { DcqlCredential } from '../u-dcql-credential.js'
 import { vIncludesAll, vNonEmptyArray } from '../u-dcql.js'
 
+const getCryptographicHolderBindingValue = (credentialQuery: DcqlCredentialQuery) =>
+  v.object({
+    cryptographic_holder_binding: credentialQuery.require_cryptographic_holder_binding
+      ? v.literal(
+          true,
+          (i) =>
+            `Expected cryptographic_holder_binding to be true but received ${i.input} because credential query '${credentialQuery.id}' requires cryptographic holder binding`
+        )
+      : v.boolean(),
+  })
+
 const getMdocMetaParser = (credentialQuery: DcqlCredentialQuery.Mdoc) => {
   const vDoctype = credentialQuery.meta?.doctype_value
     ? v.literal(
@@ -19,6 +30,7 @@ const getMdocMetaParser = (credentialQuery: DcqlCredentialQuery.Mdoc) => {
       (i) => `Expected credential format to be 'mso_mdoc' but received '${i.input}'`
     ),
     doctype: vDoctype,
+    ...getCryptographicHolderBindingValue(credentialQuery).entries,
   })
 
   return credentialParser
@@ -36,6 +48,7 @@ const getSdJwtVcMetaParser = (credentialQuery: DcqlCredentialQuery.SdJwtVc) => {
           (i) => `Expected vct to be '${credentialQuery.meta?.vct_values?.join("' | '")}' but received '${i.input}'`
         )
       : v.string('Expected vct to be defined'),
+    ...getCryptographicHolderBindingValue(credentialQuery).entries,
   })
 }
 
@@ -53,6 +66,7 @@ const getW3cVcMetaParser = (credentialQuery: DcqlCredentialQuery.W3cVc) => {
             .join(' | ')}`
         )
       : vNonEmptyArray(v.string()),
+    ...getCryptographicHolderBindingValue(credentialQuery).entries,
   })
 }
 

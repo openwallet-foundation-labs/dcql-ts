@@ -65,6 +65,7 @@ const mdocWithJT = {
     },
     'org.iso.18013.5.1': { first_name: new ValueClass('Martin Auer') },
   },
+  cryptographic_holder_binding: true,
 } satisfies DcqlMdocCredential
 
 const sdJwtVcWithJT = {
@@ -94,6 +95,7 @@ const sdJwtVcWithJT = {
     ],
     nationalities: ['British', 'Betelgeusian'],
   },
+  cryptographic_holder_binding: true,
 } satisfies DcqlSdJwtVcCredential
 
 describe('DCQL Query With Json Transform', () => {
@@ -120,6 +122,7 @@ describe('DCQL Query With Json Transform', () => {
             meta: {
               success: true,
               output: {
+                cryptographic_holder_binding: true,
                 credential_format: 'mso_mdoc',
                 doctype: 'org.iso.7367.1.mVRC',
               },
@@ -199,6 +202,7 @@ describe('DCQL Query With Json Transform', () => {
             meta: {
               success: true,
               output: {
+                cryptographic_holder_binding: true,
                 credential_format: 'mso_mdoc',
                 doctype: 'org.iso.7367.1.mVRC',
               },
@@ -279,6 +283,7 @@ describe('DCQL Query With Json Transform', () => {
                 ],
               },
               output: {
+                cryptographic_holder_binding: true,
                 credential_format: 'mso_mdoc',
               },
             },
@@ -358,6 +363,7 @@ describe('DCQL Query With Json Transform', () => {
             meta: {
               success: true,
               output: {
+                cryptographic_holder_binding: true,
                 credential_format: 'dc+sd-jwt',
                 vct: 'https://credentials.example.com/identity_credential',
               },
@@ -457,6 +463,7 @@ describe('DCQL Query With Json Transform', () => {
             meta: {
               success: true,
               output: {
+                cryptographic_holder_binding: true,
                 credential_format: 'dc+sd-jwt',
                 vct: 'https://credentials.example.com/identity_credential',
               },

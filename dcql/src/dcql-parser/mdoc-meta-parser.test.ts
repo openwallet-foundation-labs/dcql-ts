@@ -11,18 +11,21 @@ const metaExample = {
   meta: {
     doctype_value: 'something',
   },
+  require_cryptographic_holder_binding: true,
 } satisfies DcqlCredentialQuery.Mdoc
 
 const credentialExample = {
   credential_format: 'mso_mdoc',
   doctype: 'something',
   namespaces: {},
+  cryptographic_holder_binding: true,
 } satisfies DcqlMdocCredential
 
 const sdJwtCredentialExample = {
   credential_format: 'dc+sd-jwt',
   vct: 'something',
   claims: {},
+  cryptographic_holder_binding: true,
 } satisfies DcqlSdJwtVcCredential
 
 describe('Mdoc Meta Parser', () => {
@@ -31,6 +34,7 @@ describe('Mdoc Meta Parser', () => {
     const res = v.parse(parser, credentialExample)
 
     expect(res).toEqual({
+      cryptographic_holder_binding: true,
       credential_format: 'mso_mdoc',
       doctype: 'something',
     })

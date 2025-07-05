@@ -34,6 +34,7 @@ describe('DCQL presentation with claim sets', () => {
           },
           credential_format: 'vc+sd-jwt' as const,
           vct: 'PersonIdentificationData',
+          cryptographic_holder_binding: true,
         },
       ],
     }
@@ -68,6 +69,7 @@ describe('DCQL presentation with claim sets', () => {
           },
           credential_format: 'vc+sd-jwt' as const,
           vct: 'PersonIdentificationData',
+          cryptographic_holder_binding: true,
         },
       ],
     }
@@ -109,6 +111,7 @@ describe('DCQL presentation with claim sets', () => {
         {
           credential_format: 'vc+sd-jwt' as const,
           vct: 'PersonIdentificationData',
+          cryptographic_holder_binding: true,
           claims: {
             tax_id_code: { baz: {} },
           },
@@ -141,6 +144,7 @@ describe('DCQL presentation with claim sets', () => {
                 success: true,
                 output: {
                   credential_format: 'vc+sd-jwt',
+                  cryptographic_holder_binding: true,
                   vct: 'PersonIdentificationData',
                 },
               },
@@ -234,9 +238,14 @@ describe('DCQL presentation with claim sets', () => {
           credential_format: 'vc+sd-jwt' as const,
           vct: 'PersonIdentificationData',
           claims: {
-            given_name: { foo: {} },
-            family_name: { bar: {} },
+            given_name: {
+              foo: {},
+            },
+            family_name: {
+              bar: {},
+            },
           },
+          cryptographic_holder_binding: true,
         },
       ],
     }
@@ -266,6 +275,7 @@ describe('DCQL presentation with claim sets', () => {
                 success: true,
                 output: {
                   credential_format: 'vc+sd-jwt',
+                  cryptographic_holder_binding: true,
                   vct: 'PersonIdentificationData',
                 },
               },
@@ -366,9 +376,14 @@ describe('DCQL presentation with claim sets', () => {
         {
           credential_format: 'vc+sd-jwt' as const,
           vct: 'PersonIdentificationData',
+          cryptographic_holder_binding: true,
           claims: {
-            given_name: { foo: {} },
-            family_name: { bar: {} },
+            given_name: {
+              foo: {},
+            },
+            family_name: {
+              bar: {},
+            },
           },
         },
       ],
@@ -407,6 +422,7 @@ describe('DCQL presentation with claim sets', () => {
                 output: {
                   credential_format: 'vc+sd-jwt',
                   vct: 'PersonIdentificationData',
+                  cryptographic_holder_binding: true,
                 },
               },
               claims: {
@@ -520,6 +536,7 @@ describe('DCQL presentation with claim sets', () => {
             given_name: { foo: {} },
             family_name: { bar: {} },
           },
+          cryptographic_holder_binding: true,
         },
       ],
     }
@@ -560,6 +577,7 @@ describe('DCQL presentation with claim sets', () => {
                 success: true,
                 output: {
                   credential_format: 'vc+sd-jwt',
+                  cryptographic_holder_binding: true,
                   vct: 'PersonIdentificationData',
                 },
               },
@@ -670,6 +688,7 @@ describe('DCQL presentation with claim sets', () => {
         {
           credential_format: 'vc+sd-jwt' as const,
           vct: 'PersonIdentificationData',
+          cryptographic_holder_binding: true,
           claims: {
             given_name: { foo: {} },
             family_name: { bar: {} },
@@ -680,6 +699,7 @@ describe('DCQL presentation with claim sets', () => {
         {
           credential_format: 'vc+sd-jwt' as const,
           vct: 'PersonIdentificationData',
+          cryptographic_holder_binding: true,
           claims: {
             given_name: { foo: {} },
             family_name: { bar: {} },
@@ -704,6 +724,7 @@ describe('DCQL presentation with claim sets', () => {
           matching_options: [['8c791a1f-12b4-41fe-a892-236c2887fa8e']],
         },
         {
+          matching_options: undefined,
           options: [['a46e92c0-847f-41f2-9218-2914e1d2388a']],
           required: false,
         },
@@ -724,6 +745,7 @@ describe('DCQL presentation with claim sets', () => {
                 success: true,
                 output: {
                   credential_format: 'vc+sd-jwt',
+                  cryptographic_holder_binding: true,
                   vct: 'PersonIdentificationData',
                 },
               },
@@ -795,6 +817,7 @@ describe('DCQL presentation with claim sets', () => {
         'a46e92c0-847f-41f2-9218-2914e1d2388a': {
           success: false,
           credential_query_id: 'a46e92c0-847f-41f2-9218-2914e1d2388a',
+          valid_credentials: undefined,
           failed_credentials: [
             {
               success: false,
@@ -808,6 +831,7 @@ describe('DCQL presentation with claim sets', () => {
                   vct: ["Expected vct to be 'SomeRandomVct' but received 'PersonIdentificationData'"],
                 },
                 output: {
+                  cryptographic_holder_binding: true,
                   credential_format: 'vc+sd-jwt',
                   vct: 'PersonIdentificationData',
                 },
@@ -844,6 +868,72 @@ describe('DCQL presentation with claim sets', () => {
           ],
         },
       },
+    })
+  })
+
+  test('Correctly handles a presentation without cryptographic binding but required in query', () => {
+    const query: DcqlQuery.Input = {
+      credentials: [
+        {
+          id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
+          format: 'vc+sd-jwt',
+          meta: { vct_values: ['PersonIdentificationData'] },
+          claims: [{ path: ['given_name'] }],
+        },
+        {
+          id: '5ff30b81-fd6b-4133-97c9-0c4520789e84',
+          format: 'mso_mdoc',
+          meta: { doctype_value: 'PersonIdentificationData' },
+          claims: [{ path: ['namespace', 'given_name'] }],
+          require_cryptographic_holder_binding: true,
+        },
+      ],
+    }
+
+    const dcqlPresentation = {
+      '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
+        credential_format: 'vc+sd-jwt',
+        vct: 'PersonIdentificationData',
+        cryptographic_holder_binding: false,
+        claims: {
+          given_name: { foo: {} },
+          family_name: { bar: {} },
+        },
+      },
+      '5ff30b81-fd6b-4133-97c9-0c4520789e84': {
+        credential_format: 'mso_mdoc',
+        doctype: 'PersonIdentificationData',
+        cryptographic_holder_binding: false,
+        namespaces: {
+          namespace: {
+            given_name: 'foo',
+            family_name: 'bar',
+          },
+        },
+      },
+    } as const
+
+    const parsedQuery = DcqlQuery.parse(query)
+    DcqlQuery.validate(parsedQuery)
+
+    const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(dcqlPresentation, {
+      dcqlQuery: parsedQuery,
+    })
+
+    expect(
+      presentationQueryResult.credential_matches['8c791a1f-12b4-41fe-a892-236c2887fa8e'].failed_credentials[0].meta
+    ).toEqual({
+      issues: {
+        cryptographic_holder_binding: [
+          "Expected cryptographic_holder_binding to be true but received false because credential query '8c791a1f-12b4-41fe-a892-236c2887fa8e' requires cryptographic holder binding",
+        ],
+      },
+      output: {
+        credential_format: 'vc+sd-jwt',
+        cryptographic_holder_binding: false,
+        vct: 'PersonIdentificationData',
+      },
+      success: false,
     })
   })
 })

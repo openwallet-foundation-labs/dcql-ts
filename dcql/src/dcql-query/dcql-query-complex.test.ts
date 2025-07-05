@@ -104,6 +104,7 @@ const mdocMdlId = {
       portrait: 'https://example.com/portrait',
     },
   },
+  cryptographic_holder_binding: true,
 } satisfies DcqlMdocCredential
 
 const mdocMdlAddress = {
@@ -116,6 +117,7 @@ const mdocMdlAddress = {
       non_disclosed: 'secret',
     },
   },
+  cryptographic_holder_binding: true,
 } satisfies DcqlMdocCredential
 
 const mdocPhotoCardId = {
@@ -128,6 +130,7 @@ const mdocPhotoCardId = {
       portrait: 'https://example.com/portrait',
     },
   },
+  cryptographic_holder_binding: true,
 } satisfies DcqlMdocCredential
 
 const mdocPhotoCardAddress = {
@@ -140,6 +143,7 @@ const mdocPhotoCardAddress = {
       non_disclosed: 'secret',
     },
   },
+  cryptographic_holder_binding: true,
 } satisfies DcqlMdocCredential
 
 const mdocExample = {
@@ -150,6 +154,7 @@ const mdocExample = {
       example_claim: 'example_value',
     },
   },
+  cryptographic_holder_binding: true,
 } satisfies DcqlMdocCredential
 
 const sdJwtVcExample = {
@@ -175,6 +180,7 @@ const sdJwtVcExample = {
     ],
     nationalities: ['British', 'Betelgeusian'],
   },
+  cryptographic_holder_binding: true,
 } satisfies DcqlSdJwtVcCredential
 
 describe('complex-mdoc-query', () => {
@@ -209,7 +215,11 @@ describe('complex-mdoc-query', () => {
     ])
 
     assert.deepStrictEqual(res, {
-      credentials: complexMdocQuery.credentials.map((c) => ({ ...c, multiple: false })),
+      credentials: complexMdocQuery.credentials.map((c) => ({
+        ...c,
+        multiple: false,
+        require_cryptographic_holder_binding: true,
+      })),
       credential_sets: [
         {
           options: [['mdl-id'], ['photo_card-id']],

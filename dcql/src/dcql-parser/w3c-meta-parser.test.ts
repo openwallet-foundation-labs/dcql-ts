@@ -11,18 +11,21 @@ const metaExample = {
   meta: {
     type_values: [['one', 'two'], ['three']],
   },
+  require_cryptographic_holder_binding: true,
 } satisfies DcqlCredentialQuery.W3cVc
 
 const mdocCredentialExample = {
   credential_format: 'mso_mdoc',
   doctype: 'something',
   namespaces: {},
+  cryptographic_holder_binding: true,
 } satisfies DcqlMdocCredential
 
 const credentialExample = {
   credential_format: 'jwt_vc_json',
   type: ['one', 'two'],
   claims: {},
+  cryptographic_holder_binding: true,
 } satisfies DcqlW3cVcCredential
 
 describe('W3C Meta Parser', () => {
@@ -31,6 +34,7 @@ describe('W3C Meta Parser', () => {
     const res = v.parse(parser, credentialExample)
 
     expect(res).toEqual({
+      cryptographic_holder_binding: true,
       credential_format: 'jwt_vc_json',
       type: ['one', 'two'],
     })

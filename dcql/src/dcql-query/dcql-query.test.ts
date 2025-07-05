@@ -14,6 +14,7 @@ const mdocMvrcQuery = {
       id: 'my_credential',
       format: 'mso_mdoc' as const,
       meta: { doctype_value: 'org.iso.7367.1.mVRC' },
+      require_cryptographic_holder_binding: true,
       claims: [
         { path: ['org.iso.7367.1', 'vehicle_holder'], intent_to_retain: false },
         { path: ['org.iso.18013.5.1', 'first_name'], intent_to_retain: true },
@@ -47,6 +48,7 @@ const mdocNamespaceMvrcQuery = {
         { namespace: 'org.iso.7367.1', claim_name: 'vehicle_holder' },
         { namespace: 'org.iso.18013.5.1', claim_name: 'first_name' },
       ],
+      require_cryptographic_holder_binding: false,
     },
   ],
 } satisfies DcqlQuery.Input
@@ -65,6 +67,7 @@ const mdocMvrc = {
     type: 'aki',
     value: 'one',
   },
+  cryptographic_holder_binding: true,
 } satisfies DcqlMdocCredential
 
 const exampleMdoc = {
@@ -79,6 +82,7 @@ const exampleMdoc = {
     type: 'aki',
     value: 'something',
   },
+  cryptographic_holder_binding: true,
 } satisfies DcqlMdocCredential
 
 const sdJwtVcExampleQuery = {
@@ -90,6 +94,7 @@ const sdJwtVcExampleQuery = {
         vct_values: ['https://credentials.example.com/identity_credential'],
       },
       claims: [{ path: ['last_name'] }, { path: ['first_name'] }, { path: ['address', 'street_address'] }],
+      require_cryptographic_holder_binding: false,
     },
   ],
 } satisfies DcqlQuery.Input
@@ -104,6 +109,7 @@ const sdJwtVcMultipleExampleQuery = {
         vct_values: ['https://credentials.example.com/identity_credential'],
       },
       claims: [{ path: ['last_name'] }, { path: ['first_name'] }, { path: ['address', 'street_address'] }],
+      require_cryptographic_holder_binding: false,
     },
   ],
 } satisfies DcqlQuery.Input
@@ -131,6 +137,7 @@ const exampleSdJwtVc = {
     ],
     nationalities: ['British', 'Betelgeusian'],
   },
+  cryptographic_holder_binding: false,
 } satisfies DcqlSdJwtVcCredential
 
 /**
@@ -158,6 +165,7 @@ const w3cLdpVcQuery = {
         { path: ['first_name'] },
         { path: ['address', 'street_address'] },
       ],
+      require_cryptographic_holder_binding: false,
     },
   ],
 } satisfies DcqlQuery.Input
@@ -189,6 +197,7 @@ const exampleW3cLdpVc = {
     ],
     nationalities: ['British', 'Betelgeusian'],
   },
+  cryptographic_holder_binding: false,
 } satisfies DcqlW3cVcCredential
 
 describe('dcql-query', () => {
@@ -244,6 +253,7 @@ describe('dcql-query', () => {
                 doctype: ["Expected doctype to be 'org.iso.7367.1.mVRC' but received 'example_doctype'"],
               },
               output: {
+                cryptographic_holder_binding: true,
                 credential_format: 'mso_mdoc',
                 doctype: 'example_doctype',
               },
@@ -352,6 +362,7 @@ describe('dcql-query', () => {
               output: {
                 credential_format: 'mso_mdoc',
                 doctype: 'org.iso.7367.1.mVRC',
+                cryptographic_holder_binding: true,
               },
               success: true,
             },
@@ -414,6 +425,7 @@ describe('dcql-query', () => {
               output: {
                 credential_format: 'mso_mdoc',
                 doctype: 'org.iso.7367.1.mVRC',
+                cryptographic_holder_binding: true,
               },
             },
             claims: {
@@ -488,6 +500,7 @@ describe('dcql-query', () => {
               success: true,
               output: {
                 credential_format: 'ldp_vc',
+                cryptographic_holder_binding: false,
                 type: [
                   'https://www.w3.org/2018/credentials#VerifiableCredential',
                   'https://example.org/examples#AlumniCredential',
@@ -586,6 +599,7 @@ describe('dcql-query', () => {
               },
               output: {
                 credential_format: 'ldp_vc',
+                cryptographic_holder_binding: false,
                 type: [
                   'https://www.w3.org/2018/credentials#VerifiableCredential',
                   'https://example.org/examples#AlumniCredential',
@@ -686,6 +700,7 @@ describe('dcql-query', () => {
         success: true,
         output: {
           credential_format: 'vc+sd-jwt',
+          cryptographic_holder_binding: false,
           vct: 'https://credentials.example.com/identity_credential',
         },
       },

@@ -1,13 +1,15 @@
 import * as v from 'valibot'
+import { DcqlMdocCredential, DcqlSdJwtVcCredential, DcqlW3cVcCredential } from '../u-dcql-credential'
 
 export namespace DcqlMetaResult {
   export const vMetaSuccessResult = v.object({
     success: v.literal(true),
 
-    // TODO: This needs to be format specific
-    output: v.object({
-      credential_format: v.string(),
-    }),
+    output: v.variant('credential_format', [
+      v.pick(DcqlSdJwtVcCredential.vModel, ['credential_format', 'cryptographic_holder_binding', 'vct']),
+      v.pick(DcqlMdocCredential.vModel, ['credential_format', 'cryptographic_holder_binding', 'doctype']),
+      v.pick(DcqlW3cVcCredential.vModel, ['credential_format', 'cryptographic_holder_binding', 'type']),
+    ]),
   })
 
   export const vMetaFailureResult = v.object({

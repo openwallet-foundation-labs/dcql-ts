@@ -49,6 +49,7 @@ const mdocMvrc = {
     },
     'org.iso.18013.5.1': { first_name: 'Martin Auer' },
   },
+  cryptographic_holder_binding: true,
 } satisfies DcqlMdocCredential
 
 const exampleMdoc = {
@@ -59,6 +60,7 @@ const exampleMdoc = {
       example_claim: 'example_value',
     },
   },
+  cryptographic_holder_binding: true,
 } satisfies DcqlMdocCredential
 
 const sdJwtVcExampleQuery = {
@@ -104,6 +106,7 @@ const sdJwtVc = {
     ],
     nationalities: ['British', 'Betelgeusian'],
   },
+  cryptographic_holder_binding: true,
 } satisfies DcqlSdJwtVcCredential
 
 describe('dcql-query trusted authorities', () => {
@@ -141,6 +144,7 @@ describe('dcql-query trusted authorities', () => {
               output: {
                 credential_format: 'mso_mdoc',
                 doctype: 'org.iso.7367.1.mVRC',
+                cryptographic_holder_binding: true,
               },
             },
             claims: {
@@ -199,6 +203,7 @@ describe('dcql-query trusted authorities', () => {
               output: {
                 credential_format: 'mso_mdoc',
                 doctype: 'org.iso.7367.1.mVRC',
+                cryptographic_holder_binding: true,
               },
             },
             claims: {
@@ -262,6 +267,7 @@ describe('dcql-query trusted authorities', () => {
               output: {
                 credential_format: 'mso_mdoc',
                 doctype: 'org.iso.7367.1.mVRC',
+                cryptographic_holder_binding: true,
               },
             },
             claims: {
@@ -322,6 +328,7 @@ describe('dcql-query trusted authorities', () => {
               output: {
                 credential_format: 'mso_mdoc',
                 doctype: 'org.iso.7367.1.mVRC',
+                cryptographic_holder_binding: true,
               },
             },
             claims: {
@@ -379,6 +386,7 @@ describe('dcql-query trusted authorities', () => {
               output: {
                 credential_format: 'mso_mdoc',
                 doctype: 'org.iso.7367.1.mVRC',
+                cryptographic_holder_binding: true,
               },
             },
             claims: {
@@ -433,6 +441,7 @@ describe('dcql-query trusted authorities', () => {
               output: {
                 credential_format: 'mso_mdoc',
                 doctype: 'org.iso.7367.1.mVRC',
+                cryptographic_holder_binding: true,
               },
             },
             claims: {
@@ -487,6 +496,7 @@ describe('dcql-query trusted authorities', () => {
               success: true,
               output: {
                 credential_format: 'vc+sd-jwt',
+                cryptographic_holder_binding: true,
                 vct: 'https://credentials.example.com/identity_credential',
               },
             },
@@ -547,6 +557,7 @@ describe('dcql-query trusted authorities', () => {
             meta: {
               success: true,
               output: {
+                cryptographic_holder_binding: true,
                 credential_format: 'vc+sd-jwt',
                 vct: 'https://credentials.example.com/identity_credential',
               },

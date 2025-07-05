@@ -6,6 +6,21 @@ import { Model } from './u-model.js'
 
 const vCredentialModelBase = v.object({
   authority: v.optional(DcqlCredentialTrustedAuthority.vModel),
+
+  /**
+   * Indicates support/inclusion of cryptographic holder binding. This will be checked against
+   * the `require_cryptographic_holder_binding` property from the query.
+   *
+   * In the context of a presentation this value means whether the presentation is created
+   * with cryptograhpic holder hinding. In the context of a credential query this means whether
+   * the credential supports cryptographic holder binding.
+   */
+  cryptographic_holder_binding: v.pipe(
+    v.boolean(),
+    v.description(
+      'Indicates support/inclusion of cryptographic holder binding. This will be checked against the `require_cryptographic_holder_binding` property from the query.'
+    )
+  ),
 })
 
 export namespace DcqlMdocCredential {
