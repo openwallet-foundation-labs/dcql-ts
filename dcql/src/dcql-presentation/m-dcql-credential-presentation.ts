@@ -3,44 +3,22 @@ import { DcqlMdocCredential, DcqlSdJwtVcCredential, DcqlW3cVcCredential } from '
 import type { InferModelTypes } from '../u-model'
 import { Model } from '../u-model'
 
-const vBaseModel = v.object({
-  /**
-   * Whether this presentation includes cryptographic holder binding. This will be checked against
-   * the `require_cryptographic_holder_binding` property from the query
-   */
-  includes_cryptographic_holder_binding: v.pipe(
-    v.boolean(),
-    v.description(
-      'Whether this presentation includes cryptographic holder binding. This will be checked against the `require_cryptographic_holder_binding` property from the query'
-    )
-  ),
-})
-
 export namespace DcqlMdocPresentation {
-  export const vModel = v.object({
-    ...DcqlMdocCredential.vModel.entries,
-    ...vBaseModel.entries,
-  })
+  export const vModel = DcqlMdocCredential.vModel
   export const model = new Model({ vModel })
   export type Model = InferModelTypes<typeof model>
 }
 export type DcqlMdocPresentation = DcqlMdocPresentation.Model['Output']
 
 export namespace DcqlSdJwtVcPresentation {
-  export const vModel = v.object({
-    ...DcqlSdJwtVcCredential.vModel.entries,
-    ...vBaseModel.entries,
-  })
+  export const vModel = DcqlSdJwtVcCredential.vModel
   export const model = new Model({ vModel })
   export type Model = InferModelTypes<typeof model>
 }
 export type DcqlSdJwtVcPresentation = DcqlSdJwtVcPresentation.Model['Output']
 
 export namespace DcqlW3cVcPresentation {
-  export const vModel = v.object({
-    ...DcqlW3cVcCredential.vModel.entries,
-    ...vBaseModel.entries,
-  })
+  export const vModel = DcqlW3cVcCredential.vModel
   export const model = new Model({ vModel })
   export type Model = InferModelTypes<typeof model>
 }
