@@ -1,5 +1,22 @@
 # dcql
 
+## 0.4.0
+
+### Minor Changes
+
+- 2816b2d: feat: add support for the 'multiple' parameter in a DCQL query.
+
+  When the 'multipe' keyword is present (which is 'false' by default) a presentation can have multiple credentials.
+  It is still required for all presentations submitted to match against the query they are submitted to, even in the case
+  of 'multiple' and there is already a valid match, as well as if a credential set is optional.
+
+- b05782b: feat: add support for 'require_cryptographic_holder_binding' parameter.
+
+  Each presentation passed to the `DcqlPresentationResult.fromDcqlPresentation` method, and each credential passed to the `DcqlQuery.query` method, must now include a `cryptographic_holder_binding` boolean property. Both will be checked against the DCQL query to ensure cryptographic holder binding is supported and present when required.
+
+- 2816b2d: refactor: rename canBeSatisfied to can_be_satisfied for casing consistency
+- 2816b2d: refactor of the whole structure returned by this library. It is a breaking change, but splits up all the checks into separate groups, including meta (vct, doctype, credential format, etc..), trusted authorities, and claims matching. It also includes detailed context on exactly which claims succeeded/failed, allowing for more control and insights into why a query did or didn't match
+
 ## 0.3.0
 
 ### Minor Changes
