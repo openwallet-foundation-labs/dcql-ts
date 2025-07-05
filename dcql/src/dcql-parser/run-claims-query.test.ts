@@ -36,12 +36,13 @@ const claimsExample = {
 describe('Run Claims Query', () => {
   it('mso_mdoc without claims and claim sets', () => {
     const result = runClaimsQuery(
-      { format: 'mso_mdoc', id: 'mso_mdoc', multiple: false },
+      { format: 'mso_mdoc', id: 'mso_mdoc', multiple: false, require_cryptographic_holder_binding: true },
       {
         credential: {
           credential_format: 'mso_mdoc',
           namespaces: namespacesExample,
           doctype: 'org.iso.18013.5.1',
+          cryptographic_holder_binding: true,
         },
         presentation: false,
       }
@@ -67,6 +68,7 @@ describe('Run Claims Query', () => {
     const result = runClaimsQuery(
       {
         format: 'mso_mdoc',
+        require_cryptographic_holder_binding: true,
         id: 'mso_mdoc',
         multiple: false,
         claims: [
@@ -81,6 +83,7 @@ describe('Run Claims Query', () => {
       },
       {
         credential: {
+          cryptographic_holder_binding: true,
           credential_format: 'mso_mdoc',
           namespaces: namespacesExample,
           doctype: 'org.iso.18013.5.1.mDL',
@@ -126,6 +129,7 @@ describe('Run Claims Query', () => {
         format: 'mso_mdoc',
         id: 'mso_mdoc',
         multiple: false,
+        require_cryptographic_holder_binding: true,
         claims: [
           {
             path: ['org.iso.18013.5.1', 'given_name'],
@@ -138,6 +142,7 @@ describe('Run Claims Query', () => {
       },
       {
         credential: {
+          cryptographic_holder_binding: true,
           credential_format: 'mso_mdoc',
           namespaces: namespacesExample,
           doctype: 'org.iso.18013.5.1.mDL',
@@ -191,9 +196,10 @@ describe('Run Claims Query', () => {
 
   it('dc+sd-jwt without claims and claim sets', () => {
     const result = runClaimsQuery(
-      { format: 'dc+sd-jwt', id: 'dc-sd-jwt', multiple: false },
+      { format: 'dc+sd-jwt', id: 'dc-sd-jwt', multiple: false, require_cryptographic_holder_binding: true },
       {
         credential: {
+          cryptographic_holder_binding: true,
           credential_format: 'dc+sd-jwt',
           claims: claimsExample,
           vct: 'SdJwtVc',
@@ -222,6 +228,7 @@ describe('Run Claims Query', () => {
     const result = runClaimsQuery(
       {
         format: 'dc+sd-jwt',
+        require_cryptographic_holder_binding: true,
         id: 'dc-sd-jwt',
         multiple: false,
         claims: [
@@ -247,6 +254,7 @@ describe('Run Claims Query', () => {
       {
         credential: {
           credential_format: 'dc+sd-jwt',
+          cryptographic_holder_binding: true,
           claims: claimsExample,
           vct: 'SdJwtVc',
         },
@@ -378,6 +386,7 @@ describe('Run Claims Query', () => {
             path: ['degrees', null],
           },
         ],
+        require_cryptographic_holder_binding: true,
         claim_sets: [
           ['0', '1', '2', '3', '4'],
           ['0', '1', '3', '4'],
@@ -385,6 +394,7 @@ describe('Run Claims Query', () => {
       },
       {
         credential: {
+          cryptographic_holder_binding: true,
           credential_format: 'dc+sd-jwt',
           claims: claimsExample,
           vct: 'SdJwtVc',

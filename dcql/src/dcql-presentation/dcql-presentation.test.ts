@@ -686,7 +686,7 @@ describe('DCQL presentation with claim sets', () => {
     const dcqlPresentation = {
       '8c791a1f-12b4-41fe-a892-236c2887fa8e': [
         {
-          credential_format: 'vc+sd-jwt',
+          credential_format: 'vc+sd-jwt' as const,
           vct: 'PersonIdentificationData',
           cryptographic_holder_binding: true,
           claims: {
@@ -697,7 +697,7 @@ describe('DCQL presentation with claim sets', () => {
       ],
       'a46e92c0-847f-41f2-9218-2914e1d2388a': [
         {
-          credential_format: 'vc+sd-jwt',
+          credential_format: 'vc+sd-jwt' as const,
           vct: 'PersonIdentificationData',
           cryptographic_holder_binding: true,
           claims: {
@@ -706,7 +706,7 @@ describe('DCQL presentation with claim sets', () => {
           },
         },
       ],
-    } as const
+    }
 
     const parsedQuery = DcqlQuery.parse(query)
     DcqlQuery.validate(parsedQuery)
