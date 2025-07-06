@@ -1,5 +1,11 @@
 # dcql
 
+## 0.4.2
+
+### Patch Changes
+
+- 0866100: refactor: update message for cryptographic holder binding for clarity
+
 ## 0.4.1
 
 ### Patch Changes
