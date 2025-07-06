@@ -159,7 +159,7 @@ describe('DCQL presentation with claim sets', () => {
                       family_name: ["Expected claim 'family_name' to be defined"],
                     },
                     failed_claim_indexes: [0, 1],
-                    valid_claim_indexes: [2],
+                    valid_claim_indexes: [],
                   },
                 ],
                 valid_claim_sets: [
@@ -289,7 +289,7 @@ describe('DCQL presentation with claim sets', () => {
                     },
                     claim_set_index: 0,
                     failed_claim_indexes: [2],
-                    valid_claim_indexes: [0, 1],
+                    valid_claim_indexes: [],
                   },
                 ],
                 valid_claim_sets: [
@@ -435,7 +435,7 @@ describe('DCQL presentation with claim sets', () => {
                     },
                     claim_set_index: 0,
                     failed_claim_indexes: [2],
-                    valid_claim_indexes: [0, 1],
+                    valid_claim_indexes: [],
                   },
                 ],
                 valid_claim_sets: [
@@ -591,7 +591,7 @@ describe('DCQL presentation with claim sets', () => {
                     },
                     claim_set_index: 0,
                     failed_claim_indexes: [2],
-                    valid_claim_indexes: [0, 1],
+                    valid_claim_indexes: [],
                   },
                 ],
                 valid_claim_sets: [
@@ -759,7 +759,7 @@ describe('DCQL presentation with claim sets', () => {
                     },
                     claim_set_index: 0,
                     failed_claim_indexes: [2],
-                    valid_claim_indexes: [0, 1],
+                    valid_claim_indexes: [],
                   },
                 ],
                 valid_claim_sets: [

@@ -243,7 +243,7 @@ export const runClaimsQuery = (
         success: true,
         claim_set_index: claimSetIndex,
         output,
-        valid_claim_indexes: validClaims.map((claim) => claim.claim_index),
+        valid_claim_indexes: claims.map((claim) => claim.claim_index),
       })
     } else {
       const issues = failedClaims.reduce((merged, claim) => deepMerge(claim.issues, merged), {})
@@ -251,8 +251,11 @@ export const runClaimsQuery = (
         success: false,
         issues,
         claim_set_index: claimSetIndex,
-        failed_claim_indexes: failedClaims.map((claim) => claim.claim_index) as [number, ...number[]],
-        valid_claim_indexes: validClaims.map((claim) => claim.claim_index),
+        failed_claim_indexes: claims.filter((claim) => !claim.success).map((claim) => claim.claim_index) as [
+          number,
+          ...number[],
+        ],
+        valid_claim_indexes: claims.filter((claim) => claim.success).map((claim) => claim.claim_index),
       })
     }
   }
