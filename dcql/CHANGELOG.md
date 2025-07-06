@@ -1,5 +1,11 @@
 # dcql
 
+## 0.4.1
+
+### Patch Changes
+
+- 0916622: fix: do not include claim indexes not applicable for the current claim_set
+
 ## 0.4.0
 
 ### Minor Changes

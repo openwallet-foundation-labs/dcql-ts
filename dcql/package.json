@@ -2,7 +2,7 @@
   "name": "dcql",
   "description": "Digital Credentials Query Language (DCQL)",
   "author": "Martin Auer",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "private": false,
   "publishConfig": {
     "main": "./dist/index.js",
@@ -17,7 +17,9 @@
       "./package.json": "./package.json"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "license": "MIT",
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts --clean --sourcemap",
