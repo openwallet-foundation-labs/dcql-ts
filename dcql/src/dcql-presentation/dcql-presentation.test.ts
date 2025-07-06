@@ -925,7 +925,7 @@ describe('DCQL presentation with claim sets', () => {
     ).toEqual({
       issues: {
         cryptographic_holder_binding: [
-          "Expected cryptographic_holder_binding to be true but received false because credential query '8c791a1f-12b4-41fe-a892-236c2887fa8e' requires cryptographic holder binding",
+          "Expected cryptographic_holder_binding to be true (because credential query '8c791a1f-12b4-41fe-a892-236c2887fa8e' requires cryptographic holder binding), but received false",
         ],
       },
       output: {

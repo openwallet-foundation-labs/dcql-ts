@@ -11,7 +11,7 @@ const getCryptographicHolderBindingValue = (credentialQuery: DcqlCredentialQuery
       ? v.literal(
           true,
           (i) =>
-            `Expected cryptographic_holder_binding to be true but received ${i.input} because credential query '${credentialQuery.id}' requires cryptographic holder binding`
+            `Expected cryptographic_holder_binding to be true (because credential query '${credentialQuery.id}' requires cryptographic holder binding), but received ${i.input}`
         )
       : v.boolean(),
   })
