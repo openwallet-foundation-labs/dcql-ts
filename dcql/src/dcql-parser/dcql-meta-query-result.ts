@@ -13,7 +13,7 @@ const getCryptographicHolderBindingValue = (credentialQuery: DcqlCredentialQuery
           (i) =>
             `Expected cryptographic_holder_binding to be true (because credential query '${credentialQuery.id}' requires cryptographic holder binding), but received ${i.input}`
         )
-      : v.boolean(),
+      : v.optional(v.boolean()),
   })
 
 const getMdocMetaParser = (credentialQuery: DcqlCredentialQuery.Mdoc) => {

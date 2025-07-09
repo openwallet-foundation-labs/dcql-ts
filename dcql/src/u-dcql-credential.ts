@@ -16,7 +16,7 @@ const vCredentialModelBase = v.object({
    * the credential supports cryptographic holder binding.
    */
   cryptographic_holder_binding: v.pipe(
-    v.boolean(),
+    v.optional(v.boolean()),
     v.description(
       'Indicates support/inclusion of cryptographic holder binding. This will be checked against the `require_cryptographic_holder_binding` property from the query.'
     )
