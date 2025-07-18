@@ -5,6 +5,14 @@ export const idRegex = /^[a-zA-Z0-9_-]+$/
 // biome-ignore lint/suspicious/noExplicitAny: we want to allow any schema here
 export type vBaseSchemaAny = v.BaseSchema<any, any, any>
 
+export function asNonEmptyArrayOrUndefined<U>(array: U[]): NonEmptyArray<U> | undefined {
+  return array.length > 0 ? (array as NonEmptyArray<U>) : undefined
+}
+
+export function isNonEmptyArray<U>(array: U[]): array is NonEmptyArray<U> {
+  return array.length > 0
+}
+
 export type NonEmptyArray<T> = [T, ...T[]]
 export type ToNonEmptyArray<T extends Array<unknown>> = [T[number], ...T]
 export const vNonEmptyArray = <const TItem extends v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>>(

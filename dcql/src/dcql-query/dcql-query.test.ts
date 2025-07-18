@@ -265,7 +265,7 @@ describe('dcql-query', () => {
                   claim_set_index: undefined,
                   success: false,
                   failed_claim_indexes: [0, 1],
-                  valid_claim_indexes: [],
+                  valid_claim_indexes: undefined,
                   issues: {
                     'org.iso.18013.5.1': ["Expected claim 'org.iso.18013.5.1'.'first_name' to be defined"],
                     'org.iso.7367.1': ["Expected claim 'org.iso.7367.1'.'vehicle_holder' to be defined"],
@@ -292,7 +292,7 @@ describe('dcql-query', () => {
                   output: {},
                 },
               ],
-              valid_claims: [],
+              valid_claims: undefined,
             },
           },
         ],
@@ -316,8 +316,8 @@ describe('dcql-query', () => {
         valid_credentials: [
           {
             claims: {
-              failed_claim_sets: [],
-              failed_claims: [],
+              failed_claim_sets: undefined,
+              failed_claims: undefined,
               success: true,
               valid_claim_sets: [
                 {
@@ -368,7 +368,7 @@ describe('dcql-query', () => {
             },
             success: true,
             trusted_authorities: {
-              failed_trusted_authorities: [],
+              failed_trusted_authorities: undefined,
               success: true,
               valid_trusted_authority: {
                 output: {
@@ -403,7 +403,7 @@ describe('dcql-query', () => {
       my_credential: {
         success: true,
         credential_query_id: 'my_credential',
-        failed_credentials: [],
+        failed_credentials: undefined,
         valid_credentials: [
           {
             success: true,
@@ -418,7 +418,7 @@ describe('dcql-query', () => {
                   value: 'one',
                 },
               },
-              failed_trusted_authorities: [],
+              failed_trusted_authorities: undefined,
             },
             meta: {
               success: true,
@@ -430,7 +430,7 @@ describe('dcql-query', () => {
             },
             claims: {
               success: true,
-              failed_claim_sets: [],
+              failed_claim_sets: undefined,
               valid_claim_sets: [
                 {
                   success: true,
@@ -468,7 +468,7 @@ describe('dcql-query', () => {
                   },
                 },
               ],
-              failed_claims: [],
+              failed_claims: undefined,
             },
           },
         ],
@@ -488,7 +488,7 @@ describe('dcql-query', () => {
       my_credential: {
         success: true,
         credential_query_id: 'my_credential',
-        failed_credentials: [],
+        failed_credentials: undefined,
         valid_credentials: [
           {
             success: true,
@@ -510,7 +510,7 @@ describe('dcql-query', () => {
             },
             claims: {
               success: true,
-              failed_claim_sets: [],
+              failed_claim_sets: undefined,
               valid_claim_sets: [
                 {
                   success: true,
@@ -553,7 +553,7 @@ describe('dcql-query', () => {
                   },
                 },
               ],
-              failed_claims: [],
+              failed_claims: undefined,
             },
           },
         ],
@@ -608,7 +608,7 @@ describe('dcql-query', () => {
             },
             claims: {
               success: true,
-              failed_claim_sets: [],
+              failed_claim_sets: undefined,
               valid_claim_sets: [
                 {
                   success: true,
@@ -651,7 +651,7 @@ describe('dcql-query', () => {
                   },
                 },
               ],
-              failed_claims: [],
+              failed_claims: undefined,
             },
           },
         ],
@@ -678,7 +678,7 @@ describe('dcql-query', () => {
 
     assert(res.can_be_satisfied)
     expect(res.credential_matches.my_credential.valid_credentials?.length).toEqual(1)
-    expect(res.credential_matches.my_credential.failed_credentials.length).toEqual(1)
+    expect(res.credential_matches.my_credential.failed_credentials?.length).toEqual(1)
   })
 
   it("sdJwtVc with 'multiple' set to true succeeds", (_t) => {
@@ -706,7 +706,7 @@ describe('dcql-query', () => {
       },
       claims: {
         success: true,
-        failed_claim_sets: [],
+        failed_claim_sets: undefined,
         valid_claim_sets: [
           {
             success: true,
@@ -749,14 +749,14 @@ describe('dcql-query', () => {
             },
           },
         ],
-        failed_claims: [],
+        failed_claims: undefined,
       },
     } as const
     assert.deepStrictEqual(res.credential_matches, {
       my_credential: {
         success: true,
         credential_query_id: 'my_credential',
-        failed_credentials: [],
+        failed_credentials: undefined,
 
         // Match should be same except for credential index
         valid_credentials: [match, { ...match, input_credential_index: 1 }],

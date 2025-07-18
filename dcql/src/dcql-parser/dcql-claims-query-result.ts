@@ -4,7 +4,7 @@ import type { DcqlClaimsResult } from '../dcql-query-result/m-claims-result.js'
 import { DcqlClaimsQuery } from '../dcql-query/m-dcql-claims-query.js'
 import type { DcqlCredentialQuery } from '../dcql-query/m-dcql-credential-query.js'
 import type { DcqlCredential } from '../u-dcql-credential.js'
-import type { ToNonEmptyArray, vBaseSchemaAny } from '../u-dcql.js'
+import { type ToNonEmptyArray, asNonEmptyArrayOrUndefined, isNonEmptyArray, type vBaseSchemaAny } from '../u-dcql.js'
 import { deepMerge } from '../util/deep-merge.js'
 
 const pathToString = (path: Array<string | null | number>) =>
@@ -161,17 +161,17 @@ export const runClaimsQuery = (
   if (!credentialQuery.claims) {
     return {
       success: true,
-      valid_claims: [],
-      failed_claims: [],
+      valid_claims: undefined,
+      failed_claims: undefined,
       valid_claim_sets: [
         {
           claim_set_index: undefined,
           output: {},
           success: true,
-          valid_claim_indexes: [],
+          valid_claim_indexes: undefined,
         },
       ],
-      failed_claim_sets: [],
+      failed_claim_sets: undefined,
     }
   }
 
@@ -243,7 +243,7 @@ export const runClaimsQuery = (
         success: true,
         claim_set_index: claimSetIndex,
         output,
-        valid_claim_indexes: claims.map((claim) => claim.claim_index),
+        valid_claim_indexes: asNonEmptyArrayOrUndefined(claims.map((claim) => claim.claim_index)),
       })
     } else {
       const issues = failedClaims.reduce((merged, claim) => deepMerge(claim.issues, merged), {})
@@ -255,25 +255,29 @@ export const runClaimsQuery = (
           number,
           ...number[],
         ],
-        valid_claim_indexes: claims.filter((claim) => claim.success).map((claim) => claim.claim_index),
+        valid_claim_indexes: asNonEmptyArrayOrUndefined(
+          claims.filter((claim) => claim.success).map((claim) => claim.claim_index)
+        ),
       })
     }
   }
 
-  if (validClaimSets.length === 0) {
+  if (isNonEmptyArray(validClaimSets)) {
     return {
-      success: false,
-      failed_claim_sets: failedClaimSets as ToNonEmptyArray<typeof failedClaimSets>,
-      failed_claims: failedClaims.map(({ parser, ...rest }) => rest) as ToNonEmptyArray<typeof failedClaims>,
-      valid_claims: validClaims.map(({ parser, ...rest }) => rest),
+      success: true,
+      failed_claim_sets: asNonEmptyArrayOrUndefined(failedClaimSets),
+      valid_claim_sets: validClaimSets,
+      valid_claims: asNonEmptyArrayOrUndefined(validClaims.map(({ parser, ...rest }) => rest)),
+      failed_claims: asNonEmptyArrayOrUndefined(failedClaims.map(({ parser, ...rest }) => rest)),
     }
   }
 
+  // If valid claim sets is empty we know for sure there
+  // is at least one failed claim and one failed claim set
   return {
-    success: true,
-    failed_claim_sets: failedClaimSets,
-    valid_claim_sets: validClaimSets as ToNonEmptyArray<typeof validClaimSets>,
-    valid_claims: validClaims.map(({ parser, ...rest }) => rest),
-    failed_claims: failedClaims.map(({ parser, ...rest }) => rest),
+    success: false,
+    failed_claim_sets: failedClaimSets as ToNonEmptyArray<typeof failedClaimSets>,
+    failed_claims: failedClaims.map(({ parser, ...rest }) => rest) as ToNonEmptyArray<typeof failedClaims>,
+    valid_claims: asNonEmptyArrayOrUndefined(validClaims.map(({ parser, ...rest }) => rest)),
   }
 }

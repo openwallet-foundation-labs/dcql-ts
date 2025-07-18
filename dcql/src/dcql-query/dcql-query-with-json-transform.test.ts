@@ -111,7 +111,7 @@ describe('DCQL Query With Json Transform', () => {
       my_credential: {
         success: true,
         credential_query_id: 'my_credential',
-        failed_credentials: [],
+        failed_credentials: undefined,
         valid_credentials: [
           {
             success: true,
@@ -129,7 +129,7 @@ describe('DCQL Query With Json Transform', () => {
             },
             claims: {
               success: true,
-              failed_claim_sets: [],
+              failed_claim_sets: undefined,
               valid_claim_sets: [
                 {
                   claim_set_index: undefined,
@@ -167,7 +167,7 @@ describe('DCQL Query With Json Transform', () => {
                   },
                 },
               ],
-              failed_claims: [],
+              failed_claims: undefined,
             },
           },
         ],
@@ -191,7 +191,7 @@ describe('DCQL Query With Json Transform', () => {
       my_credential: {
         success: true,
         credential_query_id: 'my_credential',
-        failed_credentials: [],
+        failed_credentials: undefined,
         valid_credentials: [
           {
             success: true,
@@ -209,7 +209,7 @@ describe('DCQL Query With Json Transform', () => {
             },
             claims: {
               success: true,
-              failed_claim_sets: [],
+              failed_claim_sets: undefined,
               valid_claim_sets: [
                 {
                   claim_set_index: undefined,
@@ -247,7 +247,7 @@ describe('DCQL Query With Json Transform', () => {
                   },
                 },
               ],
-              failed_claims: [],
+              failed_claims: undefined,
             },
           },
         ],
@@ -302,7 +302,7 @@ describe('DCQL Query With Json Transform', () => {
                     ],
                   },
                   failed_claim_indexes: [0, 1, 2, 3],
-                  valid_claim_indexes: [],
+                  valid_claim_indexes: undefined,
                 },
               ],
               failed_claims: [
@@ -349,7 +349,7 @@ describe('DCQL Query With Json Transform', () => {
                   },
                 },
               ],
-              valid_claims: [],
+              valid_claims: undefined,
             },
           },
         ],
@@ -370,7 +370,7 @@ describe('DCQL Query With Json Transform', () => {
             },
             claims: {
               success: true,
-              failed_claim_sets: [],
+              failed_claim_sets: undefined,
               valid_claim_sets: [
                 {
                   claim_set_index: undefined,
@@ -426,7 +426,7 @@ describe('DCQL Query With Json Transform', () => {
                   },
                 },
               ],
-              failed_claims: [],
+              failed_claims: undefined,
             },
           },
         ],
@@ -452,7 +452,7 @@ describe('DCQL Query With Json Transform', () => {
       my_credential: {
         success: true,
         credential_query_id: 'my_credential',
-        failed_credentials: [],
+        failed_credentials: undefined,
         valid_credentials: [
           {
             success: true,
@@ -470,7 +470,7 @@ describe('DCQL Query With Json Transform', () => {
             },
             claims: {
               success: true,
-              failed_claim_sets: [],
+              failed_claim_sets: undefined,
               valid_claim_sets: [
                 {
                   success: true,
@@ -526,7 +526,7 @@ describe('DCQL Query With Json Transform', () => {
                   },
                 },
               ],
-              failed_claims: [],
+              failed_claims: undefined,
             },
           },
         ],

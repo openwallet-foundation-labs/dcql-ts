@@ -122,7 +122,7 @@ describe('dcql-query trusted authorities', () => {
       my_credential: {
         success: true,
         credential_query_id: 'my_credential',
-        failed_credentials: [],
+        failed_credentials: undefined,
         valid_credentials: [
           {
             success: true,
@@ -137,7 +137,7 @@ describe('dcql-query trusted authorities', () => {
                   value: 's9tIpPmhxdiuNkHMEWNpYim8S8Y',
                 },
               },
-              failed_trusted_authorities: [],
+              failed_trusted_authorities: undefined,
             },
             meta: {
               success: true,
@@ -149,17 +149,17 @@ describe('dcql-query trusted authorities', () => {
             },
             claims: {
               success: true,
-              valid_claims: [],
-              failed_claims: [],
+              valid_claims: undefined,
+              failed_claims: undefined,
               valid_claim_sets: [
                 {
                   claim_set_index: undefined,
                   output: {},
                   success: true,
-                  valid_claim_indexes: [],
+                  valid_claim_indexes: undefined,
                 },
               ],
-              failed_claim_sets: [],
+              failed_claim_sets: undefined,
             },
           },
         ],
@@ -184,7 +184,7 @@ describe('dcql-query trusted authorities', () => {
       my_credential: {
         success: true,
         credential_query_id: 'my_credential',
-        failed_credentials: [],
+        failed_credentials: undefined,
         valid_credentials: [
           {
             success: true,
@@ -196,7 +196,7 @@ describe('dcql-query trusted authorities', () => {
                 trusted_authority_index: 0,
                 output: { type: 'aki', value: 's9tIpPmhxdiuNkHMEWNpYim8S8Y' },
               },
-              failed_trusted_authorities: [],
+              failed_trusted_authorities: undefined,
             },
             meta: {
               success: true,
@@ -208,17 +208,17 @@ describe('dcql-query trusted authorities', () => {
             },
             claims: {
               success: true,
-              valid_claims: [],
-              failed_claims: [],
+              valid_claims: undefined,
+              failed_claims: undefined,
               valid_claim_sets: [
                 {
                   output: {},
                   success: true,
-                  valid_claim_indexes: [],
+                  valid_claim_indexes: undefined,
                   claim_set_index: undefined,
                 },
               ],
-              failed_claim_sets: [],
+              failed_claim_sets: undefined,
             },
           },
         ],
@@ -272,17 +272,17 @@ describe('dcql-query trusted authorities', () => {
             },
             claims: {
               success: true,
-              valid_claims: [],
-              failed_claims: [],
+              valid_claims: undefined,
+              failed_claims: undefined,
               valid_claim_sets: [
                 {
                   claim_set_index: undefined,
                   output: {},
                   success: true,
-                  valid_claim_indexes: [],
+                  valid_claim_indexes: undefined,
                 },
               ],
-              failed_claim_sets: [],
+              failed_claim_sets: undefined,
             },
           },
         ],
@@ -333,17 +333,17 @@ describe('dcql-query trusted authorities', () => {
             },
             claims: {
               success: true,
-              valid_claims: [],
-              failed_claims: [],
+              valid_claims: undefined,
+              failed_claims: undefined,
               valid_claim_sets: [
                 {
                   claim_set_index: undefined,
                   output: {},
                   success: true,
-                  valid_claim_indexes: [],
+                  valid_claim_indexes: undefined,
                 },
               ],
-              failed_claim_sets: [],
+              failed_claim_sets: undefined,
             },
           },
         ],
@@ -391,17 +391,17 @@ describe('dcql-query trusted authorities', () => {
             },
             claims: {
               success: true,
-              valid_claims: [],
-              failed_claims: [],
+              valid_claims: undefined,
+              failed_claims: undefined,
               valid_claim_sets: [
                 {
                   claim_set_index: undefined,
                   output: {},
                   success: true,
-                  valid_claim_indexes: [],
+                  valid_claim_indexes: undefined,
                 },
               ],
-              failed_claim_sets: [],
+              failed_claim_sets: undefined,
             },
           },
         ],
@@ -446,17 +446,17 @@ describe('dcql-query trusted authorities', () => {
             },
             claims: {
               success: true,
-              valid_claims: [],
-              failed_claims: [],
+              valid_claims: undefined,
+              failed_claims: undefined,
               valid_claim_sets: [
                 {
                   claim_set_index: undefined,
                   output: {},
                   success: true,
-                  valid_claim_indexes: [],
+                  valid_claim_indexes: undefined,
                 },
               ],
-              failed_claim_sets: [],
+              failed_claim_sets: undefined,
             },
           },
         ],
@@ -475,7 +475,7 @@ describe('dcql-query trusted authorities', () => {
       my_credential: {
         success: true,
         credential_query_id: 'my_credential',
-        failed_credentials: [],
+        failed_credentials: undefined,
         valid_credentials: [
           {
             success: true,
@@ -490,7 +490,7 @@ describe('dcql-query trusted authorities', () => {
                   value: 'https://list.com',
                 },
               },
-              failed_trusted_authorities: [],
+              failed_trusted_authorities: undefined,
             },
             meta: {
               success: true,
@@ -502,17 +502,17 @@ describe('dcql-query trusted authorities', () => {
             },
             claims: {
               success: true,
-              valid_claims: [],
-              failed_claims: [],
+              valid_claims: undefined,
+              failed_claims: undefined,
               valid_claim_sets: [
                 {
                   claim_set_index: undefined,
                   output: {},
                   success: true,
-                  valid_claim_indexes: [],
+                  valid_claim_indexes: undefined,
                 },
               ],
-              failed_claim_sets: [],
+              failed_claim_sets: undefined,
             },
           },
         ],
@@ -537,7 +537,7 @@ describe('dcql-query trusted authorities', () => {
       my_credential: {
         success: true,
         credential_query_id: 'my_credential',
-        failed_credentials: [],
+        failed_credentials: undefined,
         valid_credentials: [
           {
             success: true,
@@ -552,7 +552,7 @@ describe('dcql-query trusted authorities', () => {
                   value: 'https://list.com',
                 },
               },
-              failed_trusted_authorities: [],
+              failed_trusted_authorities: undefined,
             },
             meta: {
               success: true,
@@ -564,17 +564,17 @@ describe('dcql-query trusted authorities', () => {
             },
             claims: {
               success: true,
-              valid_claims: [],
-              failed_claims: [],
+              valid_claims: undefined,
+              failed_claims: undefined,
               valid_claim_sets: [
                 {
                   output: {},
                   success: true,
-                  valid_claim_indexes: [],
+                  valid_claim_indexes: undefined,
                   claim_set_index: undefined,
                 },
               ],
-              failed_claim_sets: [],
+              failed_claim_sets: undefined,
             },
           },
         ],

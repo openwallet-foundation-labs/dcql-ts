@@ -188,9 +188,35 @@ describe('complex-mdoc-query', () => {
     const query = DcqlQuery.parse(complexMdocQuery)
     DcqlQuery.validate(query)
 
-    expect(() => DcqlQuery.query(query, [])).toThrow(
-      'Credentials array provided to credential query has length of 0, unable to match credentials against credential query.'
-    )
+    expect(DcqlQuery.query(query, [])).toMatchObject({
+      can_be_satisfied: false,
+      credential_matches: {
+        'mdl-address': {
+          credential_query_id: 'mdl-address',
+          failed_credentials: undefined,
+          success: false,
+          valid_credentials: undefined,
+        },
+        'mdl-id': {
+          credential_query_id: 'mdl-id',
+          failed_credentials: undefined,
+          success: false,
+          valid_credentials: undefined,
+        },
+        'photo_card-address': {
+          credential_query_id: 'photo_card-address',
+          failed_credentials: undefined,
+          success: false,
+          valid_credentials: undefined,
+        },
+        'photo_card-id': {
+          credential_query_id: 'photo_card-id',
+          failed_credentials: undefined,
+          success: false,
+          valid_credentials: undefined,
+        },
+      },
+    })
   })
 
   it('fails with credentials that do not satisfy a required claim_set', (_t) => {

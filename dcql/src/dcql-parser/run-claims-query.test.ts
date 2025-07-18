@@ -50,17 +50,17 @@ describe('Run Claims Query', () => {
 
     expect(result).toStrictEqual({
       success: true,
-      valid_claims: [],
-      failed_claims: [],
+      valid_claims: undefined,
+      failed_claims: undefined,
       valid_claim_sets: [
         {
           claim_set_index: undefined,
           output: {},
           success: true,
-          valid_claim_indexes: [],
+          valid_claim_indexes: undefined,
         },
       ],
-      failed_claim_sets: [],
+      failed_claim_sets: undefined,
     })
   })
 
@@ -94,7 +94,7 @@ describe('Run Claims Query', () => {
 
     expect(result).toStrictEqual({
       success: true,
-      failed_claim_sets: [],
+      failed_claim_sets: undefined,
       valid_claim_sets: [
         {
           success: true,
@@ -119,7 +119,7 @@ describe('Run Claims Query', () => {
           output: { 'org.iso.18013.5.1': { family_name: 'Dent' } },
         },
       ],
-      failed_claims: [],
+      failed_claims: undefined,
     })
   })
 
@@ -210,17 +210,17 @@ describe('Run Claims Query', () => {
 
     expect(result).toStrictEqual({
       success: true,
-      valid_claims: [],
-      failed_claims: [],
+      valid_claims: undefined,
+      failed_claims: undefined,
       valid_claim_sets: [
         {
           claim_set_index: undefined,
           output: {},
           success: true,
-          valid_claim_indexes: [],
+          valid_claim_indexes: undefined,
         },
       ],
-      failed_claim_sets: [],
+      failed_claim_sets: undefined,
     })
   })
 
@@ -264,7 +264,7 @@ describe('Run Claims Query', () => {
 
     expect(result).toStrictEqual({
       success: true,
-      failed_claim_sets: [],
+      failed_claim_sets: undefined,
       valid_claim_sets: [
         {
           success: true,
@@ -351,7 +351,7 @@ describe('Run Claims Query', () => {
           },
         },
       ],
-      failed_claims: [],
+      failed_claims: undefined,
     })
   })
 

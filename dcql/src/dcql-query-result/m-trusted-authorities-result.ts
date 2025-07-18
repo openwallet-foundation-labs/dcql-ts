@@ -26,7 +26,7 @@ export namespace DcqlTrustedAuthoritiesResult {
     v.object({
       success: v.literal(true),
       valid_trusted_authority: vTrustedAuthorityEntrySuccessResult,
-      failed_trusted_authorities: v.array(vTrustedAuthorityEntryFailureResult),
+      failed_trusted_authorities: v.optional(vNonEmptyArray(vTrustedAuthorityEntryFailureResult)),
     }),
   ])
 
