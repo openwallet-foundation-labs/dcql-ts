@@ -1,5 +1,12 @@
 # dcql
 
+## 0.5.0
+
+### Minor Changes
+
+- fe2beaa: refactor: always return `undefined` or a non-empty array for claims, credentials, trusted authorities, etc. This provides more consistency for the different places in the library where arrays are returned. If the value is defined, you can now always be sure there's at least one item in the array
+- fe2beaa: refactor: passing an empty credential array to the dcql library will now return an normal result with `valid_credentials` and `failed_credentials` being `undefined` for all credentials from the DCQL query. This to still allow using the context of the DCQL query result to build the UI for a request.
+
 ## 0.4.2
 
 ### Patch Changes
