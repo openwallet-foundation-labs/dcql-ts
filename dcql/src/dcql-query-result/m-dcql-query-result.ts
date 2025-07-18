@@ -30,13 +30,13 @@ export namespace DcqlQueryResult {
       success: v.literal(true),
       credential_query_id: vIdString,
       valid_credentials: vNonEmptyArray(vCredentialQueryItemCredentialSuccessResult),
-      failed_credentials: v.array(vCredentialQueryItemCredentialFailureResult),
+      failed_credentials: v.optional(vNonEmptyArray(vCredentialQueryItemCredentialFailureResult)),
     }),
     v.object({
       success: v.literal(false),
       credential_query_id: vIdString,
       valid_credentials: v.optional(v.undefined()),
-      failed_credentials: vNonEmptyArray(vCredentialQueryItemCredentialFailureResult),
+      failed_credentials: v.optional(vNonEmptyArray(vCredentialQueryItemCredentialFailureResult)),
     }),
   ])
 

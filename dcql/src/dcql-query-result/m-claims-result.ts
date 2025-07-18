@@ -34,7 +34,7 @@ export namespace DcqlClaimsResult {
 
     // We use indexes because if there are no claim sets, the ids can be undefined
     // Can be empty array in case there are no claims
-    valid_claim_indexes: v.array(v.number()),
+    valid_claim_indexes: v.optional(vNonEmptyArray(v.number())),
     failed_claim_indexes: v.optional(v.undefined()),
     output: vClaimsOutput,
   })
@@ -46,7 +46,7 @@ export namespace DcqlClaimsResult {
     claim_set_index: v.union([v.number(), v.undefined()]),
 
     // We use indexes because if there are no claim sets, the ids can be undefined
-    valid_claim_indexes: v.array(v.number()),
+    valid_claim_indexes: v.optional(vNonEmptyArray(v.number())),
     failed_claim_indexes: vNonEmptyArray(v.number()),
 
     issues: v.record(v.string(), v.unknown()),
@@ -54,16 +54,16 @@ export namespace DcqlClaimsResult {
 
   export const vClaimsSuccessResult = v.object({
     success: v.literal(true),
-    valid_claims: v.array(vClaimsEntrySuccessResult),
-    failed_claims: v.array(vClaimsEntryFailureResult),
+    valid_claims: v.optional(vNonEmptyArray(vClaimsEntrySuccessResult)),
+    failed_claims: v.optional(vNonEmptyArray(vClaimsEntryFailureResult)),
 
     valid_claim_sets: vNonEmptyArray(vClaimSetSuccessResult),
-    failed_claim_sets: v.array(vClaimSetFailureResult),
+    failed_claim_sets: v.optional(vNonEmptyArray(vClaimSetFailureResult)),
   })
 
   export const vClaimsFailureResult = v.object({
     success: v.literal(false),
-    valid_claims: v.array(vClaimsEntrySuccessResult),
+    valid_claims: v.optional(vNonEmptyArray(vClaimsEntrySuccessResult)),
     failed_claims: vNonEmptyArray(vClaimsEntryFailureResult),
 
     valid_claim_sets: v.optional(v.undefined()),

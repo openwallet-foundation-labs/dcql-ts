@@ -74,7 +74,7 @@ export namespace DcqlPresentationResult {
     const dqclQueryMatched =
       // We require that all the submitted presentations match with the queries
       // So we must have success for all queries, and we don't allow failed_credentials
-      queriesResults.every((result) => result.success && result.failed_credentials.length === 0) &&
+      queriesResults.every((result) => result.success && !result.failed_credentials) &&
       (credentialSetResults
         ? credentialSetResults.every((set) => !set.required || set.matching_options)
         : // If not credential_sets are used, we require that at least every credential has a match

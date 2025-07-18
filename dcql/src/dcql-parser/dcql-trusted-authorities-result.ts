@@ -4,7 +4,7 @@ import type { DcqlCredential } from '../u-dcql-credential.js'
 
 import type { DcqlTrustedAuthoritiesResult } from '../dcql-query-result/m-trusted-authorities-result.js'
 import { getTrustedAuthorityParser } from '../dcql-query/m-dcql-trusted-authorities.js'
-import type { ToNonEmptyArray } from '../u-dcql.js'
+import { type ToNonEmptyArray, asNonEmptyArrayOrUndefined } from '../u-dcql.js'
 
 export const runTrustedAuthoritiesQuery = (
   credentialQuery: DcqlCredentialQuery,
@@ -32,7 +32,7 @@ export const runTrustedAuthoritiesQuery = (
           trusted_authority_index: trustedAuthorityIndex,
           output: parseResult.output,
         },
-        failed_trusted_authorities: failedTrustedAuthorities,
+        failed_trusted_authorities: asNonEmptyArrayOrUndefined(failedTrustedAuthorities),
       }
     }
 

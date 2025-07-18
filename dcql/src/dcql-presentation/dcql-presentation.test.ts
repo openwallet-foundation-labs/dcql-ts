@@ -132,7 +132,7 @@ describe('DCQL presentation with claim sets', () => {
         '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
           success: true,
           credential_query_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
-          failed_credentials: [],
+          failed_credentials: undefined,
           valid_credentials: [
             {
               success: true,
@@ -159,7 +159,7 @@ describe('DCQL presentation with claim sets', () => {
                       family_name: ["Expected claim 'family_name' to be defined"],
                     },
                     failed_claim_indexes: [0, 1],
-                    valid_claim_indexes: [],
+                    valid_claim_indexes: undefined,
                   },
                 ],
                 valid_claim_sets: [
@@ -263,7 +263,7 @@ describe('DCQL presentation with claim sets', () => {
         '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
           success: true,
           credential_query_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
-          failed_credentials: [],
+          failed_credentials: undefined,
           valid_credentials: [
             {
               success: true,
@@ -289,7 +289,7 @@ describe('DCQL presentation with claim sets', () => {
                     },
                     claim_set_index: 0,
                     failed_claim_indexes: [2],
-                    valid_claim_indexes: [],
+                    valid_claim_indexes: undefined,
                   },
                 ],
                 valid_claim_sets: [
@@ -409,7 +409,7 @@ describe('DCQL presentation with claim sets', () => {
         '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
           success: true,
           credential_query_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
-          failed_credentials: [],
+          failed_credentials: undefined,
           valid_credentials: [
             {
               success: true,
@@ -435,7 +435,7 @@ describe('DCQL presentation with claim sets', () => {
                     },
                     claim_set_index: 0,
                     failed_claim_indexes: [2],
-                    valid_claim_indexes: [],
+                    valid_claim_indexes: undefined,
                   },
                 ],
                 valid_claim_sets: [
@@ -565,7 +565,7 @@ describe('DCQL presentation with claim sets', () => {
         '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
           success: true,
           credential_query_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
-          failed_credentials: [],
+          failed_credentials: undefined,
           valid_credentials: [
             {
               success: true,
@@ -591,7 +591,7 @@ describe('DCQL presentation with claim sets', () => {
                     },
                     claim_set_index: 0,
                     failed_claim_indexes: [2],
-                    valid_claim_indexes: [],
+                    valid_claim_indexes: undefined,
                   },
                 ],
                 valid_claim_sets: [
@@ -733,7 +733,7 @@ describe('DCQL presentation with claim sets', () => {
         '8c791a1f-12b4-41fe-a892-236c2887fa8e': {
           success: true,
           credential_query_id: '8c791a1f-12b4-41fe-a892-236c2887fa8e',
-          failed_credentials: [],
+          failed_credentials: undefined,
           valid_credentials: [
             {
               success: true,
@@ -759,7 +759,7 @@ describe('DCQL presentation with claim sets', () => {
                     },
                     claim_set_index: 0,
                     failed_claim_indexes: [2],
-                    valid_claim_indexes: [],
+                    valid_claim_indexes: undefined,
                   },
                 ],
                 valid_claim_sets: [
@@ -838,7 +838,7 @@ describe('DCQL presentation with claim sets', () => {
               },
               claims: {
                 success: true,
-                failed_claim_sets: [],
+                failed_claim_sets: undefined,
                 valid_claim_sets: [
                   {
                     success: true,
@@ -862,7 +862,7 @@ describe('DCQL presentation with claim sets', () => {
                     },
                   },
                 ],
-                failed_claims: [],
+                failed_claims: undefined,
               },
             },
           ],
@@ -921,7 +921,7 @@ describe('DCQL presentation with claim sets', () => {
     })
 
     expect(
-      presentationQueryResult.credential_matches['8c791a1f-12b4-41fe-a892-236c2887fa8e'].failed_credentials[0].meta
+      presentationQueryResult.credential_matches['8c791a1f-12b4-41fe-a892-236c2887fa8e'].failed_credentials?.[0].meta
     ).toEqual({
       issues: {
         cryptographic_holder_binding: [
