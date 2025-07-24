@@ -10,7 +10,7 @@ const authorityQueryExample = {
 
 const authorityExample = {
   type: 'aki',
-  value: 'one',
+  values: ['one'],
 } satisfies DcqlCredentialTrustedAuthority
 
 describe('Trusted Authorities Parser', () => {
@@ -40,9 +40,11 @@ describe('Trusted Authorities Parser', () => {
     const parser = getTrustedAuthorityParser(authorityQueryExample)
     const res = v.safeParse(parser, {
       ...authorityExample,
-      value: 'two',
+      values: ['two'],
     })
 
-    expect(res.issues?.[0].message).toEqual("Expected trusted authority value to be 'one' | 'three' but received 'two'")
+    expect(res.issues?.[0].message).toEqual(
+      "Expected one of the trusted authority values to be 'one' | 'three' but received 'two'"
+    )
   })
 })

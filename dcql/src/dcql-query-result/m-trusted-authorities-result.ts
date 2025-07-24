@@ -6,7 +6,17 @@ export namespace DcqlTrustedAuthoritiesResult {
   export const vTrustedAuthorityEntrySuccessResult = v.object({
     success: v.literal(true),
     trusted_authority_index: v.number(),
-    output: DcqlCredentialTrustedAuthority.vModel,
+
+    // We map from values (multiple options for a credential/query) to value (the matching option)
+    output: v.variant(
+      'type',
+      DcqlCredentialTrustedAuthority.vModel.options.map((o) =>
+        v.object({
+          type: o.entries.type,
+          value: o.entries.values.item,
+        })
+      )
+    ),
   })
 
   export const vTrustedAuthorityEntryFailureResult = v.object({

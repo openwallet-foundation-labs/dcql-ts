@@ -65,7 +65,7 @@ const mdocMvrc = {
   },
   authority: {
     type: 'aki',
-    value: 'one',
+    values: ['one'],
   },
   cryptographic_holder_binding: true,
 } satisfies DcqlMdocCredential
@@ -80,7 +80,7 @@ const exampleMdoc = {
   },
   authority: {
     type: 'aki',
-    value: 'something',
+    values: ['something'],
   },
   cryptographic_holder_binding: true,
 } satisfies DcqlMdocCredential
@@ -221,11 +221,13 @@ describe('dcql-query', () => {
               failed_trusted_authorities: [
                 {
                   issues: {
-                    value: ["Expected trusted authority value to be 'one' | 'two' but received 'something'"],
+                    values: [
+                      "Expected one of the trusted authority values to be 'one' | 'two' but received 'something'",
+                    ],
                   },
                   output: {
                     type: 'aki',
-                    value: 'something',
+                    values: ['something'],
                   },
                   success: false,
                   trusted_authority_index: 0,
@@ -233,13 +235,13 @@ describe('dcql-query', () => {
                 {
                   issues: {
                     type: ["Expected trusted authority type to be 'openid_federation' but received 'aki'"],
-                    value: [
-                      "Expected trusted authority value to be 'https://federation.com' | 'https://agent.com' but received 'something'",
+                    values: [
+                      "Expected one of the trusted authority values to be 'https://federation.com' | 'https://agent.com' but received 'something'",
                     ],
                   },
                   output: {
                     type: 'aki',
-                    value: 'something',
+                    values: ['something'],
                   },
                   success: false,
                   trusted_authority_index: 1,
@@ -390,7 +392,10 @@ describe('dcql-query', () => {
         my_credential: [
           {
             ...validCredential.meta.output,
-            authority: validCredential.trusted_authorities.valid_trusted_authority?.output,
+            authority: {
+              ...validCredential.trusted_authorities.valid_trusted_authority?.output,
+              values: [validCredential.trusted_authorities.valid_trusted_authority?.output.value],
+            },
             namespaces: validCredential.claims.valid_claim_sets[0].output,
           },
         ],
