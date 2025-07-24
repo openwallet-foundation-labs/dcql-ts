@@ -19,8 +19,11 @@ export const vNonEmptyArray = <const TItem extends v.BaseSchema<unknown, unknown
   item: TItem
 ) => {
   return v.pipe(
-    v.array(item),
-    v.custom<NonEmptyArray<v.InferOutput<TItem>>>((input) => (input as TItem[]).length > 0)
+    v.array(item, (i) => `Expected input to be an array, but received '${i.received}'`),
+    v.custom<NonEmptyArray<v.InferOutput<TItem>>>(
+      (input) => (input as TItem[]).length > 0,
+      'Array must be non-empty and have length of at least 1'
+    )
   )
 }
 

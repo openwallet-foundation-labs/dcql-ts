@@ -3,21 +3,22 @@ import { describe, it } from 'vitest'
 import { DcqlPresentationResult } from '../dcql-presentation/m-dcql-presentation-result.js'
 import type { DcqlMdocCredential, DcqlSdJwtVcCredential } from '../u-dcql-credential.js'
 import { DcqlQuery } from './m-dcql-query.js'
+import type { DcqlCredentialTrustedAuthority } from './m-dcql-trusted-authorities.js'
 
 const etsiTlAuthority = {
   type: 'etsi_tl',
-  value: 'https://list.com',
-} as const
+  values: ['https://list.com'],
+} satisfies DcqlCredentialTrustedAuthority
 
 const openidFederationAuthority = {
   type: 'openid_federation',
-  value: 'https://federation.com',
-} as const
+  values: ['https://federation.com'],
+} satisfies DcqlCredentialTrustedAuthority
 
 const akiAuthority = {
   type: 'aki',
-  value: 's9tIpPmhxdiuNkHMEWNpYim8S8Y',
-} as const
+  values: ['s9tIpPmhxdiuNkHMEWNpYim8S8Y'],
+} satisfies DcqlCredentialTrustedAuthority
 
 /**
  * The following is a non-normative example of a DCQL query that requests
@@ -173,7 +174,10 @@ describe('dcql-query trusted authorities', () => {
           {
             ...validCredential.meta.output,
             namespaces: validCredential.claims.valid_claim_sets[0].output,
-            authority: validCredential.trusted_authorities.valid_trusted_authority.output,
+            authority: {
+              ...validCredential.trusted_authorities.valid_trusted_authority.output,
+              values: [validCredential.trusted_authorities.valid_trusted_authority.output.value],
+            },
           },
         ],
       },
@@ -251,13 +255,13 @@ describe('dcql-query trusted authorities', () => {
                   trusted_authority_index: 0,
                   issues: {
                     type: ["Expected trusted authority type to be 'aki' but received 'openid_federation'"],
-                    value: [
-                      "Expected trusted authority value to be 's9tIpPmhxdiuNkHMEWNpYim8S8Y' | 'UVVJUkVELiBBIHN0cmluZyB1bmlxdWVseSBpZGVudGlmeWluZyB0aGUgdHlwZSA' but received 'https://federation.com'",
+                    values: [
+                      "Expected one of the trusted authority values to be 's9tIpPmhxdiuNkHMEWNpYim8S8Y' | 'UVVJUkVELiBBIHN0cmluZyB1bmlxdWVseSBpZGVudGlmeWluZyB0aGUgdHlwZSA' but received 'https://federation.com'",
                     ],
                   },
                   output: {
                     type: 'openid_federation',
-                    value: 'https://federation.com',
+                    values: ['https://federation.com'],
                   },
                 },
               ],
@@ -312,13 +316,13 @@ describe('dcql-query trusted authorities', () => {
                   trusted_authority_index: 0,
                   issues: {
                     type: ["Expected trusted authority type to be 'aki' but received 'openid_federation'"],
-                    value: [
-                      "Expected trusted authority value to be 's9tIpPmhxdiuNkHMEWNpYim8S8Y' | 'UVVJUkVELiBBIHN0cmluZyB1bmlxdWVseSBpZGVudGlmeWluZyB0aGUgdHlwZSA' but received 'https://federation.com'",
+                    values: [
+                      "Expected one of the trusted authority values to be 's9tIpPmhxdiuNkHMEWNpYim8S8Y' | 'UVVJUkVELiBBIHN0cmluZyB1bmlxdWVseSBpZGVudGlmeWluZyB0aGUgdHlwZSA' but received 'https://federation.com'",
                     ],
                   },
                   output: {
                     type: 'openid_federation',
-                    value: 'https://federation.com',
+                    values: ['https://federation.com'],
                   },
                 },
               ],
@@ -526,7 +530,10 @@ describe('dcql-query trusted authorities', () => {
           {
             ...validCredential.meta.output,
             claims: validCredential.claims.valid_claim_sets[0].output,
-            authority: validCredential.trusted_authorities.valid_trusted_authority.output,
+            authority: {
+              ...validCredential.trusted_authorities.valid_trusted_authority.output,
+              values: [validCredential.trusted_authorities.valid_trusted_authority.output.value],
+            },
           },
         ],
       },
