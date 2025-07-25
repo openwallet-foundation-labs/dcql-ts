@@ -20,7 +20,7 @@
     "style:fix": "pnpm style --write",
     "test": "vitest",
     "release": "pnpm build && pnpm changeset publish",
-    "changeset-version": "pnpm changeset version && pnpm style:fix && git add . && git commit --amend -s --no-edit"
+    "changeset-version": "pnpm changeset version && pnpm style:fix && git add . && git commit --amend --no-edit"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
