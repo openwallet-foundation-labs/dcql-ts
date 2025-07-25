@@ -1,5 +1,10 @@
 # dcql
 
+## 1.0.0
+### Major Changes
+
+- 4d6aab5: bump version to 1.0 stable
+
 ## 0.5.1
 ### Patch Changes
 
