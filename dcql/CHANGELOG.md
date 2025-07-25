@@ -1,5 +1,11 @@
 # dcql
 
+## 0.5.1
+### Patch Changes
+
+- 9db1273: ci: add git tag for package publishing
+- 3f12360: ci: typo and git tag creation
+
 ## 0.5.0
 
 ### Minor Changes
