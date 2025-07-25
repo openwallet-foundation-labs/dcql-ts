@@ -37,20 +37,10 @@ jobs:
           commit: "chore(release): new version"
           publish: pnpm release
           version: pnpm changeset-version
-          createGithubReleases: false
+          createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Get current package version
-        id: get_version
-        run: echo "CURRENT_PACKAGE_VERSION=$(node -p "require('./dcql/package.json').version")" >> $GITHUB_ENV
-
-      - name: Create Github Release
-        if: steps.changesets.outputs.published == 'true'
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v${{ env.CURRENT_PACKAGE_VERSION }}
 
   release-unstable:
     name: Release Unstable
