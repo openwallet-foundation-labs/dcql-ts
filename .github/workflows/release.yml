@@ -34,7 +34,6 @@ jobs:
         uses: changesets/action@v1
         with:
           title: "chore(release): new version"
-          commit: "chore(release): new version"
           publish: pnpm release
           version: pnpm changeset-version
           createGithubReleases: true

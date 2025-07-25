@@ -12,7 +12,7 @@ const getAddMessage = async (changeset) => {
 }
 
 const getVersionMessage = async () => {
-  return `chore(release): new verion\n\n${getSignedOffBy()}\n`
+  return `chore(release): new version\n\n${getSignedOffBy()}\n`
 }
 
 module.exports = {
