@@ -19,7 +19,7 @@
     "style": "biome check --unsafe",
     "style:fix": "pnpm style --write",
     "test": "vitest",
-    "release": "pnpm build && pnpm changeset publish --no-git-tag",
+    "release": "pnpm build && pnpm changeset publish",
     "changeset-version": "pnpm changeset version && pnpm style:fix"
   },
   "devDependencies": {
