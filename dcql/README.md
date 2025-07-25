@@ -8,8 +8,8 @@ DCQL enables Verifiers to request Verifiable Presentations that match specific q
 - Create and validate DCQL queries
 - Match queries against Verifiable Credentials
 - Validate presentation results
-- Handle various credential formats including mso_mdoc and dc+sd-jwt and w3c vc's.
-- Create and parse DCQL queries from OID4VP Draft 22 up to Draft 29.
+- Handle various credential formats including mso_mdoc, dc+sd-jwt and w3c vc's.
+- Create and parse DCQL queries from OID4VP Draft 22 up to version 1.0.
 
 ## Installation
 
@@ -24,32 +24,54 @@ pnpm add dcql
 ## Quick Start
 
 ```typescript
-import { DcqlQuery, DcqlPresentationResult } from 'dcql';
+import { DcqlQuery, type DcqlCredential } from 'dcql'
+
+const credentials = [
+  {
+    credential_format: 'mso_mdoc',
+    doctype: 'org.iso.7367.1.mVRC',
+    cryptographic_holder_binding: true,
+    namespaces: {
+      'org.iso.7367.1': {
+        vehicle_holder: 'John Doe',
+      },
+      'org.iso.18013.5.1': {
+        first_name: 'John',
+      },
+    },
+    authority: {
+      type: 'aki',
+      values: ['21cbb5a0-9d1e-46dc-b8aa-0e85036af442'],
+    },
+  },
+] satisfies DcqlCredential[]
 
 // Create a DCQL query
 const query = {
-  credentials: [{
-    id: 'my_credential',
-    format: 'mso_mdoc',
-    meta: { doctype_value: 'org.iso.7367.1.mVRC' },
-    claims: [
-      { 
-        path: ['org.iso.7367.1', 'vehicle_holder'], 
-        intent_to_reatin: true 
-      },
-      { 
-        path: ['org.iso.18013.5.1', 'first_name'] 
-      },
-    ],
-  }]
-};
+  credentials: [
+    {
+      id: 'my_credential',
+      format: 'mso_mdoc',
+      meta: { doctype_value: 'org.iso.7367.1.mVRC' },
+      claims: [
+        {
+          path: ['org.iso.7367.1', 'vehicle_holder'],
+          intent_to_retain: true,
+        },
+        {
+          path: ['org.iso.18013.5.1', 'first_name'],
+        },
+      ],
+    },
+  ],
+} satisfies DcqlQuery.Input
 
 // Parse (structural) and validate (content) the query
-const parsedQuery = DcqlQuery.parse(query);
-DcqlQuery.validate(parsedQuery);
+const parsedQuery = DcqlQuery.parse(query)
+DcqlQuery.validate(parsedQuery)
 
 // Execute the query against credentials
-const queryResult = DcqlQuery.query(parsedQuery, credentials);
+const queryResult = DcqlQuery.query(parsedQuery, credentials)
 ```
 
 ## Features
@@ -67,17 +89,18 @@ const queryResult = DcqlQuery.query(parsedQuery, credentials);
 The query result provides detailed information about the match:
 
 ```typescript
-const queryResult = DcqlQuery.query(query, credentials);
+// Execute the query against credentials
+const queryResult = DcqlQuery.query(parsedQuery, credentials)
 
 // Check if query can be satisfied
-console.log(queryResult.can_be_satisfied);
+console.log(queryResult.can_be_satisfied)
 
 // Access matched credentials
-console.log(queryResult.credential_matches);
+console.log(queryResult.credential_matches)
 
 // The result of a specific credential query
-const credentialMatch = queryResult.credential_matches['credential_query_id'];
-console.log(credentialMatch.success);                 // True if the query is fulfillable
+const credentialMatch = queryResult.credential_matches.credential_query_id
+console.log(credentialMatch.success) // True if the query is fulfillable
 ```
 
 ## Validating Presentations
@@ -87,15 +110,18 @@ Validate presentation results against queries:
 ```ts
 const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
   {
-    my_credential: [{
-      credential_format: 'mso_mdoc' as const,
-      doctype: 'org.iso.7367.1.mVRC',
-      namespaces: {
-        'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
-        'org.iso.18013.5.1': { first_name: 'Martin Auer' },
-      }
-    }]
+    my_credential: [
+      {
+        credential_format: 'mso_mdoc',
+        doctype: 'org.iso.7367.1.mVRC',
+        namespaces: {
+          'org.iso.7367.1': { vehicle_holder: 'Martin Auer' },
+          'org.iso.18013.5.1': { first_name: 'Martin Auer' },
+        },
+        cryptographic_holder_binding: true,
+      },
+    ],
   },
-  { dcqlQuery: query }
-);
+  { dcqlQuery: parsedQuery }
+)
 ```

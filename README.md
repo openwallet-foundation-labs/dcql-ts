@@ -26,13 +26,7 @@
 
 A TypeScript implementation of the Digital Credentials Query Language (DCQL, pronounced [ˈdakl̩]) - a JSON-encoded query language for requesting and validating Verifiable Presentations.
 
-
-```ts
-import {
-  DcqlQuery,
-  DcqlQueryResult,
-} from "dcql";
-```
+See the [DCQL package README](./dcql/README.md) for installation and usage instructions.
 
 ## Supported Environments
 
