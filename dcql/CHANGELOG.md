@@ -1,5 +1,10 @@
 # dcql
 
+## 1.0.1
+### Patch Changes
+
+- 29c0b04: fix: rename Model class to ModelDefinition to prevent naming clash in ESM generated typescript types
+
 ## 1.0.0
 ### Major Changes
 
