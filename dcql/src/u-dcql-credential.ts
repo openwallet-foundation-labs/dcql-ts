@@ -2,7 +2,7 @@ import * as v from 'valibot'
 import { DcqlCredentialTrustedAuthority } from './dcql-query/m-dcql-trusted-authorities.js'
 import { vJsonRecord } from './u-dcql.js'
 import type { InferModelTypes } from './u-model.js'
-import { Model } from './u-model.js'
+import { ModelDefinition } from './u-model.js'
 
 const vCredentialModelBase = v.object({
   authority: v.optional(DcqlCredentialTrustedAuthority.vModel),
@@ -32,7 +32,7 @@ export namespace DcqlMdocCredential {
     namespaces: vNamespaces,
   })
 
-  export const model = new Model({ vModel })
+  export const model = new ModelDefinition({ vModel })
   export type Model = InferModelTypes<typeof model>
   export type NameSpaces = v.InferOutput<typeof vNamespaces>
 }
@@ -46,7 +46,7 @@ export namespace DcqlSdJwtVcCredential {
     vct: v.string(),
     claims: vClaims,
   })
-  export const model = new Model({ vModel })
+  export const model = new ModelDefinition({ vModel })
   export type Model = InferModelTypes<typeof model>
   export type Claims = Model['Output']['claims']
 }
@@ -61,7 +61,7 @@ export namespace DcqlW3cVcCredential {
     type: v.array(v.string()),
   })
 
-  export const model = new Model({ vModel })
+  export const model = new ModelDefinition({ vModel })
   export type Model = InferModelTypes<typeof model>
   export type Claims = Model['Output']['claims']
 }
@@ -74,7 +74,7 @@ export namespace DcqlCredential {
     DcqlW3cVcCredential.vModel,
   ])
 
-  export const model = new Model({ vModel })
+  export const model = new ModelDefinition({ vModel })
   export type Model = InferModelTypes<typeof model>
 }
 export type DcqlCredential = DcqlCredential.Model['Output']

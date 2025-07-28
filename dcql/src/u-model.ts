@@ -5,7 +5,7 @@ export type UnknownBaseSchema = v.BaseSchema<unknown, unknown, v.BaseIssue<unkno
 
 type EnsureOutputAssignableToInput<T extends UnknownBaseSchema> = v.InferOutput<T> extends v.InferInput<T> ? T : never
 
-export class Model<T extends UnknownBaseSchema> {
+export class ModelDefinition<T extends UnknownBaseSchema> {
   constructor(private input: { vModel: EnsureOutputAssignableToInput<T> }) {}
 
   public get v() {
@@ -47,7 +47,7 @@ export class Model<T extends UnknownBaseSchema> {
 }
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export type InferModelTypes<T extends Model<any>> = T extends Model<infer U>
+export type InferModelTypes<T extends ModelDefinition<any>> = T extends ModelDefinition<infer U>
   ? {
       Input: v.InferInput<U>
       Output: v.InferOutput<U>
