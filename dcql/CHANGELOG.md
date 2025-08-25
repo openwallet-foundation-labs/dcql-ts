@@ -1,5 +1,10 @@
 # dcql
 
+## 2.0.0
+### Major Changes
+
+- 4ef6fc8: Add support for W3C VCDM 2.0 SD-JWT format.
+
 ## 1.0.1
 ### Patch Changes
 
