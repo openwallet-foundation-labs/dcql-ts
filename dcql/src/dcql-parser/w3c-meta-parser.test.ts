@@ -28,6 +28,23 @@ const credentialExample = {
   cryptographic_holder_binding: true,
 } satisfies DcqlW3cVcCredential
 
+const metaSdJwtExample = {
+  format: 'vc+sd-jwt',
+  id: '1d6b9512-c8bc-4698-a8ca-62c84fd90c0d',
+  multiple: false,
+  meta: {
+    type_values: [['one', 'two'], ['three']],
+  },
+  require_cryptographic_holder_binding: true,
+} satisfies DcqlCredentialQuery.W3cVc
+
+const credentialSdJwtExample = {
+  credential_format: 'vc+sd-jwt',
+  type: ['one', 'two'],
+  claims: {},
+  cryptographic_holder_binding: true,
+} satisfies DcqlW3cVcCredential
+
 describe('W3C Meta Parser', () => {
   it('meta with type', () => {
     const parser = getMetaParser(metaExample)
@@ -36,6 +53,17 @@ describe('W3C Meta Parser', () => {
     expect(res).toEqual({
       cryptographic_holder_binding: true,
       credential_format: 'jwt_vc_json',
+      type: ['one', 'two'],
+    })
+  })
+
+  it('meta with type and credential', () => {
+    const parser = getMetaParser(metaSdJwtExample)
+    const res = v.parse(parser, credentialSdJwtExample)
+
+    expect(res).toEqual({
+      cryptographic_holder_binding: true,
+      credential_format: 'vc+sd-jwt',
       type: ['one', 'two'],
     })
   })

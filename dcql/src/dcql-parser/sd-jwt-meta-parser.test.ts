@@ -28,6 +28,23 @@ const credentialExample = {
   cryptographic_holder_binding: true,
 } satisfies DcqlSdJwtVcCredential
 
+const legacyMetaExample = {
+  format: 'vc+sd-jwt',
+  id: '1d6b9512-c8bc-4698-a8ca-62c84fd90c0d',
+  multiple: false,
+  meta: {
+    vct_values: ['something', 'really-something'],
+  },
+  require_cryptographic_holder_binding: true,
+} satisfies DcqlCredentialQuery.SdJwtVc
+
+const legacyCredentialExample = {
+  credential_format: 'vc+sd-jwt',
+  vct: 'something',
+  claims: {},
+  cryptographic_holder_binding: true,
+} satisfies DcqlSdJwtVcCredential
+
 describe('SD-JWT VC Meta Parser', () => {
   it('meta with vct', () => {
     const parser = getMetaParser(metaExample)
@@ -36,6 +53,18 @@ describe('SD-JWT VC Meta Parser', () => {
     expect(res).toEqual({
       cryptographic_holder_binding: true,
       credential_format: 'dc+sd-jwt',
+      vct: 'something',
+    })
+  })
+
+  // TODO: remove this test when we remove legacy SD-JWT VCs.
+  it('legacy meta with vct', () => {
+    const parser = getMetaParser(legacyMetaExample)
+    const res = v.parse(parser, legacyCredentialExample)
+
+    expect(res).toEqual({
+      cryptographic_holder_binding: true,
+      credential_format: 'vc+sd-jwt',
       vct: 'something',
     })
   })

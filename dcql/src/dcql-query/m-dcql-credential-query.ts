@@ -100,8 +100,14 @@ export namespace DcqlCredentialQuery {
 
   export const vW3cVc = v.object({
     ...vBase.entries,
-    format: v.picklist(['jwt_vc_json', 'ldp_vc']),
-    claims: v.optional(vNonEmptyArray(DcqlClaimsQuery.vW3cSdJwtVc)),
+    format: v.pipe(
+      v.picklist(['jwt_vc_json', 'ldp_vc', 'vc+sd-jwt']),
+      v.description('REQUIRED. A string that specifies the format of the requested Verifiable Credential.')
+    ),
+    claims: v.pipe(
+      v.optional(vNonEmptyArray(DcqlClaimsQuery.vW3cSdJwtVc)),
+      v.description('OPTIONAL. A non-empty array of objects as that specifies claims in the requested Credential.')
+    ),
     meta: v.pipe(
       v.pipe(
         v.object({
