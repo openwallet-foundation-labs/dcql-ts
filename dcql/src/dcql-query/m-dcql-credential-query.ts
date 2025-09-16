@@ -126,7 +126,7 @@ export namespace DcqlCredentialQuery {
   })
   export type W3cVc = v.InferOutput<typeof vW3cVc>
 
-  export const vModel = v.variant('format', [vMdoc, vSdJwtVc, vW3cVc])
+  export const vModel = v.variant('format', [vMdoc, vW3cVc, vSdJwtVc])
   export type Input = v.InferInput<typeof vModel>
   export type Output = v.InferOutput<typeof vModel>
 
