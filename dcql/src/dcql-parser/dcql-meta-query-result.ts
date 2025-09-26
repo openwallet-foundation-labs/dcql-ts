@@ -75,8 +75,16 @@ export const getMetaParser = (credentialQuery: DcqlCredentialQuery) => {
     return getMdocMetaParser(credentialQuery)
   }
 
-  if (credentialQuery.format === 'dc+sd-jwt' || credentialQuery.format === 'vc+sd-jwt') {
+  if (credentialQuery.format === 'dc+sd-jwt') {
     return getSdJwtVcMetaParser(credentialQuery)
+  }
+
+  if (credentialQuery.format === 'vc+sd-jwt') {
+    if (credentialQuery.meta && 'type_values' in credentialQuery.meta) {
+      return getW3cVcMetaParser(credentialQuery as DcqlCredentialQuery.W3cVc)
+    }
+
+    return getSdJwtVcMetaParser(credentialQuery as DcqlCredentialQuery.SdJwtVc)
   }
 
   if (credentialQuery.format === 'ldp_vc' || credentialQuery.format === 'jwt_vc_json') {
@@ -85,7 +93,7 @@ export const getMetaParser = (credentialQuery: DcqlCredentialQuery) => {
 
   throw new DcqlError({
     code: 'NOT_IMPLEMENTED',
-    message: `Usupported format '${credentialQuery.format}'`,
+    message: `Unsupported format '${credentialQuery.format}'`,
   })
 }
 

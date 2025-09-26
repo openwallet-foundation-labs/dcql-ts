@@ -85,7 +85,62 @@ const exampleMdoc = {
   cryptographic_holder_binding: true,
 } satisfies DcqlMdocCredential
 
-const sdJwtVcExampleQuery = {
+const sdJwtDcExampleQuery = {
+  credentials: [
+    {
+      id: 'my_credential',
+      format: 'dc+sd-jwt',
+      meta: {
+        vct_values: ['https://credentials.example.com/identity_credential'],
+      },
+      claims: [{ path: ['last_name'] }, { path: ['first_name'] }, { path: ['address', 'street_address'] }],
+      require_cryptographic_holder_binding: false,
+    },
+  ],
+} satisfies DcqlQuery.Input
+
+const sdJwtDcMultipleExampleQuery = {
+  credentials: [
+    {
+      id: 'my_credential',
+      format: 'dc+sd-jwt',
+      multiple: true,
+      meta: {
+        vct_values: ['https://credentials.example.com/identity_credential'],
+      },
+      claims: [{ path: ['last_name'] }, { path: ['first_name'] }, { path: ['address', 'street_address'] }],
+      require_cryptographic_holder_binding: false,
+    },
+  ],
+} satisfies DcqlQuery.Input
+
+const exampleSdJwtDc = {
+  credential_format: 'dc+sd-jwt',
+  vct: 'https://credentials.example.com/identity_credential',
+  claims: {
+    first_name: 'Arthur',
+    last_name: 'Dent',
+    address: {
+      street_address: '42 Market Street',
+      locality: 'Milliways',
+      postal_code: '12345',
+    },
+    degrees: [
+      {
+        type: 'Bachelor of Science',
+        university: 'University of Betelgeuse',
+      },
+      {
+        type: 'Master of Science',
+        university: 'University of Betelgeuse',
+      },
+    ],
+    nationalities: ['British', 'Betelgeusian'],
+  },
+  cryptographic_holder_binding: false,
+} satisfies DcqlSdJwtVcCredential
+
+const legacySdJwtVcExampleQuery = {
   credentials: [
     {
       id: 'my_credential',
@@ -99,7 +154,7 @@ const sdJwtVcExampleQuery = {
   ],
 } satisfies DcqlQuery.Input
 
-const sdJwtVcMultipleExampleQuery = {
+const legacySdJwtDcMultipleExampleQuery = {
   credentials: [
     {
       id: 'my_credential',
@@ -114,7 +169,7 @@ const sdJwtVcMultipleExampleQuery = {
   ],
 } satisfies DcqlQuery.Input
 
-const exampleSdJwtVc = {
+const exampleLegacySdJwtVc = {
   credential_format: 'vc+sd-jwt',
   vct: 'https://credentials.example.com/identity_credential',
   claims: {
@@ -198,6 +253,58 @@ const exampleW3cLdpVc = {
     nationalities: ['British', 'Betelgeusian'],
   },
   cryptographic_holder_binding: false,
+} satisfies DcqlW3cVcCredential
+
+const sdJwtVcQuery = {
+  credentials: [
+    {
+      id: 'my_credential',
+      format: 'vc+sd-jwt',
+      meta: {
+        type_values: [
+          ['https://example.org/examples#AlumniCredential', 'https://example.org/examples#BachelorDegree'],
+          ['https://www.w3.org/ns/credentials/v2', 'https://example.org/examples#UniversityDegreeCredential'],
+        ],
+      },
+      claims: [
+        {
+          path: ['last_name'],
+        },
+        { path: ['first_name'] },
+        { path: ['address', 'street_address'] },
+      ],
+    },
+  ],
+} satisfies DcqlQuery.Input
+
+const exampleSdJwtVc = {
+  credential_format: 'vc+sd-jwt',
+  type: [
+    'https://www.w3.org/ns/credentials/v2',
+    'https://example.org/examples#AlumniCredential',
+    'https://example.org/examples#BachelorDegree',
+  ],
+  claims: {
+    first_name: 'Arthur',
+    last_name: 'Dent',
+    address: {
+      street_address: '42 Market Street',
+      locality: 'Milliways',
+      postal_code: '12345',
+    },
+    degrees: [
+      {
+        type: 'Bachelor of Science',
+        university: 'University of Betelgeuse',
+      },
+      {
+        type: 'Master of Science',
+        university: 'University of Betelgeuse',
+      },
+    ],
+    nationalities: ['British', 'Betelgeusian'],
+  },
+  cryptographic_holder_binding: true,
 } satisfies DcqlW3cVcCredential
 
 describe('dcql-query', () => {
@@ -675,23 +782,230 @@ describe('dcql-query', () => {
     expect(res.credential_matches.my_credential.valid_credentials?.length).toEqual(1)
   })
 
-  it('sdJwtVc example with multiple credentials succeeds', (_t) => {
-    const query = DcqlQuery.parse(sdJwtVcExampleQuery)
+  it('sdJwtDc example with multiple credentials succeeds', (_t) => {
+    const query = DcqlQuery.parse(sdJwtDcExampleQuery)
     DcqlQuery.validate(query)
 
-    const res = DcqlQuery.query(query, [exampleMdoc, exampleSdJwtVc])
+    const res = DcqlQuery.query(query, [exampleMdoc, exampleSdJwtDc])
 
     assert(res.can_be_satisfied)
     expect(res.credential_matches.my_credential.valid_credentials?.length).toEqual(1)
     expect(res.credential_matches.my_credential.failed_credentials?.length).toEqual(1)
   })
 
-  it("sdJwtVc with 'multiple' set to true succeeds", (_t) => {
-    const query = DcqlQuery.parse(sdJwtVcMultipleExampleQuery)
+  it("sdJwtDc with 'multiple' set to true succeeds", (_t) => {
+    const query = DcqlQuery.parse(sdJwtDcMultipleExampleQuery)
     DcqlQuery.validate(query)
 
     // We add the same credential twice
-    const res = DcqlQuery.query(query, [exampleSdJwtVc, exampleSdJwtVc])
+    const res = DcqlQuery.query(query, [exampleSdJwtDc, exampleSdJwtDc])
+
+    assert(res.can_be_satisfied)
+
+    const match = {
+      success: true,
+      input_credential_index: 0,
+      trusted_authorities: {
+        success: true,
+      },
+      meta: {
+        success: true,
+        output: {
+          credential_format: 'dc+sd-jwt',
+          cryptographic_holder_binding: false,
+          vct: 'https://credentials.example.com/identity_credential',
+        },
+      },
+      claims: {
+        success: true,
+        failed_claim_sets: undefined,
+        valid_claim_sets: [
+          {
+            success: true,
+            claim_set_index: undefined,
+            output: {
+              last_name: 'Dent',
+              first_name: 'Arthur',
+              address: {
+                street_address: '42 Market Street',
+              },
+            },
+            valid_claim_indexes: [0, 1, 2],
+          },
+        ],
+        valid_claims: [
+          {
+            success: true,
+            claim_id: undefined,
+            claim_index: 0,
+            output: {
+              last_name: 'Dent',
+            },
+          },
+          {
+            success: true,
+            claim_id: undefined,
+            claim_index: 1,
+            output: {
+              first_name: 'Arthur',
+            },
+          },
+          {
+            success: true,
+            claim_id: undefined,
+            claim_index: 2,
+            output: {
+              address: {
+                street_address: '42 Market Street',
+              },
+            },
+          },
+        ],
+        failed_claims: undefined,
+      },
+    } as const
+    assert.deepStrictEqual(res.credential_matches, {
+      my_credential: {
+        success: true,
+        credential_query_id: 'my_credential',
+        failed_credentials: undefined,
+
+        // Match should be same except for credential index
+        valid_credentials: [match, { ...match, input_credential_index: 1 }],
+      },
+    } as const)
+
+    const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
+      {
+        my_credential: [exampleSdJwtDc, exampleSdJwtDc],
+      },
+      { dcqlQuery: query }
+    )
+
+    expect(presentationQueryResult.can_be_satisfied).toBe(true)
+    expect(presentationQueryResult.credential_matches.my_credential.valid_credentials?.length).toEqual(2)
+  })
+
+  it("sdJwtDc with 'multiple' set to true but only one credential in the presentation matches", (_t) => {
+    const query = DcqlQuery.parse(sdJwtDcMultipleExampleQuery)
+    DcqlQuery.validate(query)
+
+    // We add the same credential twice
+    const res = DcqlQuery.query(query, [exampleSdJwtDc, exampleSdJwtDc])
+
+    assert(res.can_be_satisfied)
+
+    const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
+      {
+        my_credential: [exampleSdJwtDc, exampleMdoc],
+      },
+      { dcqlQuery: query }
+    )
+    expect(presentationQueryResult.can_be_satisfied).toBe(false)
+  })
+
+  it('sdJwtVc example succeeds', (_t) => {
+    const query = DcqlQuery.parse(sdJwtVcQuery)
+    DcqlQuery.validate(query)
+
+    const credentials = [exampleSdJwtVc]
+    const res = DcqlQuery.query(query, credentials)
+
+    assert(res.can_be_satisfied)
+    assert.deepStrictEqual(res.credential_matches, {
+      my_credential: {
+        success: true,
+        credential_query_id: 'my_credential',
+        failed_credentials: undefined,
+        valid_credentials: [
+          {
+            success: true,
+            input_credential_index: 0,
+            trusted_authorities: {
+              success: true,
+            },
+            meta: {
+              success: true,
+              output: {
+                credential_format: 'vc+sd-jwt',
+                cryptographic_holder_binding: true,
+                type: [
+                  'https://www.w3.org/ns/credentials/v2',
+                  'https://example.org/examples#AlumniCredential',
+                  'https://example.org/examples#BachelorDegree',
+                ],
+              },
+            },
+            claims: {
+              success: true,
+              failed_claim_sets: undefined,
+              valid_claim_sets: [
+                {
+                  success: true,
+                  claim_set_index: undefined,
+                  output: {
+                    last_name: 'Dent',
+                    first_name: 'Arthur',
+                    address: {
+                      street_address: '42 Market Street',
+                    },
+                  },
+                  valid_claim_indexes: [0, 1, 2],
+                },
+              ],
+              valid_claims: [
+                {
+                  success: true,
+                  claim_id: undefined,
+                  claim_index: 0,
+                  output: {
+                    last_name: 'Dent',
+                  },
+                },
+                {
+                  success: true,
+                  claim_id: undefined,
+                  claim_index: 1,
+                  output: {
+                    first_name: 'Arthur',
+                  },
+                },
+                {
+                  success: true,
+                  claim_id: undefined,
+                  claim_index: 2,
+                  output: {
+                    address: {
+                      street_address: '42 Market Street',
+                    },
+                  },
+                },
+              ],
+              failed_claims: undefined,
+            },
+          },
+        ],
+      },
+    })
+  })
+
+  it('sdJwtVc (legacy) example with multiple credentials succeeds', (_t) => {
+    const query = DcqlQuery.parse(legacySdJwtVcExampleQuery)
+    DcqlQuery.validate(query)
+
+    const res = DcqlQuery.query(query, [exampleMdoc, exampleLegacySdJwtVc])
+
+    assert(res.can_be_satisfied)
+    expect(res.credential_matches.my_credential.valid_credentials?.length).toEqual(1)
+    expect(res.credential_matches.my_credential.failed_credentials?.length).toEqual(1)
+  })
+
+  it("sdJwtVc (legacy) with 'multiple' set to true succeeds", (_t) => {
+    const query = DcqlQuery.parse(legacySdJwtDcMultipleExampleQuery)
+    DcqlQuery.validate(query)
+
+    // We add the same credential twice
+    const res = DcqlQuery.query(query, [exampleLegacySdJwtVc, exampleLegacySdJwtVc])
 
     assert(res.can_be_satisfied)
 
@@ -770,7 +1084,7 @@ describe('dcql-query', () => {
 
     const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
       {
-        my_credential: [exampleSdJwtVc, exampleSdJwtVc],
+        my_credential: [exampleLegacySdJwtVc, exampleLegacySdJwtVc],
       },
       { dcqlQuery: query }
     )
@@ -779,18 +1093,18 @@ describe('dcql-query', () => {
     expect(presentationQueryResult.credential_matches.my_credential.valid_credentials?.length).toEqual(2)
   })
 
-  it("sdJwtVc with 'multiple' set to true but only one credential in the presentation matches", (_t) => {
-    const query = DcqlQuery.parse(sdJwtVcMultipleExampleQuery)
+  it("sdJwtVc (legacy) with 'multiple' set to true but only one credential in the presentation matches", (_t) => {
+    const query = DcqlQuery.parse(legacySdJwtDcMultipleExampleQuery)
     DcqlQuery.validate(query)
 
     // We add the same credential twice
-    const res = DcqlQuery.query(query, [exampleSdJwtVc, exampleSdJwtVc])
+    const res = DcqlQuery.query(query, [exampleLegacySdJwtVc, exampleLegacySdJwtVc])
 
     assert(res.can_be_satisfied)
 
     const presentationQueryResult = DcqlPresentationResult.fromDcqlPresentation(
       {
-        my_credential: [exampleSdJwtVc, exampleMdoc],
+        my_credential: [exampleLegacySdJwtVc, exampleMdoc],
       },
       { dcqlQuery: query }
     )
