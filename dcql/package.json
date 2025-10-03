@@ -1,24 +1,22 @@
 {
   "name": "dcql",
-  "description": "Digital Credentials Query Language (DCQL)",
-  "author": "Martin Auer",
   "version": "1.0.1",
+  "description": "Digital Credentials Query Language (DCQL)",
+  "license": "MIT",
+  "author": "Martin Auer",
   "private": false,
-  "publishConfig": {
-    "main": "./dist/index.js",
-    "module": "./dist/index.mjs",
-    "types": "./dist/index.d.ts",
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      },
-      "./package.json": "./package.json"
-    }
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./package.json": "./package.json"
   },
   "files": ["dist"],
-  "license": "MIT",
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts --clean --sourcemap",
     "types:check": "tsc --noEmit"
@@ -31,10 +29,10 @@
     "tsup": "^8.3.5",
     "typescript": "^5.6.3"
   },
-  "homepage": "https://github.com/openwallet-foundation-labs/dcql-ts/dcql",
+  "homepage": "https://github.com/openwallet-foundation-labs/dcql-ts/tree/main/dcql",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openwallet-foundation-labs/dcql-ts/dcql",
+    "url": "https://github.com/openwallet-foundation-labs/dcql-ts",
     "directory": "dcql"
   },
   "keywords": [
