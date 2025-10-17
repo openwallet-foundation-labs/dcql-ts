@@ -6,16 +6,16 @@
   "author": "Martin Auer",
   "private": false,
   "publishConfig": {
-	  "main": "./dist/index.js",
-	  "module": "./dist/index.mjs",
-	  "types": "./dist/index.d.ts",
-	  "exports": {
-	    ".": {
-	      "import": "./dist/index.mjs",
-	      "require": "./dist/index.js",
-	      "types": "./dist/index.d.ts"
-	    },
-	    "./package.json": "./package.json"
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "exports": {
+      ".": {
+        "import": "./dist/index.mjs",
+        "require": "./dist/index.js",
+        "types": "./dist/index.d.ts"
+      },
+      "./package.json": "./package.json"
     }
   },
   "files": ["dist"],
