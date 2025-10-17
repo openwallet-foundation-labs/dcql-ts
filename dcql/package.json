@@ -2,19 +2,21 @@
   "name": "dcql",
   "version": "1.0.1",
   "description": "Digital Credentials Query Language (DCQL)",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "author": "Martin Auer",
   "private": false,
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./package.json": "./package.json"
+  "publishConfig": {
+	  "main": "./dist/index.js",
+	  "module": "./dist/index.mjs",
+	  "types": "./dist/index.d.ts",
+	  "exports": {
+	    ".": {
+	      "import": "./dist/index.mjs",
+	      "require": "./dist/index.js",
+	      "types": "./dist/index.d.ts"
+	    },
+	    "./package.json": "./package.json"
+    }
   },
   "files": ["dist"],
   "scripts": {
