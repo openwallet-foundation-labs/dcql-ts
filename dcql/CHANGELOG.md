@@ -1,5 +1,18 @@
 # dcql
 
+## 2.0.0
+### Major Changes
+
+- 4ef6fc8: Add support for W3C VCDM 2.0 SD-JWT format.
+
+### Minor Changes
+
+- 8e29ab5: chore: update valibot to 1.1.0
+
+### Patch Changes
+
+- 0ab60c1: Fix querying a W3C `vc+sd-jwt` credential.
+
 ## 1.0.1
 ### Patch Changes
 
