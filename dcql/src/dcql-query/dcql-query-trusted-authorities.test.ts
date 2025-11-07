@@ -53,7 +53,7 @@ const mdocMvrc = {
   cryptographic_holder_binding: true,
 } satisfies DcqlMdocCredential
 
-const exampleMdoc = {
+const _exampleMdoc = {
   credential_format: 'mso_mdoc',
   doctype: 'example_doctype',
   namespaces: {

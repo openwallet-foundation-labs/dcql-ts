@@ -1,9 +1,9 @@
 import * as v from 'valibot'
 import { DcqlError } from '../dcql-error/e-base.js'
-import type { DcqlMetaResult } from '../dcql-query-result/m-meta-result.js'
 import type { DcqlCredentialQuery } from '../dcql-query/m-dcql-credential-query.js'
-import type { DcqlCredential } from '../u-dcql-credential.js'
+import type { DcqlMetaResult } from '../dcql-query-result/m-meta-result.js'
 import { vIncludesAll, vNonEmptyArray } from '../u-dcql.js'
+import type { DcqlCredential } from '../u-dcql-credential.js'
 
 const getCryptographicHolderBindingValue = (credentialQuery: DcqlCredentialQuery) =>
   v.object({

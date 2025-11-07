@@ -1,10 +1,10 @@
 import * as v from 'valibot'
 import { DcqlParseError } from '../dcql-error/e-dcql.js'
-import type { DcqlClaimsResult } from '../dcql-query-result/m-claims-result.js'
 import { DcqlClaimsQuery } from '../dcql-query/m-dcql-claims-query.js'
 import type { DcqlCredentialQuery } from '../dcql-query/m-dcql-credential-query.js'
+import type { DcqlClaimsResult } from '../dcql-query-result/m-claims-result.js'
+import { asNonEmptyArrayOrUndefined, isNonEmptyArray, type ToNonEmptyArray, type vBaseSchemaAny } from '../u-dcql.js'
 import type { DcqlCredential } from '../u-dcql-credential.js'
-import { type ToNonEmptyArray, asNonEmptyArrayOrUndefined, isNonEmptyArray, type vBaseSchemaAny } from '../u-dcql.js'
 import { deepMerge } from '../util/deep-merge.js'
 
 const pathToString = (path: Array<string | null | number>) =>

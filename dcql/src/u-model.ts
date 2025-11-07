@@ -46,7 +46,7 @@ export class ModelDefinition<T extends UnknownBaseSchema> {
   }
 }
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+// biome-ignore lint/suspicious/noExplicitAny: no explanation
 export type InferModelTypes<T extends ModelDefinition<any>> = T extends ModelDefinition<infer U>
   ? {
       Input: v.InferInput<U>

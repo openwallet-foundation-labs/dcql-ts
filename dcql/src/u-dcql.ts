@@ -51,7 +51,7 @@ interface HasToJson {
 function isToJsonable(value: unknown): value is HasToJson {
   if (value === null || typeof value !== 'object') return false
 
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  // biome-ignore lint/suspicious/noExplicitAny: no explanation
   const toJsonFn = (value as any).toJson
   return typeof toJsonFn === 'function'
 }
@@ -78,7 +78,7 @@ export const vWithJT = <Schema extends UnknownBaseSchema>(schema: Schema) =>
 
       try {
         json = dataset.value.toJson()
-      } catch (error) {
+      } catch (_error) {
         for (const safeParseIssue of result.issues) {
           addIssue({
             ...safeParseIssue,
@@ -121,7 +121,7 @@ export type JsonRecord = v.InferOutput<typeof vJsonRecord>
 export const vStringToJson = v.rawTransform<string, Json>(({ dataset, addIssue, NEVER }) => {
   try {
     return JSON.parse(dataset.value) as Json
-  } catch (error) {
+  } catch (_error) {
     addIssue({ message: 'Invalid JSON' })
     return NEVER
   }

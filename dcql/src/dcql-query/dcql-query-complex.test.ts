@@ -292,7 +292,7 @@ describe('complex-mdoc-query', () => {
             ...res.credential_matches['photo_card-id'].valid_credentials?.[0].meta.output,
           },
         ],
-        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        // biome-ignore lint/suspicious/noExplicitAny: no explanation
       } as any,
       { dcqlQuery: query }
     )

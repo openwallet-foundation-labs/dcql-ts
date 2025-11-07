@@ -1,7 +1,6 @@
 import * as v from 'valibot'
-
-import { DcqlMdocCredential, DcqlSdJwtVcCredential, DcqlW3cVcCredential } from '../u-dcql-credential.js'
 import { vIdString, vNonEmptyArray } from '../u-dcql.js'
+import { DcqlMdocCredential, DcqlSdJwtVcCredential, DcqlW3cVcCredential } from '../u-dcql-credential.js'
 
 export namespace DcqlClaimsResult {
   const vClaimsOutput = v.union([

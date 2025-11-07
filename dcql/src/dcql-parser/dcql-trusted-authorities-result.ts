@@ -1,10 +1,10 @@
 import * as v from 'valibot'
 import type { DcqlCredentialQuery } from '../dcql-query/m-dcql-credential-query.js'
-import type { DcqlCredential } from '../u-dcql-credential.js'
+import { getTrustedAuthorityParser } from '../dcql-query/m-dcql-trusted-authorities.js'
 
 import type { DcqlTrustedAuthoritiesResult } from '../dcql-query-result/m-trusted-authorities-result.js'
-import { getTrustedAuthorityParser } from '../dcql-query/m-dcql-trusted-authorities.js'
-import { type ToNonEmptyArray, asNonEmptyArrayOrUndefined } from '../u-dcql.js'
+import { asNonEmptyArrayOrUndefined, type ToNonEmptyArray } from '../u-dcql.js'
+import type { DcqlCredential } from '../u-dcql-credential.js'
 
 export const runTrustedAuthoritiesQuery = (
   credentialQuery: DcqlCredentialQuery,

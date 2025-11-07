@@ -8,7 +8,7 @@
     "skipLibCheck": true,
     "noEmitOnError": true,
     "lib": ["ES2020"],
-    "types": [],
+    "types": ["node"],
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
