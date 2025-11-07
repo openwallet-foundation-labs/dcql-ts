@@ -285,7 +285,7 @@ describe('DCQL Query With Json Transform', () => {
               output: {
                 cryptographic_holder_binding: true,
                 credential_format: 'mso_mdoc',
-                vct: undefined
+                vct: undefined,
               },
             },
             claims: {

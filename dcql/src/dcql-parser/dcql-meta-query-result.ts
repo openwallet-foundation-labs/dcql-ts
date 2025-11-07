@@ -43,10 +43,13 @@ const getSdJwtVcMetaParser = (credentialQuery: DcqlCredentialQuery.SdJwtVc) => {
       (i) => `Expected credential format to be '${credentialQuery.format}' but received '${i.input}'`
     ),
     vct: credentialQuery.meta?.vct_values
-      ? vCustomRequiredMessage(v.picklist(
-          credentialQuery.meta.vct_values,
+      ? vCustomRequiredMessage(
+          v.picklist(
+            credentialQuery.meta.vct_values,
+            (i) => `Expected vct to be '${credentialQuery.meta?.vct_values?.join("' | '")}' but received '${i.input}'`
+          ),
           (i) => `Expected vct to be '${credentialQuery.meta?.vct_values?.join("' | '")}' but received '${i.input}'`
-        ), i => `Expected vct to be '${credentialQuery.meta?.vct_values?.join("' | '")}' but received '${i.input}'`)
+        )
       : vCustomRequiredMessage(v.string('Expected vct to be a string'), 'Expected vct to be defined'),
     ...getCryptographicHolderBindingValue(credentialQuery).entries,
   })
