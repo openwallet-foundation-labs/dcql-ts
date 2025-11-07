@@ -2,7 +2,7 @@ import * as v from 'valibot'
 import { DcqlError } from '../dcql-error/e-base.js'
 import type { DcqlCredentialQuery } from '../dcql-query/m-dcql-credential-query.js'
 import type { DcqlMetaResult } from '../dcql-query-result/m-meta-result.js'
-import { vIncludesAll, vNonEmptyArray } from '../u-dcql.js'
+import { vCustomRequiredMessage, vIncludesAll, vNonEmptyArray } from '../u-dcql.js'
 import type { DcqlCredential } from '../u-dcql-credential.js'
 
 const getCryptographicHolderBindingValue = (credentialQuery: DcqlCredentialQuery) =>
@@ -43,11 +43,11 @@ const getSdJwtVcMetaParser = (credentialQuery: DcqlCredentialQuery.SdJwtVc) => {
       (i) => `Expected credential format to be '${credentialQuery.format}' but received '${i.input}'`
     ),
     vct: credentialQuery.meta?.vct_values
-      ? v.picklist(
+      ? vCustomRequiredMessage(v.picklist(
           credentialQuery.meta.vct_values,
           (i) => `Expected vct to be '${credentialQuery.meta?.vct_values?.join("' | '")}' but received '${i.input}'`
-        )
-      : v.string('Expected vct to be defined'),
+        ), i => `Expected vct to be '${credentialQuery.meta?.vct_values?.join("' | '")}' but received '${i.input}'`)
+      : vCustomRequiredMessage(v.string('Expected vct to be a string'), 'Expected vct to be defined'),
     ...getCryptographicHolderBindingValue(credentialQuery).entries,
   })
 }

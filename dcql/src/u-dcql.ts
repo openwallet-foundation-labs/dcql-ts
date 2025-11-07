@@ -126,3 +126,26 @@ export const vStringToJson = v.rawTransform<string, Json>(({ dataset, addIssue, 
     return NEVER
   }
 })
+
+
+/**
+ * Helper function to provide a custom required message for an object property.
+ * 
+ * The behavior was changed in newer valibot versions.
+ * 
+ * @see https://github.com/fabian-hiller/valibot/issues/1034
+ */
+export function vCustomRequiredMessage<TSchema extends v.GenericSchema<unknown>>(
+  schema: TSchema,
+  message?: v.ErrorMessage<v.InferIssue<TSchema>>,
+) {
+  const outputSchema = v.pipe(
+    v.optional(schema, () => undefined),
+    schema,
+  );
+  if (message) {
+    // @ts-expect-error
+    return v.message(outputSchema, message);
+  }
+  return outputSchema;
+}
