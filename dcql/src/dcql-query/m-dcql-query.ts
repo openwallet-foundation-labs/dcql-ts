@@ -1,8 +1,8 @@
 import * as v from 'valibot'
 import { DcqlCredentialSetError, DcqlNonUniqueCredentialQueryIdsError } from '../dcql-error/e-dcql.js'
 import { runDcqlQuery } from '../dcql-query-result/run-dcql-query.js'
-import type { DcqlCredential } from '../u-dcql-credential.js'
 import { vNonEmptyArray } from '../u-dcql.js'
+import type { DcqlCredential } from '../u-dcql-credential.js'
 import { DcqlCredentialQuery } from './m-dcql-credential-query.js'
 import { CredentialSetQuery } from './m-dcql-credential-set-query.js'
 

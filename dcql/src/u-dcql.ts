@@ -51,7 +51,7 @@ interface HasToJson {
 function isToJsonable(value: unknown): value is HasToJson {
   if (value === null || typeof value !== 'object') return false
 
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  // biome-ignore lint/suspicious/noExplicitAny: no explanation
   const toJsonFn = (value as any).toJson
   return typeof toJsonFn === 'function'
 }
@@ -78,7 +78,7 @@ export const vWithJT = <Schema extends UnknownBaseSchema>(schema: Schema) =>
 
       try {
         json = dataset.value.toJson()
-      } catch (error) {
+      } catch {
         for (const safeParseIssue of result.issues) {
           addIssue({
             ...safeParseIssue,
@@ -121,8 +121,30 @@ export type JsonRecord = v.InferOutput<typeof vJsonRecord>
 export const vStringToJson = v.rawTransform<string, Json>(({ dataset, addIssue, NEVER }) => {
   try {
     return JSON.parse(dataset.value) as Json
-  } catch (error) {
+  } catch {
     addIssue({ message: 'Invalid JSON' })
     return NEVER
   }
 })
+
+/**
+ * Helper function to provide a custom required message for an object property.
+ *
+ * The behavior was changed in newer valibot versions.
+ *
+ * @see https://github.com/fabian-hiller/valibot/issues/1034
+ */
+export function vCustomRequiredMessage<TSchema extends v.GenericSchema<unknown>>(
+  schema: TSchema,
+  message?: v.ErrorMessage<v.InferIssue<TSchema>>
+) {
+  const outputSchema = v.pipe(
+    v.optional(schema, () => undefined),
+    schema
+  )
+  if (message) {
+    // @ts-expect-error any schema suffices for message, so type error is okay
+    return v.message(outputSchema, message)
+  }
+  return outputSchema
+}

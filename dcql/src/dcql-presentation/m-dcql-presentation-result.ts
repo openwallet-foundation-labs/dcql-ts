@@ -2,8 +2,8 @@ import * as v from 'valibot'
 
 import { DcqlInvalidPresentationRecordError, DcqlPresentationResultError } from '../dcql-error/e-dcql.js'
 import { runCredentialQuery } from '../dcql-parser/dcql-credential-query-result.js'
-import { DcqlQueryResult } from '../dcql-query-result/m-dcql-query-result.js'
 import type { DcqlQuery } from '../dcql-query/m-dcql-query.js'
+import { DcqlQueryResult } from '../dcql-query-result/m-dcql-query-result.js'
 import type { DcqlCredentialPresentation } from './m-dcql-credential-presentation.js'
 
 export namespace DcqlPresentationResult {

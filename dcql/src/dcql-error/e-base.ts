@@ -67,7 +67,7 @@ type DCQL_ERROR_CODE = 'PARSE_ERROR' | 'INTERNAL_SERVER_ERROR' | 'NOT_IMPLEMENTE
 
 export class DcqlError extends Error {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore override doesn't work in all environments due to "This member cannot have an 'override' modifier because it is not declared in the base class 'Error'"
+  // @ts-expect-error override doesn't work in all environments due to "This member cannot have an 'override' modifier because it is not declared in the base class 'Error'"
   public override readonly cause?: Error
   public readonly code
 
@@ -80,7 +80,7 @@ export class DcqlError extends Error {
     const message = opts.message ?? cause?.message ?? opts.code
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore https://github.com/tc39/proposal-error-cause
+    // @ts-expect-error https://github.com/tc39/proposal-error-cause
     super(message, { cause })
 
     this.code = opts.code
