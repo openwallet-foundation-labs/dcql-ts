@@ -34,11 +34,11 @@
           "level": "error",
           "options": {
             "deniedGlobals": {
-              "URL": "TODO: Add a custom message here.",
-              "URLSearchParams": "TODO: Add a custom message here.",
-              "fetch": "TODO: Add a custom message here.",
-              "Response": "TODO: Add a custom message here.",
-              "Headers": "TODO: Add a custom message here."
+              "URL": "Global URL should not be used, and should be imported from '@openid4vc/utils'",
+              "URLSearchParams": "Global URLSearchParams should not be used, and should be imported from '@openid4vc/utils'",
+              "fetch": "Global fetch should not be used, and should be imported from '@openid4vc/utils'",
+              "Response": "Global Response should not be used, and should be imported from '@openid4vc/utils'",
+              "Headers": "Global Headers should not be used, and should be imported from '@openid4vc/utils'"
             }
           }
         },

@@ -78,7 +78,7 @@ export const vWithJT = <Schema extends UnknownBaseSchema>(schema: Schema) =>
 
       try {
         json = dataset.value.toJson()
-      } catch (_error) {
+      } catch {
         for (const safeParseIssue of result.issues) {
           addIssue({
             ...safeParseIssue,
@@ -121,7 +121,7 @@ export type JsonRecord = v.InferOutput<typeof vJsonRecord>
 export const vStringToJson = v.rawTransform<string, Json>(({ dataset, addIssue, NEVER }) => {
   try {
     return JSON.parse(dataset.value) as Json
-  } catch (_error) {
+  } catch {
     addIssue({ message: 'Invalid JSON' })
     return NEVER
   }
@@ -143,7 +143,7 @@ export function vCustomRequiredMessage<TSchema extends v.GenericSchema<unknown>>
     schema
   )
   if (message) {
-    // @ts-expect-error
+    // @ts-expect-error any schema suffices for message, so type error is okay
     return v.message(outputSchema, message)
   }
   return outputSchema
