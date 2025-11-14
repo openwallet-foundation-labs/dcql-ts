@@ -1,5 +1,10 @@
 # dcql
 
+## 2.0.1
+### Patch Changes
+
+- 04c7029: Fix the CommonJS entry point and the types file reference in `package.json`.
+
 ## 2.0.0
 ### Major Changes
 
