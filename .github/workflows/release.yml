@@ -25,7 +25,7 @@ jobs:
       published: ${{ steps.changesets.outputs.published }}
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup
         uses: ./.github/setup
@@ -53,7 +53,7 @@ jobs:
     if: always() && github.event_name == 'push' && needs.release-stable.outputs.published == 'false'
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup
         uses: ./.github/setup
