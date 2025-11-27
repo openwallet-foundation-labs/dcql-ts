@@ -1,5 +1,10 @@
 # dcql
 
+## 3.0.0
+### Major Changes
+
+- 9fa8b0d: Remove support for the CommonJS/CJS syntax. Since React Native bundles your code, the update to ESM should not cause issues. In addition all latest minor releases of Node 20+ support requiring ESM modules. This means that even if you project is still a CommonJS project, it can now depend on ESM modules. For this reason DCQL is now fully an ESM module.
+
 ## 2.0.1
 ### Patch Changes
 
