@@ -2,7 +2,7 @@ packages:
   - dcql
 
 catalog:
-  '@types/node': ^24.10.0
+  '@types/node': ^24.10.1
   tsx: ^4.11.2
   tsdown: ^0.16.1
   typescript: ~5.9.3
