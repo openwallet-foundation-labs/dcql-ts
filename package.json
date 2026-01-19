@@ -23,8 +23,8 @@
     "changeset-version": "pnpm changeset version && pnpm style:fix && git add . && git commit --amend --no-edit"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.10",
+    "@biomejs/biome": "^2.3.11",
     "@changesets/cli": "^2.29.8",
-    "vitest": "^4.0.16"
+    "vitest": "^4.0.17"
   }
 }
