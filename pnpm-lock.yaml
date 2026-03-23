@@ -16,8 +16,8 @@ catalogs:
       specifier: ~5.9.3
       version: 5.9.3
     valibot:
-      specifier: 1.2.0
-      version: 1.2.0
+      specifier: 1.3.1
+      version: 1.3.1
 
 importers:
 
@@ -37,7 +37,7 @@ importers:
     dependencies:
       valibot:
         specifier: 'catalog:'
-        version: 1.2.0(typescript@5.9.3)
+        version: 1.3.1(typescript@5.9.3)
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
@@ -1162,8 +1162,8 @@ packages:
       synckit:
         optional: true
 
-  valibot@1.2.0:
-    resolution: {integrity: sha512-mm1rxUsmOxzrwnX5arGS+U4T25RdvpPjPN4yR0u9pUBov9+zGVtO84tif1eY4r6zWxVxu3KzIyknJy3rxfRZZg==}
+  valibot@1.3.1:
+    resolution: {integrity: sha512-sfdRir/QFM0JaF22hqTroPc5xy4DimuGQVKFrzF1YfGwaS1nJot3Y8VqMdLO2Lg27fMzat2yD3pY5PbAYO39Gg==}
     peerDependencies:
       typescript: '>=5'
     peerDependenciesMeta:
@@ -2263,7 +2263,7 @@ snapshots:
     dependencies:
       rolldown: 1.0.0-rc.3
 
-  valibot@1.2.0(typescript@5.9.3):
+  valibot@1.3.1(typescript@5.9.3):
     optionalDependencies:
       typescript: 5.9.3
 
