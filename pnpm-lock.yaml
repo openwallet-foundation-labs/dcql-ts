@@ -13,8 +13,8 @@ catalogs:
       specifier: ^0.20.3
       version: 0.20.3
     typescript:
-      specifier: ~5.9.3
-      version: 5.9.3
+      specifier: ~6.0.2
+      version: 6.0.2
     valibot:
       specifier: 1.2.0
       version: 1.2.0
@@ -37,17 +37,17 @@ importers:
     dependencies:
       valibot:
         specifier: 'catalog:'
-        version: 1.2.0(typescript@5.9.3)
+        version: 1.2.0(typescript@6.0.2)
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
         version: 25.3.3
       tsdown:
         specifier: 'catalog:'
-        version: 0.20.3(typescript@5.9.3)
+        version: 0.20.3(typescript@6.0.2)
       typescript:
         specifier: 'catalog:'
-        version: 5.9.3
+        version: 6.0.2
 
 packages:
 
@@ -1137,8 +1137,8 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
-  typescript@5.9.3:
-    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
+  typescript@6.0.2:
+    resolution: {integrity: sha512-bGdAIrZ0wiGDo5l8c++HWtbaNCWTS4UTv7RaTH/ThVIgjkveJt83m74bBHMJkuCbslY8ixgLBVZJIOiQlQTjfQ==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -2093,7 +2093,7 @@ snapshots:
 
   reusify@1.1.0: {}
 
-  rolldown-plugin-dts@0.22.1(rolldown@1.0.0-rc.3)(typescript@5.9.3):
+  rolldown-plugin-dts@0.22.1(rolldown@1.0.0-rc.3)(typescript@6.0.2):
     dependencies:
       '@babel/generator': 8.0.0-rc.1
       '@babel/helper-validator-identifier': 8.0.0-rc.1
@@ -2106,7 +2106,7 @@ snapshots:
       obug: 2.1.1
       rolldown: 1.0.0-rc.3
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
     transitivePeerDependencies:
       - oxc-resolver
 
@@ -2218,7 +2218,7 @@ snapshots:
 
   tree-kill@1.2.2: {}
 
-  tsdown@0.20.3(typescript@5.9.3):
+  tsdown@0.20.3(typescript@6.0.2):
     dependencies:
       ansis: 4.2.0
       cac: 6.7.14
@@ -2229,7 +2229,7 @@ snapshots:
       obug: 2.1.1
       picomatch: 4.0.3
       rolldown: 1.0.0-rc.3
-      rolldown-plugin-dts: 0.22.1(rolldown@1.0.0-rc.3)(typescript@5.9.3)
+      rolldown-plugin-dts: 0.22.1(rolldown@1.0.0-rc.3)(typescript@6.0.2)
       semver: 7.7.3
       tinyexec: 1.0.2
       tinyglobby: 0.2.15
@@ -2237,7 +2237,7 @@ snapshots:
       unconfig-core: 7.4.2
       unrun: 0.2.27
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
     transitivePeerDependencies:
       - '@ts-macro/tsc'
       - '@typescript/native-preview'
@@ -2248,7 +2248,7 @@ snapshots:
   tslib@2.8.1:
     optional: true
 
-  typescript@5.9.3: {}
+  typescript@6.0.2: {}
 
   unconfig-core@7.4.2:
     dependencies:
@@ -2263,9 +2263,9 @@ snapshots:
     dependencies:
       rolldown: 1.0.0-rc.3
 
-  valibot@1.2.0(typescript@5.9.3):
+  valibot@1.2.0(typescript@6.0.2):
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
 
   vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1):
     dependencies:
