@@ -5,5 +5,5 @@ catalog:
   '@types/node': ^25.3.3
   tsx: ^4.11.2
   tsdown: ^0.20.3
-  typescript: ~5.9.3
+  typescript: ~6.0.3
   valibot: 1.2.0
