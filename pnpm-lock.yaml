@@ -7,8 +7,8 @@ settings:
 catalogs:
   default:
     '@types/node':
-      specifier: ^25.3.3
-      version: 25.3.3
+      specifier: ^26.5.1
+      version: 26.5.1
     tsdown:
       specifier: ^0.22.1
       version: 0.22.1
@@ -16,7 +16,7 @@ catalogs:
       specifier: ~5.9.3
       version: 5.9.3
     valibot:
-      specifier: 1.4.2
+      specifier: ^1.4.2
       version: 1.4.2
 
 importers:
@@ -28,10 +28,10 @@ importers:
         version: 2.4.16
       '@changesets/cli':
         specifier: ^2.31.0
-        version: 2.31.0(@types/node@25.3.3)
+        version: 2.31.0(@types/node@26.5.1)
       vitest:
         specifier: ^5.0.0
-        version: 5.0.0(@types/node@25.3.3)(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1))
+        version: 5.0.0(@types/node@26.5.1)(vite@7.3.1(@types/node@26.5.1)(jiti@2.6.1))
 
   dcql:
     dependencies:
@@ -41,7 +41,7 @@ importers:
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
-        version: 25.3.3
+        version: 26.5.1
       tsdown:
         specifier: 'catalog:'
         version: 0.22.1(typescript@5.9.3)(unrun@0.2.27(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0))
@@ -735,8 +735,8 @@ packages:
   '@types/node@12.20.55':
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
 
-  '@types/node@25.3.3':
-    resolution: {integrity: sha512-DpzbrH7wIcBaJibpKo9nnSQL0MTRdnWttGyE5haGwK86xgMOkFLp7vEyfQPGLOJh5wNYiJ3V9PmUMDhV9u8kkQ==}
+  '@types/node@26.5.1':
+    resolution: {integrity: sha512-CzNm2FezW4VR/LjG6yUdiEgLE/rAQ9Slj5gCu/C2VrdcW7I0ahNZ8DRbHT7zOZ6r3ONgd/bsQIeSaoDGrd1C6g==}
 
   '@vitest/mocker@5.0.0':
     resolution: {integrity: sha512-66PGTMIiVJP3t4a5yxU9qPtf7MdTBs8jmToMvy+HVflB3Yy13WJZTtPePdvU+wjRV02SKK5doLbSA6o9pwOmiA==}
@@ -1261,8 +1261,8 @@ packages:
   unconfig-core@7.5.0:
     resolution: {integrity: sha512-Su3FauozOGP44ZmKdHy2oE6LPjk51M/TRRjHv2HNCWiDvfvCoxC2lno6jevMA91MYAdCdwP05QnWdWpSbncX/w==}
 
-  undici-types@7.18.2:
-    resolution: {integrity: sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w==}
+  undici-types@8.9.0:
+    resolution: {integrity: sha512-KTDyRTYX8sWmKXAikPHHSyc63CRPETMctyjKFupcC6OBLXT3xsN0e9aF7m+mIXutFWpUXuedtowG7iLOzp0kQg==}
 
   universalify@0.1.2:
     resolution: {integrity: sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==}
@@ -1467,7 +1467,7 @@ snapshots:
     dependencies:
       '@changesets/types': 6.1.0
 
-  '@changesets/cli@2.31.0(@types/node@25.3.3)':
+  '@changesets/cli@2.31.0(@types/node@26.5.1)':
     dependencies:
       '@changesets/apply-release-plan': 7.1.1
       '@changesets/assemble-release-plan': 6.0.10
@@ -1483,7 +1483,7 @@ snapshots:
       '@changesets/should-skip-package': 0.1.2
       '@changesets/types': 6.1.0
       '@changesets/write': 0.4.0
-      '@inquirer/external-editor': 1.0.3(@types/node@25.3.3)
+      '@inquirer/external-editor': 1.0.3(@types/node@26.5.1)
       '@manypkg/get-packages': 1.1.3
       ansi-colors: 4.1.3
       enquirer: 2.4.1
@@ -1675,12 +1675,12 @@ snapshots:
   '@esbuild/win32-x64@0.27.7':
     optional: true
 
-  '@inquirer/external-editor@1.0.3(@types/node@25.3.3)':
+  '@inquirer/external-editor@1.0.3(@types/node@26.5.1)':
     dependencies:
       chardet: 2.1.1
       iconv-lite: 0.7.2
     optionalDependencies:
-      '@types/node': 25.3.3
+      '@types/node': 26.5.1
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:
@@ -1946,18 +1946,18 @@ snapshots:
 
   '@types/node@12.20.55': {}
 
-  '@types/node@25.3.3':
+  '@types/node@26.5.1':
     dependencies:
-      undici-types: 7.18.2
+      undici-types: 8.9.0
 
-  '@vitest/mocker@5.0.0(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1))':
+  '@vitest/mocker@5.0.0(vite@7.3.1(@types/node@26.5.1)(jiti@2.6.1))':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
       '@vitest/spy': 5.0.0
       estree-walker: 3.0.3
       magic-string: 1.3.1
     optionalDependencies:
-      vite: 7.3.1(@types/node@25.3.3)(jiti@2.6.1)
+      vite: 7.3.1(@types/node@26.5.1)(jiti@2.6.1)
 
   '@vitest/spy@5.0.0': {}
 
@@ -2450,7 +2450,7 @@ snapshots:
       '@quansync/fs': 1.0.0
       quansync: 1.0.0
 
-  undici-types@7.18.2: {}
+  undici-types@8.9.0: {}
 
   universalify@0.1.2: {}
 
@@ -2466,7 +2466,7 @@ snapshots:
     optionalDependencies:
       typescript: 5.9.3
 
-  vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1):
+  vite@7.3.1(@types/node@26.5.1)(jiti@2.6.1):
     dependencies:
       esbuild: 0.27.7
       fdir: 6.5.0(picomatch@4.0.7)
@@ -2475,14 +2475,14 @@ snapshots:
       rollup: 4.63.3
       tinyglobby: 0.2.17
     optionalDependencies:
-      '@types/node': 25.3.3
+      '@types/node': 26.5.1
       fsevents: 2.3.3
       jiti: 2.6.1
 
-  vitest@5.0.0(@types/node@25.3.3)(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)):
+  vitest@5.0.0(@types/node@26.5.1)(vite@7.3.1(@types/node@26.5.1)(jiti@2.6.1)):
     dependencies:
       '@types/chai': 5.2.3
-      '@vitest/mocker': 5.0.0(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1))
+      '@vitest/mocker': 5.0.0(vite@7.3.1(@types/node@26.5.1)(jiti@2.6.1))
       chai: 6.2.2
       es-module-lexer: 2.3.2
       expect-type: 1.4.0
@@ -2493,10 +2493,10 @@ snapshots:
       tinybench: 6.1.4
       tinyexec: 1.3.0
       tinyglobby: 0.2.17
-      vite: 7.3.1(@types/node@25.3.3)(jiti@2.6.1)
+      vite: 7.3.1(@types/node@26.5.1)(jiti@2.6.1)
       why-is-node-running: 2.3.0
     optionalDependencies:
-      '@types/node': 25.3.3
+      '@types/node': 26.5.1
     transitivePeerDependencies:
       - msw
 
