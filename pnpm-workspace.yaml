@@ -6,4 +6,4 @@ catalog:
   tsx: ^4.11.2
   tsdown: ^0.22.1
   typescript: ~5.9.3
-  valibot: 1.4.1
+  valibot: ^1.4.2
