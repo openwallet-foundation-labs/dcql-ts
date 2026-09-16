@@ -1,3 +1,8 @@
+# ⚠️ MOVED
+The mDoc library has **moved** to the [Identity Common](https://github.com/openwallet-foundation-labs/identity-common-ts/tree/main/packages/dcql) repository. This repository will not see updates anymore. The package is still published under [dcql](https://www.npmjs.com/package/dcql).
+
+---
+
 <h1 align="center" ><b>DCQL (Digital Credentials Query Language)</b></h1>
 
 <p align="center">
