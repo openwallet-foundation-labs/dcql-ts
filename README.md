@@ -1,5 +1,5 @@
 # ⚠️ MOVED
-The mDoc library has **moved** to the [Identity Common](https://github.com/openwallet-foundation-labs/identity-common-ts/tree/main/packages/dcql) repository. This repository will not see updates anymore. The package is still published under [dcql](https://www.npmjs.com/package/dcql).
+The DCQL library has **moved** to the [Identity Common](https://github.com/openwallet-foundation-labs/identity-common-ts/tree/main/packages/dcql) repository. This repository will not see updates anymore. The package is still published under [dcql](https://www.npmjs.com/package/dcql).
 
 ---
 
